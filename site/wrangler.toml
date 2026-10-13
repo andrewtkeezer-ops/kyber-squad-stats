@@ -9,3 +9,6 @@ binding = "ASSETS"
 [[kv_namespaces]]
 binding = "STATS"
 id = "d7d31887e49c4dc983ca494a1aa23733"
+
+[vars]
+ADMIN_EMAILS = "andrewtkeezer@gmail.com"
