@@ -55,7 +55,19 @@ const CAREER = {
   kills: 'c___k_gatt', deaths: 'c___d_gatt', killsAssists: 'c___ka_gatt',
   score: 'score', xp: 'experience', rank: 'rank', playtime: 'c_ca__sax_gatt',
   vehiclesDestroyed: 'c___vdx_gatt',
+  damage: 'c___pdax_gatt',          // confirmed: scales with kills across all three squad members
+  headshots: 'c__aw_hxwy_gatt',     // confirmed: equals the sum of per-weapon headshot keys
 };
+const WEAPON_AGG = new Set(['aw', 'ag', 'othwep', 'AOWG', 'AOWGTD', 'blasterrifle', 'longrifle', 'pistol', 'ability', 'gadgets']);
+const WEAPON_NAMES = { CR2: 'CR-2', Valken38x: 'Valken-38X', A280CFE: 'A280-CFE', NT242: 'NT-242', a280c: 'A280C', TL50: 'TL-50', heavyrifle: 'Heavy blaster', bossket: "Bossk's Relby", DC15: 'DC-15', EL16: 'EL-16HFE', E11: 'E-11', SE44: 'SE-44C', DLT19: 'DLT-19', CR2b: 'CR-2' };
+function topWeapons(raw) {
+  const out = [];
+  for (const [k, v] of Object.entries(raw)) {
+    const m = /^c_([A-Za-z0-9]+)__ewx_gatt$/.exec(k);
+    if (m && v > 0 && !WEAPON_AGG.has(m[1])) out.push({ id: m[1], name: WEAPON_NAMES[m[1]] || m[1], kills: Math.round(v) });
+  }
+  return out.sort((a, b) => b.kills - a.kills).slice(0, 5);
+}
 
 const num = (m, k) => { const v = m[k]; return typeof v === 'number' && isFinite(v) ? v : 0; };
 const kdOf = (k, d) => (d > 0 ? +(k / d).toFixed(2) : (k > 0 ? k : 0));
@@ -72,7 +84,9 @@ function decodeStats(rawMap) {
   const deaths = Math.round(num(raw, CAREER.deaths));
   const career = {
     kills, deaths, kd: kdOf(kills, deaths),
-    killsAssists: Math.round(num(raw, CAREER.killsAssists)),
+    killsAssists: Math.round(num(raw, CAREER.killsAssists)),   // NOT kills+assists (lower than kills for some players) — unused
+    damage: Math.round(num(raw, CAREER.damage)),
+    headshots: Math.round(num(raw, CAREER.headshots)),
     score: Math.round(num(raw, CAREER.score)) || Math.round(num(raw, CAREER.xp)),
     rank: Math.round(num(raw, CAREER.rank)),
     playtimeSec: num(raw, CAREER.playtime),
@@ -82,8 +96,11 @@ function decodeStats(rawMap) {
   const classes = CLASSES.map((c) => ({ id: c.id, name: c.name, ...scoped(raw, c.prefix) }));
   const heroPlaytimeSec = heroes.reduce((a, h) => a + h.playtimeSec, 0);
   const classPlaytimeSec = classes.reduce((a, c) => a + c.playtimeSec, 0);
+  const kph = career.playtimeSec > 0 ? +(career.kills / (career.playtimeSec / 3600)).toFixed(1) : 0;
+  const spm = career.playtimeSec > 0 ? Math.round(career.score / (career.playtimeSec / 60)) : 0;
+  career.killsPerHour = kph; career.scorePerMin = spm;
   return {
-    career, heroes, classes,
+    career, heroes, classes, weapons: topWeapons(raw),
     totals: { heroPlaytimeSec, classPlaytimeSec, rawKeyCount: Object.keys(raw).length },
   };
 }
