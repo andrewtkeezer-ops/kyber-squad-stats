@@ -784,6 +784,12 @@
   .feat b{display:block;font-size:14px;font-weight:600}
   .feat small{display:block;font-family:var(--font-m);font-size:10px;letter-spacing:.18em;color:var(--ink-2);margin-top:4px}
   .feat .ico{width:26px;height:26px;stroke:#d4d8e2}
+  .feat .ico{stroke:#d4d8e2;overflow:visible}
+  .feat .ico .dot{fill:var(--accent);stroke:none;filter:drop-shadow(0 0 4px var(--accent))}
+  .feat div:nth-child(1) .ico.draw *{animation-delay:.1s}.feat div:nth-child(2) .ico.draw *{animation-delay:.25s}.feat div:nth-child(3) .ico.draw *{animation-delay:.4s}.feat div:nth-child(4) .ico.draw *{animation-delay:.55s}
+  .feat div:hover .ico{stroke:var(--accent)}
+  .feat div{cursor:default;transition:transform .25s var(--ease)}.feat div:hover{transform:translateY(-2px)}
+  .hero.enter .feat{animation:heroin .9s var(--ease) .7s both}
   header.top .tr .pill,header.top .you,header.top .ic{display:none}
   header.top .nav{visibility:hidden}
   #marks{display:none}
@@ -816,10 +822,10 @@
     <div class="orbit" id="orbit"></div>
     <div id="marks"></div>
     <div class="feat">
-      <div><svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="12"/><circle cx="17" cy="17" r="5"/><path d="M17 1v7M17 26v7M1 17h7M26 17h7"/></svg><span><b>Live squad standings</b><small>K/D · KILLS · DAMAGE · HEADSHOTS</small></span></div>
-      <div><svg class="ico" viewBox="0 0 34 34"><path d="M4 20 14 10M20 20 10 10"/><path d="M14 10l5-5h1v1l-5 5M10 10 5 5H4v1l5 5"/></svg><span><b>Rivalries</b><small>HEAD TO HEAD, SETTLED WITH RECEIPTS</small></span></div>
-      <div><svg class="ico" viewBox="0 0 34 34"><path d="M5 20V12M12 20V6M19 20v-9M26 20V4"/><path d="M3 30h28" stroke-dasharray="2 3"/></svg><span><b>Sessions &amp; Weekly Wrapped</b><small>EVERY NIGHT RECORDED, EVEN WITHOUT YOU</small></span></div>
-      <div><svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="13"/><ellipse cx="17" cy="17" rx="13" ry="5"/><path d="M4 17h26"/></svg><span><b>Live servers</b><small>JOIN STRAIGHT FROM THE BOARD</small></span></div>
+      <div><svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="12"/><circle cx="17" cy="17" r="5"/><path d="M17 1v7M17 26v7M1 17h7M26 17h7"/><circle class="dot" cx="17" cy="17" r="1.6"/></svg><span><b>Live squad standings</b><small>K/D · KILLS · DAMAGE · HEADSHOTS</small></span></div>
+      <div><svg class="ico" viewBox="0 0 34 34"><path d="M5 29 15 19M29 29 19 19"/><path d="M15 19l11-11h3v3L18 22M19 19 8 8H5v3l11 11"/><path d="M5 25l4 4M29 25l-4 4"/><circle class="dot" cx="17" cy="17" r="1.6"/></svg><span><b>Rivalries</b><small>HEAD TO HEAD, SETTLED WITH RECEIPTS</small></span></div>
+      <div><svg class="ico" viewBox="0 0 34 34"><path d="M5 24V14M12 24V7M19 24V17M26 24V4"/><path d="M3 29h28" stroke-dasharray="2 3"/><circle class="dot" cx="26" cy="4" r="1.6"/></svg><span><b>Sessions &amp; Weekly Wrapped</b><small>EVERY NIGHT RECORDED, EVEN WITHOUT YOU</small></span></div>
+      <div><svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="13"/><ellipse cx="17" cy="17" rx="13" ry="5"/><ellipse cx="17" cy="17" rx="5" ry="13"/><path d="M4 17h26"/><circle class="dot" cx="26" cy="9" r="1.6"/></svg><span><b>Live servers</b><small>JOIN STRAIGHT FROM THE BOARD</small></span></div>
     </div>
   </section>
 </main>
@@ -910,6 +916,10 @@ function faction(f){FACTION=f;document.documentElement.setAttribute("data-factio
 $("#toggle").addEventListener("click",e=>{const b=e.target.closest("button");if(b)faction(b.dataset.f);});
 let f="rebel";try{f=localStorage.getItem("kss-faction")||f;}catch{}
 faction(f);
+const drawIcons=()=>document.querySelectorAll(".feat .ico").forEach(ic=>{ic.classList.remove("draw");void ic.getBoundingClientRect();ic.classList.add("draw");});
+drawIcons();
+document.querySelectorAll(".feat div").forEach(d=>d.addEventListener("pointerenter",()=>{const ic=d.querySelector(".ico");if(!ic||reduce)return;ic.classList.remove("draw");void ic.getBoundingClientRect();ic.classList.add("draw");}));
+$("#toggle").addEventListener("click",()=>setTimeout(drawIcons,50));
 </script>
 </body>
 </html>
