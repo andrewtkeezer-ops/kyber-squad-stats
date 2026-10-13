@@ -1,13 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-faction="rebel">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Kyber Squad Stats</title>
-<link rel="icon" href="plates/rebel-crest.webp" id="fav" /><meta property="og:title" content="Kyber Squad Stats" /><meta property="og:description" content="Squad intelligence for Battlefront II on Kyber." /><meta property="og:image" content="plates/rebel.jpg" /><meta name="theme-color" content="#07080c" />
-<meta name="description" content="Kyber Squad Stats — squad intelligence for Battlefront II on Kyber." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<meta name="description" content="Squad intelligence for Battlefront II on Kyber." />
+<link rel="icon" href="plates/rebel-crest.webp" id="fav" /><meta property="og:title" content="Kyber Squad Stats" /><meta property="og:image" content="plates/rebel.jpg" /><meta name="theme-color" content="#07080c" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
 <style>
   /* Layout: fixed command-rail on the left (crest, nav, faction switch, you); main column with a
@@ -762,138 +760,67 @@
   .standings .row .av{position:relative}
   @media (prefers-reduced-motion:reduce){.kc{animation:none}}
 </style>
+<style>
+  /* landing-only */
+  body{min-height:100vh;display:flex;flex-direction:column}
+  .hero{margin-top:0;flex:1;aspect-ratio:auto;min-height:calc(100vh - var(--top-h));border-radius:0;display:block}
+  .hero .copy{top:50%;transform:translateY(-55%)!important;max-width:min(48%,640px)}
+  .land-cta{display:flex;align-items:center;gap:18px;margin-top:34px;flex-wrap:wrap}
+  .gbtn{display:inline-flex;align-items:center;gap:12px;padding:15px 24px;border-radius:10px;background:#fff;color:#111;font-weight:700;font-size:15px;text-decoration:none;box-shadow:0 10px 30px -10px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.15);transition:transform .25s var(--ease),box-shadow .3s}
+  .gbtn:hover{transform:translateY(-2px);box-shadow:0 14px 34px -10px rgba(0,0,0,.9),0 0 24px var(--accent-glow)}
+  .gbtn svg{width:20px;height:20px}
+  .land-note{font-family:var(--font-m);font-size:11.5px;letter-spacing:.14em;color:var(--ink-2)}
+  .land-note b{color:var(--ink);font-weight:500}
+  .feat{position:absolute;left:2.9%;right:2.9%;bottom:5.5%;z-index:4;display:flex;gap:0;border-top:1px solid rgba(255,255,255,.18);padding-top:18px}
+  .feat div{padding-right:26px;margin-right:26px;border-right:1px solid rgba(255,255,255,.14);display:flex;align-items:center;gap:14px}
+  .feat div:last-child{border:0}
+  .feat b{display:block;font-size:14px;font-weight:600}
+  .feat small{display:block;font-family:var(--font-m);font-size:10px;letter-spacing:.18em;color:var(--ink-2);margin-top:4px}
+  .feat .ico{width:26px;height:26px;stroke:#d4d8e2}
+  header.top .tr .pill,header.top .you,header.top .ic{display:none}
+  header.top .nav{visibility:hidden}
+  #marks{display:none}
+  @media (max-width:860px){.hero{height:auto;min-height:calc(100vh - 120px);background-size:auto 118%;background-position:58% 100%}.hero .copy{max-width:92%;top:12%;transform:none!important}.feat{display:none}.fleet,.orbit{display:flex}.fleet{display:block}.ship{display:block}.land-cta{gap:12px}}
+</style>
 </head>
 <body>
-
 <header class="top" id="top">
   <div class="brand"><i class="crest crestm" id="crest"></i><b>KYBER SQUAD<span>BATTLEFRONT II</span></b></div>
-  <nav class="nav" id="nav"><i class="ind" id="navind"></i>
-    <button class="on" data-v="overview">Overview</button>
-    <button data-v="squad">Leaderboard</button>
-    <button data-v="rivalry">Rivalry</button>
-    <button data-v="player">Player Card</button>
-    <button data-v="sessions">Sessions</button>
-    <button data-v="servers">Live Servers</button>
-    <button data-v="admin" id="navAdmin" hidden>Admin</button>
-  </nav>
+  <nav class="nav" id="nav"><i class="ind" id="navind"></i><button class="on">Overview</button></nav>
   <div class="tr">
     <div class="fac" id="toggle">
       <button data-f="empire"><i class="crestm" style="--m:url(plates/empire-mask.png)"></i>EMPIRE</button>
       <button data-f="rebel"><i class="crestm" style="--m:url(plates/rebel-mask.png)"></i>REBELLION</button>
     </div>
-    <span class="pill" id="badge"><span class="dot"></span><span id="badge-txt">LOADING</span></span>
-    <button class="ic" id="sound" title="Sound"><svg viewBox="0 0 14 14"><path d="M3 2h2v10H3zM9 2h2v10H9z"/></svg></button>
-    <button class="you" id="youBtn"><span class="av" id="youAv">··</span><span><b id="youName">Sign in</b><small>Your profile</small></span></button>
   </div>
 </header>
-
 <main class="main">
   <section class="hero enter" id="hero">
     <div class="copy">
-      <div class="eyebrow" id="eyebrow">IMPERIAL INTELLIGENCE</div>
+      <div class="eyebrow" id="eyebrow">ALLIANCE INTELLIGENCE</div>
       <h1 class="display">THE<br>SQUAD.</h1>
-      <div class="tag" id="tag">Three pilots. One fleet.</div>
-      <div class="cta">
-        <button class="link" id="toboard">View leaderboard <svg viewBox="0 0 16 16"><path d="M8 2v11M3 9l5 5 5-5"/></svg></button>
-        <button class="wrapbtn" id="openwrap"><svg class="bars" viewBox="0 0 16 16"><path d="M3 13V8M7 13V3M11 13V6M15 13V9"/></svg>WEEKLY WRAPPED <svg viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
+      <div class="tag" id="tag">Battlefront II · Kyber · your crew's numbers, live.</div>
+      <div class="land-cta">
+        <a class="gbtn" href="/app" id="signin"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.4 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-3.9-13.5-9.3l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Sign in with Google</a>
+        <span class="land-note">INVITE ONLY · <b>ask Andrew</b> to add your Gmail</span>
       </div>
     </div>
-    <div class="strip" id="strip"></div>
     <div class="fleet" id="fleet"></div>
     <div class="orbit" id="orbit"></div>
-    <div class="lite core"></div>
     <div id="marks"></div>
-    <div class="hint"><svg viewBox="0 0 16 22"><path d="M8 2v6M8 2l-2 2M8 2l2 2"/><rect x="3" y="10" width="10" height="10" rx="2"/></svg>HOVER A PILOT OR SHIP <em>/</em> CLICK A PILOT FOR THEIR CARD</div>
-    <span id="crumb" hidden></span><button id="meBtn" hidden><span id="meAv"></span><span id="meTxt"></span></button>
+    <div class="feat">
+      <div><svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="12"/><circle cx="17" cy="17" r="5"/><path d="M17 1v7M17 26v7M1 17h7M26 17h7"/></svg><span><b>Live squad standings</b><small>K/D · KILLS · DAMAGE · HEADSHOTS</small></span></div>
+      <div><svg class="ico" viewBox="0 0 34 34"><path d="M4 20 14 10M20 20 10 10"/><path d="M14 10l5-5h1v1l-5 5M10 10 5 5H4v1l5 5"/></svg><span><b>Rivalries</b><small>HEAD TO HEAD, SETTLED WITH RECEIPTS</small></span></div>
+      <div><svg class="ico" viewBox="0 0 34 34"><path d="M5 20V12M12 20V6M19 20v-9M26 20V4"/><path d="M3 30h28" stroke-dasharray="2 3"/></svg><span><b>Sessions &amp; Weekly Wrapped</b><small>EVERY NIGHT RECORDED, EVEN WITHOUT YOU</small></span></div>
+      <div><svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="13"/><ellipse cx="17" cy="17" rx="13" ry="5"/><path d="M4 17h26"/></svg><span><b>Live servers</b><small>JOIN STRAIGHT FROM THE BOARD</small></span></div>
+    </div>
   </section>
-
-
-  <div id="app"></div>
-  <div class="foot" id="foot"></div>
 </main>
-
-<div class="boot" id="boot"><div class="b"><svg viewBox="0 0 48 48" fill="none" id="bootcrest"></svg>ESTABLISHING UPLINK<div class="line"><i></i></div><span id="bootmsg">KYBER API</span></div></div>
-
-<div id="wrapped">
-  <div class="plate"></div><div class="shade"></div>
-  <div class="w-bars" id="wbars"></div>
-  <button class="w-close" id="wclose">✕</button>
-  <div class="w-stage"><div id="wslide"></div><div class="w-nav"><div id="wprev"></div><div id="wnext"></div></div></div>
-</div>
-
 <script>
-/* ================= data layer ================= */
-const $=(s,r=document)=>r.querySelector(s);
-let FACTION="rebel",LIVE=false,ME=null,players=[],servers=[],updatedAt=null;
-const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
-const dayAgo=(d,h=21,m=0)=>{const t=new Date();t.setDate(t.getDate()-d);t.setHours(h,m,0,0);return t;};
-const S=(d,h,min,k,de,cls,hero)=>{const st=dayAgo(d,h),en=new Date(st.getTime()+min*60000);return{start:st.toISOString(),end:en.toISOString(),durationMin:min,career:{kills:k,deaths:de,kd:de?+(k/de).toFixed(2):k},classes:cls?[{name:cls,playtimeSec:min*60,kills:k}]:[],heroes:hero?[{name:hero[0],side:hero[1],playtimeSec:Math.round(min*60*.4),kills:Math.round(k*.4)}]:[]};};
-const P=(id,name,side,c,heroes,classes,sessions)=>({id,name,username:name,resolved:true,side,career:{...c,kd:+(c.kills/Math.max(1,c.deaths)).toFixed(2),killsAssists:Math.round(c.kills*1.5)},heroes,classes,sessions});
-const DEMO={players:[
-  P("keezer","HeyKeezer","light",{kills:4821,deaths:1545,score:2143700,rank:142,playtimeSec:402*3600,damage:1239000,headshots:531,vehiclesDestroyed:29,killsPerHour:13.1,scorePerMin:649},[{name:"Luke Skywalker",side:"light",playtimeSec:96*3600,kills:1480,score:530000,rank:96},{name:"Obi-Wan Kenobi",side:"light",playtimeSec:61*3600,kills:910,score:340000,rank:71},{name:"Han Solo",side:"light",playtimeSec:44*3600,kills:620,score:220000,rank:52},{name:"Yoda",side:"light",playtimeSec:30*3600,kills:410,score:160000,rank:40}],[{name:"Assault",playtimeSec:58*3600,kills:980,score:400000,rank:70},{name:"Officer",playtimeSec:40*3600,kills:520,score:250000,rank:55},{name:"Heavy",playtimeSec:22*3600,kills:300,score:120000,rank:33},{name:"Specialist",playtimeSec:18*3600,kills:260,score:90000,rank:28}],[S(0,21,148,182,61,"Assault",["Luke Skywalker","light"]),S(2,20,96,101,44,"Officer",["Obi-Wan Kenobi","light"]),S(4,22,70,64,30,"Assault",["Luke Skywalker","light"])]),
-  P("andrew","Andrew","dark",{kills:4198,deaths:1521,score:1876000,rank:128,playtimeSec:356*3600,damage:1134000,headshots:486,vehiclesDestroyed:27,killsPerHour:12.0,scorePerMin:594},[{name:"Darth Vader",side:"dark",playtimeSec:88*3600,kills:1320,score:480000,rank:88},{name:"Darth Maul",side:"dark",playtimeSec:57*3600,kills:850,score:300000,rank:60},{name:"Emperor Palpatine",side:"dark",playtimeSec:33*3600,kills:440,score:170000,rank:41}],[{name:"Heavy",playtimeSec:61*3600,kills:900,score:380000,rank:66},{name:"Assault",playtimeSec:39*3600,kills:600,score:240000,rank:52},{name:"Officer",playtimeSec:19*3600,kills:240,score:110000,rank:30}],[S(0,21,85,112,47,"Heavy",["Darth Vader","dark"]),S(3,21,120,130,58,"Assault",["Darth Maul","dark"])]),
-  P("riley","RogueOne_Riley","light",{kills:3764,deaths:1629,score:1612000,rank:117,playtimeSec:331*3600,damage:1050000,headshots:450,vehiclesDestroyed:25,killsPerHour:11.1,scorePerMin:550},[{name:"Rey",side:"light",playtimeSec:70*3600,kills:980,score:360000,rank:70},{name:"Han Solo",side:"light",playtimeSec:52*3600,kills:700,score:260000,rank:55},{name:"Luke Skywalker",side:"light",playtimeSec:31*3600,kills:410,score:150000,rank:38}],[{name:"Specialist",playtimeSec:66*3600,kills:820,score:330000,rank:64},{name:"Assault",playtimeSec:30*3600,kills:400,score:170000,rank:40}],[S(1,20,82,74,39,"Specialist",["Rey","light"]),S(5,19,60,52,27,"Specialist"),S(6,21,45,41,20,"Assault",["Han Solo","light"]),S(6,23,40,36,18,"Specialist")]),
-  P("wampa","WampaStomper","dark",{kills:3120,deaths:1608,score:1398000,rank:104,playtimeSec:298*3600,damage:882000,headshots:378,vehiclesDestroyed:21,killsPerHour:9.3,scorePerMin:462},[{name:"Boba Fett",side:"dark",playtimeSec:74*3600,kills:860,score:330000,rank:74},{name:"Darth Maul",side:"dark",playtimeSec:41*3600,kills:480,score:190000,rank:45},{name:"Darth Vader",side:"dark",playtimeSec:22*3600,kills:260,score:100000,rank:30}],[{name:"Aerial",playtimeSec:59*3600,kills:640,score:270000,rank:58},{name:"Heavy",playtimeSec:33*3600,kills:380,score:150000,rank:36}],[S(1,19,45,38,30,"Aerial",["Boba Fett","dark"])]),
-  P("porg","PorgSmuggler","light",{kills:2411,deaths:1536,score:1021000,rank:88,playtimeSec:241*3600,damage:798000,headshots:342,vehiclesDestroyed:19,killsPerHour:8.4,scorePerMin:418},[{name:"Han Solo",side:"light",playtimeSec:63*3600,kills:600,score:240000,rank:63},{name:"Obi-Wan Kenobi",side:"light",playtimeSec:39*3600,kills:380,score:150000,rank:40},{name:"Rey",side:"light",playtimeSec:20*3600,kills:190,score:80000,rank:24}],[{name:"Officer",playtimeSec:52*3600,kills:480,score:210000,rank:50},{name:"Assault",playtimeSec:28*3600,kills:300,score:120000,rank:34}],[S(2,22,55,42,35,"Officer",["Han Solo","light"])])
-,
-  P("fourskinner83","fourskinner83","dark",{kills:2980,deaths:1702,score:1240000,rank:96,playtimeSec:272*3600,damage:987000,headshots:423,vehiclesDestroyed:23,killsPerHour:10.4,scorePerMin:517},[{name:"Kylo Ren",side:"dark",playtimeSec:66*3600,kills:720,score:290000,rank:66},{name:"Iden Versio",side:"dark",playtimeSec:38*3600,kills:410,score:160000,rank:41},{name:"Darth Maul",side:"dark",playtimeSec:24*3600,kills:280,score:110000,rank:30}],[{name:"Assault",playtimeSec:49*3600,kills:600,score:250000,rank:52},{name:"Officer",playtimeSec:31*3600,kills:330,score:140000,rank:38}],[S(0,22,70,78,41,"Assault",["Kylo Ren","dark"]),S(3,20,95,88,52,"Officer",["Iden Versio","dark"])])
-],servers:[{name:"Galactic Assault - All Maps",official:true,players:18,maxPlayers:40,map:"Levels/MP/Hoth_01/Hoth_01",mode:"PlanetaryBattles",mods:["Battlefront Plus"]},{name:"HvV Chaos - 24/7",official:false,players:37,maxPlayers:40,map:"S9_3/Scarif/Levels/MP/Scarif_02/Scarif_02",mode:"HeroesVersusVillains",mods:["Battlefront Expanded","HvV Chaos Mode"]},{name:"1v1 Sabers Only - 24/7",official:false,players:24,maxPlayers:30,map:"S5_1/Levels/MP/Geonosis_01/Geonosis_01",mode:"HeroesVersusVillains",mods:["Saberfront"]},{name:"Conquest - All Maps",official:true,players:12,maxPlayers:40,map:"S9_3/Tatooine_02/Tatooine_02",mode:"Mode1",mods:["Battlefront Plus"]},{name:"Galactic CO-OP XL | BF+ - 24/7",official:false,players:15,maxPlayers:16,map:"Levels/MP/Tatooine_01/Tatooine_01",mode:"PlanetaryBattles",mods:["Battlefront Plus"]},{name:"Saberfront 1v1s - 24/7",official:false,players:0,maxPlayers:28,map:"S5_1/Levels/MP/Geonosis_01/Geonosis_01",mode:"HeroesVersusVillains",mods:["Saberfront"]}]};
-
-function fromBlob(blob){
-  return (blob.players||[]).map(p=>{
-    if(!p.resolved||!p.stats)return{id:p.name,name:p.name,username:p.name,resolved:false,heroes:[],classes:[],sessions:[],career:null};
-    const st=p.stats;const c=st.career||null;
-    const heroes=(st.heroes||[]).filter(h=>h.playtimeSec>0||h.kills>0).map(h=>({name:h.name,side:h.side,playtimeSec:h.playtimeSec||0,kills:h.kills||0,score:h.score||0,rank:h.rank||0})).sort((a,b)=>b.playtimeSec-a.playtimeSec);
-    const classes=(st.classes||[]).filter(x=>x.playtimeSec>0||x.kills>0).map(x=>({name:x.name,playtimeSec:x.playtimeSec||0,kills:x.kills||0,score:x.score||0,rank:x.rank||0})).sort((a,b)=>b.playtimeSec-a.playtimeSec);
-    const lp=heroes.filter(h=>h.side==="light").reduce((a,h)=>a+h.playtimeSec,0),dp=heroes.filter(h=>h.side==="dark").reduce((a,h)=>a+h.playtimeSec,0);
-    const career=c?{kills:c.kills,deaths:c.deaths,kd:c.kd,score:c.score,rank:c.rank,playtimeSec:c.playtimeSec||((st.totals?.heroPlaytimeSec||0)+(st.totals?.classPlaytimeSec||0)),damage:c.damage??null,headshots:c.headshots??null,vehiclesDestroyed:c.vehiclesDestroyed??null,killsPerHour:c.killsPerHour??null,scorePerMin:c.scorePerMin??null}
-      :{kills:null,deaths:null,kd:null,score:null,rank:null,playtimeSec:(st.totals?.heroPlaytimeSec||0)+(st.totals?.classPlaytimeSec||0),damage:null,headshots:null,vehiclesDestroyed:null,killsPerHour:null,scorePerMin:null};
-    const sessions=(p.sessions||[]).map(s=>{const d=s.decoded||{};const cc=d.career;return{start:s.start,end:s.end,durationMin:s.durationMin,
-      career:cc?{kills:cc.kills,deaths:cc.deaths,kd:cc.kd}:null,
-      classes:(d.classes||[]).filter(x=>x.playtimeSec>0).sort((a,b)=>b.playtimeSec-a.playtimeSec).slice(0,2).map(x=>({name:x.name,playtimeSec:x.playtimeSec,kills:x.kills||0})),
-      heroes:(d.heroes||[]).filter(x=>x.playtimeSec>0).sort((a,b)=>b.playtimeSec-a.playtimeSec).slice(0,2).map(x=>({name:x.name,side:x.side,playtimeSec:x.playtimeSec,kills:x.kills||0}))};});
-    return{id:p.id||p.name,name:p.username||p.name,username:p.username||p.name,resolved:true,side:dp>lp?"dark":"light",career,heroes,classes,sessions,weapons:st.weapons||[],color:p.color||null};
-  });
-}
-async function load(){
-  try{const r=await fetch("/api/data",{cache:"no-store"});if(!r.ok)throw 0;const blob=await r.json();if(!blob||!Array.isArray(blob.players))throw 0;
-    players=fromBlob(blob);servers=Array.isArray(blob.servers)?blob.servers:[];updatedAt=blob.updatedAt;LIVE=true;
-    try{ME=await(await fetch("/api/me")).json();}catch{ME=null;}
-    if(ME&&ME.admin){$("#navAdmin").hidden=false;}
-  }catch{players=DEMO.players;servers=DEMO.servers;updatedAt=new Date(Date.now()-40000).toISOString();LIVE=false;}
-  const b=$("#badge");b.classList.toggle("live",LIVE);$("#badge-txt").textContent=LIVE?("LIVE · "+ago(updatedAt).toUpperCase()):"DEMO DATA";
-  const meName=(ME&&ME.name)||(!LIVE?"HeyKeezer":null);
-  $("#meAv").textContent=meName?ini(meName):"··";$("#youAv").textContent=meName?ini(meName):"··";$("#youName").textContent=meName||"Sign in";
-  $("#foot").innerHTML=(LIVE?"LIVE SQUAD DATA · STATS COUNT ON OFFICIAL KYBER SERVERS ONLY":"CONCEPT · SAMPLE DATA · NOT LIVE FIGURES")+"<br>BUILT ON THE OPEN-SOURCE KYBER API · NOT AFFILIATED WITH EA OR KYBER";
-}
-const ago=ts=>{if(!ts)return"never";const d=(Date.now()-new Date(ts))/1000;if(d<90)return"just now";if(d<3600)return Math.round(d/60)+"m ago";if(d<86400)return Math.round(d/3600)+"h ago";return Math.round(d/86400)+"d ago";};
-const fmtH=sec=>{sec=sec||0;const h=Math.floor(sec/3600),m=Math.round(sec%3600/60);return h>0?(h+"h"+(h<10&&m?" "+m+"m":"")):m+"m";};
-const fmtN=n=>n==null?null:Math.round(n).toLocaleString();
-const pct=v=>v==null?null:Math.round(v*100)+"%";
-const ini=n=>n.replace(/[^A-Za-z0-9]/g,"").slice(0,2).toUpperCase();
-const sideCol=s=>s==="dark"?"var(--dark)":"var(--light)";
-const na=(t="stat key not decoded yet")=>`<span class="na" title="${t}">—</span>`;
-const week=p=>(p.sessions||[]).filter(s=>Date.now()-new Date(s.start)<7*86400e3);
-const wkMin=p=>week(p).reduce((a,s)=>a+(s.durationMin||0),0);
-const wkKills=p=>week(p).reduce((a,s)=>a+((s.career&&s.career.kills)||0),0);
-const wkDeaths=p=>week(p).reduce((a,s)=>a+((s.career&&s.career.deaths)||0),0);
-const mapName=m=>{if(!m)return"";const seg=m.split("/").filter(Boolean).pop()||m;return seg.replace(/_\d+$/,"").replace(/([a-z])([A-Z])/g,"$1 $2");};
-const MODES={PlanetaryBattles:"Galactic Assault",HeroesVersusVillains:"Heroes vs Villains",Mode1:"Conquest / Supremacy",ModeDefend:"Co-Op",Mode9:"Instant Action"};
-const modeName=m=>MODES[m]||m||"";
-const CREST={empire:`<circle cx="24" cy="24" r="19" stroke="currentColor" stroke-width="2.2"/><circle cx="24" cy="24" r="8.5" stroke="currentColor" stroke-width="2.2"/>${[0,45,90,135,180,225,270,315].map(a=>{const r=a*Math.PI/180;return `<line x1="${24+8.5*Math.cos(r)}" y1="${24+8.5*Math.sin(r)}" x2="${24+19*Math.cos(r)}" y2="${24+19*Math.sin(r)}" stroke="currentColor" stroke-width="2.2"/>`}).join("")}`,rebel:`<path d="M24 5c6.5 9.5 6.5 17.5 0 38-6.5-20.5-6.5-28.5 0-38z" fill="currentColor"/><path d="M11 21c3.8 5.6 7.6 8.6 13 10.4-7.3 1.1-12.2-2.5-15-8.2zM37 21c-3.8 5.6-7.6 8.6-13 10.4 7.3 1.1 12.2-2.5 15-8.2z" fill="currentColor" opacity=".85"/>`};
-const CRYSTAL=["var(--c-teal)","var(--c-pink)","var(--c-blue)","var(--c-gold)","var(--c-violet)","var(--c-teal)"];
-function countUp(el,to,dec=0,sfx=""){if(to==null){el.innerHTML=na();return;}if(reduce){el.textContent=(dec?to.toFixed(dec):Math.round(to).toLocaleString())+sfx;return;}const s=performance.now();(function st(t){const k=Math.min(1,(t-s)/900),e=1-Math.pow(1-k,3),v=to*e;el.textContent=(dec?v.toFixed(dec):Math.round(v).toLocaleString())+sfx;if(k<1)requestAnimationFrame(st);})(performance.now());}
-
-/* ================= audio ================= */
-let actx,soundOn=false;
-function ensureAudio(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();if(actx.state==="suspended")actx.resume();}
-function hum(f){if(!soundOn)return;ensureAudio();const t=actx.currentTime,base=f==="rebel"?150:92;const g=actx.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.16,t+.12);g.gain.exponentialRampToValueAtTime(.0008,t+1.5);const flt=actx.createBiquadFilter();flt.type="lowpass";flt.frequency.setValueAtTime(380,t);flt.frequency.exponentialRampToValueAtTime(1500,t+.28);flt.frequency.exponentialRampToValueAtTime(300,t+1.3);const o1=actx.createOscillator();o1.type="sawtooth";o1.frequency.setValueAtTime(base,t);o1.frequency.linearRampToValueAtTime(base*1.5,t+.14);o1.frequency.linearRampToValueAtTime(base,t+.6);const o2=actx.createOscillator();o2.type="sawtooth";o2.frequency.value=base*1.01;o2.detune.value=9;o1.connect(flt);o2.connect(flt);flt.connect(g);g.connect(actx.destination);o1.start(t);o2.start(t);o1.stop(t+1.6);o2.stop(t+1.6);}
-function blip(){if(!soundOn)return;ensureAudio();const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.setValueAtTime(760,t);o.frequency.exponentialRampToValueAtTime(1180,t+.08);g.gain.setValueAtTime(.07,t);g.gain.exponentialRampToValueAtTime(.001,t+.12);o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+.13);}
-$("#sound").onclick=()=>{soundOn=!soundOn;$("#sound").classList.toggle("on",soundOn);if(soundOn){ensureAudio();hum(FACTION);}};
-
-/* ================= hero markers + strip ================= */
-// Slots = the five crystals painted into the plate. [label x, label y, crystal x, crystal y] in % of the plate, plus the crystal's own colour.
-
+const $=s=>document.querySelector(s);const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]||c));
+let FACTION="rebel",players=[];
+const CRYSTAL=["#2ef2d0"];
 /* ================= scene: orbit + crystals + fleet =================
    empire: crystals sit on the three painted into the plate (until Empire assets arrive)
    rebel : clean plate; orbit rings, crystals and ships are drawn/animated here      */
@@ -932,7 +859,8 @@ function gemSVG_old(c){return `<svg viewBox="0 0 30 48"><path d="M15 2 L26 18 L1
 function pilotCard(p){const c=p.career||{};const top=p.heroes[0]||p.classes[0];return `<i class="k"><b>${c.kd!=null?c.kd.toFixed(2):"—"}</b><small>K/D</small></i><i><b>${c.kills!=null?fmtN(c.kills):"—"}</b><small>KILLS</small></i><i><b>${c.rank??"—"}</b><small>LEVEL</small></i><i><b>${fmtH(c.playtimeSec)}</b><small>TIME</small></i>${top?`<em>${esc(top.name)} · ${fmtH(top.playtimeSec)}</em>`:""}`;}
 const KYBER=[["blue","#3ad7ff"],["green","#2ef2d0"],["red","#ff2d4d"],["purple","#b48cff"],["yellow","#ffc53d"],["orange","#ff8a3d"],["white","#dfe9ff"],["magenta","#ff5fd0"]];
 function gemSVG(c){return `<span class="kc" style="--c:${c}"><i><img src="plates/crystal.png" alt="" draggable="false"></i></span>`;}
-function renderMarks(){
+function renderMarks(){return;}
+function renderMarks_unused(){
   const sc=SCENE[FACTION]||SCENE.empire;const list=players.filter(p=>p.resolved).slice(0,6);
   if(sc.mode==="painted"){
     $("#marks").innerHTML=PAINTED.map((s,i)=>{const p=list[i];if(!p)return"";const c=s[4];
@@ -965,334 +893,16 @@ function layoutFleet(){const el=$("#fleet");const W=el.clientWidth,H=el.clientHe
     else img.style.transform=`rotate(${delta.toFixed(1)}deg)`;});}
 addEventListener("resize",layoutFleet);
 $("#fleet").addEventListener("pointerenter",e=>{const bob=e.target.closest&&e.target.closest(".bob");if(!bob)return;const r=bob.getBoundingClientRect(),h=$("#hero").getBoundingClientRect();bob.classList.toggle("below",r.top-h.top<190);bob.classList.toggle("edge-l",r.left-h.left<140);bob.classList.toggle("edge-r",h.right-r.right<140);},true);
-const ICONS={
-  // thin-line terminal marks, in the style of the reference sheet. Every path is stroke-only so it can draw on.
-  elim:`<svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="12"/><circle cx="17" cy="17" r="5"/><path d="M17 1v7M17 26v7M1 17h7M26 17h7"/><circle class="dot" cx="17" cy="17" r="1.5"/></svg>`,
-  kd:`<svg class="ico" viewBox="0 0 34 34"><path d="M3 29h28"/><path d="M4 24l7-7 6 4 7-11 6 3"/><circle class="dot" cx="30" cy="13" r="1.8"/><path d="M4 5v24" stroke-dasharray="2 3"/></svg>`,
-  kph:`<svg class="ico" viewBox="0 0 34 34"><path d="M5 25a12 12 0 1 1 24 0"/><path d="M17 25L24 13"/><circle class="dot" cx="17" cy="25" r="2"/><path d="M5 25h3M26 25h3M8 15l2 1M26 15l-2 1M17 9v3"/></svg>`,
-  squad:`<svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="13"/><ellipse cx="17" cy="17" rx="13" ry="5"/><ellipse cx="17" cy="17" rx="5" ry="13"/><path d="M4 17h26"/><circle class="dot" cx="26" cy="9" r="1.8"/></svg>`,
-  dmg:`<svg class="ico" viewBox="0 0 34 34"><path d="M17 3l4 9 9 1-6.5 6 2 9-8.5-4.5L8.5 28l2-9L4 13l9-1z"/><path d="M17 11v6M17 20v1" /></svg>`,
-  hs:`<svg class="ico" viewBox="0 0 34 34"><rect x="5" y="5" width="24" height="24" rx="2"/><path d="M17 5v7M17 22v7M5 17h7M22 17h7"/><circle cx="17" cy="17" r="4"/><circle class="dot" cx="17" cy="17" r="1.2"/></svg>`,
-  veh:`<svg class="ico" viewBox="0 0 34 34"><path d="M6 20h22l-3 6H9z"/><path d="M10 20v-6h8l4 6"/><circle cx="11" cy="26" r="2.5"/><circle cx="23" cy="26" r="2.5"/><path d="M22 14h6"/></svg>`,
-  spm:`<svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="12"/><path d="M17 8v9l6 3"/><path d="M17 3v2M31 17h-2M17 31v-2M3 17h2"/></svg>`,
-  time:`<svg class="ico" viewBox="0 0 34 34"><path d="M9 4h16M9 30h16M11 4c0 9 12 9 12 13s-12 4-12 13M23 4c0 9-12 9-12 13s12 4 12 13"/><circle class="dot" cx="17" cy="17" r="1.5"/></svg>`,
-  score:`<svg class="ico" viewBox="0 0 34 34"><path d="M5 28V12M12 28V6M19 28V16M26 28V9"/><path d="M3 30h28" stroke-dasharray="2 3"/></svg>`,
-  deaths:`<svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="14" r="9"/><path d="M12 23v6h10v-6"/><circle cx="13.5" cy="13" r="1.8"/><circle cx="20.5" cy="13" r="1.8"/><path d="M15 27v2M19 27v2"/></svg>`,
-  level:`<svg class="ico" viewBox="0 0 34 34"><path d="M17 4l12 7v12l-12 7-12-7V11z"/><path d="M17 11l6 3.5v7L17 25l-6-3.5v-7z"/><circle class="dot" cx="17" cy="18" r="1.5"/></svg>`,
-};
-const TILE_ICON={"K/D":"kd","KILLS":"elim","DEATHS":"deaths","KILLS / HOUR":"kph","SCORE":"score","PLAY TIME":"time","KILLS THIS WEEK":"elim","K/D THIS WEEK":"kd","DAMAGE DEALT":"dmg","HEADSHOTS":"hs","VEHICLES DESTROYED":"veh","SCORE / MIN":"spm","LEVEL":"level"};
-function renderStrip(){
-  const list=players.filter(p=>p.resolved&&p.career);
-  const kills=list.reduce((a,p)=>a+(p.career.kills||0),0);
-  const kds=list.map(p=>p.career.kd).filter(v=>v!=null);const avgKd=kds.length?kds.reduce((a,b)=>a+b,0)/kds.length:null;
-  const totSec=list.reduce((a,p)=>a+(p.career.playtimeSec||0),0);const kph=totSec>0?+(kills/(totSec/3600)).toFixed(1):null;
-  const sess=players.reduce((a,p)=>a+week(p).length,0);
-  $("#strip").innerHTML=`<div>${ICONS.elim}<span><b data-n="${kills}">0</b><small>ELIMINATIONS</small></span></div><div>${ICONS.kd}<span><b data-n="${avgKd??""}" data-dec="2">0</b><small>AVG K/D</small></span></div><div>${ICONS.kph}<span><b data-n="${kph??""}" data-dec="1">0</b><small>KILLS / HOUR</small></span></div><div>${ICONS.squad}<span><b data-n="${sess}">0</b><small>WEEKLY BATTLES</small></span></div>`;
-  $("#strip").querySelectorAll(".ico").forEach(ic=>ic.classList.add("draw"));$("#strip").querySelectorAll("[data-n]").forEach(el=>countUp(el,el.dataset.n===""?null:+el.dataset.n,+(el.dataset.dec||0),el.dataset.sfx||""));
-}
 
-/* ================= component kit ================= */
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;","&gt;":"&gt;",'"':"&quot;"}[c]||c));
-const UI={
-  head:(title,sub,right="")=>`<div class="head"><div><h2>${title}</h2>${sub?`<p>${sub}</p>`:""}</div>${right?`<div class="r">${right}</div>`:""}</div>`,
-  panel:(title,body,extra="")=>`<div class="card ${extra}"><h3>${title}</h3>${body}</div>`,
-  tile:(v,label,o={})=>`<div class="tile ${TILE_ICON[label]?"has-ico":""}">${TILE_ICON[label]?ICONS[TILE_ICON[label]]:""}<b class="${o.a?"a":""}" data-n="${v??""}" data-dec="${o.dec||0}" data-sfx="${o.sfx||""}">0</b><small>${label}</small></div>`,
-  tiles:items=>`<div class="tiles" style="margin-bottom:12px">${items.join("")}</div>`,
-  bar:(name,w,val,col="var(--accent)")=>`<div class="barrow"><div class="n"><i style="background:${col}"></i><span>${name}</span></div><div class="track"><i data-w="${w}" style="background:${col}"></i></div><div class="v">${val}</div></div>`,
-  seg:(id,opts,cur)=>`<div class="seg" id="${id}">${opts.map(([k,l])=>`<button data-k="${k}" class="${k===cur?"on":""}">${l}</button>`).join("")}</div>`,
-  filters:(id,opts,cur)=>`<div class="filters" id="${id}">${opts.map(([k,l])=>`<button data-k="${k}" class="${k===cur?"on":""}">${l}</button>`).join("")}</div>`,
-  avatar:(name,cls="")=>`<div class="av ${cls}">${ini(name)}</div>`,
-  spark:(vals,col="var(--accent)",w=120,h=28)=>{if(!vals.length||!Math.max(...vals))return`<svg class="spark" viewBox="0 0 ${w} ${h}"><path d="M0 ${h-2}H${w}" stroke="var(--line-2)"/></svg>`;const mx=Math.max(...vals),n=vals.length;const pts=vals.map((v,i)=>[i/(n-1)*(w-4)+2,h-3-(v/mx)*(h-8)]);const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");return`<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path class="fill" d="${d} L${w-2} ${h} L2 ${h}Z" fill="${col}"/><path d="${d}" stroke="${col}"/></svg>`;},
-  ring:(pctv,label,txt,col="var(--accent)")=>{const r=32,C=2*Math.PI*r,off=C*(1-Math.min(1,Math.max(0,pctv||0)));return`<div class="ringbox"><svg class="gauge" viewBox="0 0 76 76"><circle class="bg" cx="38" cy="38" r="${r}"/><circle class="fg" cx="38" cy="38" r="${r}" stroke="${col}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" data-off="${off.toFixed(1)}"/></svg><div><b>${txt}</b><small>${label}</small></div></div>`;},
-  heat:grid=>{const mx=Math.max(1,...grid.flat());const D=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];return`<div class="heat">${grid.map((row,d)=>`<div class="d">${D[d]}</div>${row.map(v=>`<div class="h ${v?"l"+Math.max(1,Math.ceil(v/mx*4)):""}" title="${D[d]} · ${v} session${v===1?"":"s"}"></div>`).join("")}`).join("")}<div class="x"><span>12am</span><span>6am</span><span>noon</span><span>6pm</span><span>11pm</span></div></div>`;},
-  empty:(txt)=>`<div class="view card" style="text-align:center;padding:40px"><div class="muted">${txt}</div></div>`,
-  animate:()=>{app.querySelectorAll(".ico").forEach(ic=>ic.classList.add("draw"));app.querySelectorAll("[data-n]").forEach(el=>countUp(el,el.dataset.n===""?null:+el.dataset.n,+(el.dataset.dec||0),el.dataset.sfx||""));requestAnimationFrame(()=>{app.querySelectorAll(".track>i,.vbar>i,.popbar>i").forEach(i=>i.style.width=i.dataset.w+"%");app.querySelectorAll(".gauge .fg").forEach(c=>c.style.strokeDashoffset=c.dataset.off);});},
-  bind:(id,fn)=>{const el=$("#"+id);if(el)el.querySelectorAll("button").forEach(b=>b.onclick=()=>fn(b.dataset.k));}
-};
-const dailyKills=(p,days=14)=>{const out=new Array(days).fill(0);(p.sessions||[]).forEach(s=>{const d=Math.floor((Date.now()-new Date(s.start))/86400e3);if(d>=0&&d<days)out[days-1-d]+=(s.career&&s.career.kills)||0;});return out;};
-const bestNight=p=>(p.sessions||[]).reduce((b,s)=>(!b||((s.career?.kills||0)>(b.career?.kills||0)))?s:b,null);
-const crystalOf=p=>{if(p&&p.color)return p.color;const i=players.filter(x=>x.resolved).indexOf(p);if(i<0)return CRYSTAL[0];return (SCENE[FACTION]||SCENE.empire).mode==="painted"?(PAINTED[i]?PAINTED[i][4]:GEMCOL[i%GEMCOL.length]):GEMCOL[i%GEMCOL.length];};
-
-/* ================= views ================= */
-let current="overview",selected=null,rivA=null,rivB=null,sortKey="playtime",lbMode="career",srvFilter="all",sessFilter="all";const app=$("#app");
-const SORTS={playtime:["Play time",p=>p.career?.playtimeSec??0],kd:["K/D",p=>p.career?.kd??-1],kph:["Kills / hour",p=>p.career?.killsPerHour??-1],damage:["Damage",p=>p.career?.damage??-1],headshots:["Headshots",p=>p.career?.headshots??-1],kills:["Kills",p=>p.career?.kills??-1],score:["Score",p=>p.career?.score??-1],rank:["Level",p=>p.career?.rank??-1]};
-const WSORTS={kills:["Kills this week",p=>wkKills(p)],kd:["K/D this week",p=>wkDeaths(p)?wkKills(p)/wkDeaths(p):wkKills(p)],time:["Time this week",p=>wkMin(p)],sessions:["Sessions",p=>week(p).length]};
-const VIEWS=["overview","squad","rivalry","player","sessions","servers","you","admin"];
-function moveInd(){const on=$("#nav button.on"),ind=$("#navind");if(!on||!ind)return;ind.style.left=on.offsetLeft+"px";ind.style.width=on.offsetWidth+"px";}
-let swTimer=null;
-function switchTo(v,push=true){if(!VIEWS.includes(v))v="overview";const changed=v!==current;current=v;$("#nav").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));moveInd();
-  const full=v==="overview";$("#hero").style.display=full?"":"none";document.body.classList.toggle("inner",!full);if(full){requestAnimationFrame(layoutFleet);if(changed){$("#hero").classList.remove("enter");void $("#hero").offsetWidth;$("#hero").classList.add("enter");}}
-  if(push){const h=v==="overview"?"":"#"+v+(v==="player"&&selected?"/"+selected:"");if(location.hash!==h)history.replaceState(null,"",location.pathname+h);}
-  blip();if(changed&&!reduce){app.classList.add("out");clearTimeout(swTimer);swTimer=setTimeout(()=>{app.classList.remove("out");render();},200);}else render();if(!full)window.scrollTo({top:0,behavior:"smooth"});}
-function render(){({overview:renderOverview,squad:renderLeaderboard,rivalry:renderRivalry,player:renderPlayer,sessions:renderSessions,servers:renderServers,you:renderYou,admin:renderAdmin}[current])();}
-const sorted=()=>players.filter(p=>p.resolved).sort((a,b)=>SORTS[sortKey][1](b)-SORTS[sortKey][1](a));
-const CICON={Assault:'<svg viewBox="0 0 16 16"><path d="M8 2l6 11H2z"/><path d="M8 7v3M8 11.5v.5"/></svg>',Specialist:'<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.5"/><circle cx="8" cy="8" r="1"/><path d="M8 1v3M8 12v3M1 8h3M12 8h3"/></svg>',Heavy:'<svg viewBox="0 0 16 16"><path d="M8 1.5l5.6 3.25v6.5L8 14.5l-5.6-3.25v-6.5z"/><rect x="5.5" y="5.5" width="5" height="5"/></svg>',Officer:'<svg viewBox="0 0 16 16"><path d="M8 2l1.8 3.7 4.2.6-3 2.9.7 4.1L8 11.4l-3.7 1.9.7-4.1-3-2.9 4.2-.6z"/></svg>',Aerial:'<svg viewBox="0 0 16 16"><path d="M8 2v12M3 8h10M5 5l6 6M11 5l-6 6"/></svg>',Enforcer:'<svg viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" rx="2"/><path d="M6 8h4"/></svg>',Infiltrator:'<svg viewBox="0 0 16 16"><path d="M2 8c2-4 10-4 12 0-2 4-10 4-12 0z"/><circle cx="8" cy="8" r="1.5"/></svg>'};
-const chips=p=>(p.heroes.length?p.heroes.slice(0,3).map(h=>`<span class="chip"><i class="${h.side==="dark"?"d":"l"}"></i>${h.name}</span>`):p.classes.slice(0,3).map(c=>`<span class="chip ic-${c.name.toLowerCase()}">${CICON[c.name]||'<i class="a"></i>'}${c.name}</span>`)).join("");
-const clickRows=()=>app.querySelectorAll("tr.click").forEach(tr=>tr.onclick=()=>{selected=tr.dataset.id;switchTo("player");});
-const unresRows=()=>players.filter(p=>!p.resolved).map(p=>`<div class="row unres"><span class="no">·</span><span class="av">${ini(p.name)}</span><span class="who"><b>${esc(p.name)}</b><small>NOT FOUND ON KYBER — CHECK SPELLING</small></span></div>`).join("");
-
-/* Overview: compact leaderboard under the holotable */
-function renderOverview(){
-  const list=sorted();
-  if(!list.length&&!players.length){app.innerHTML=`<section class="standings view"><div class="sh"><h2>SQUAD STANDINGS</h2><i></i></div><div class="empty-state"><div class="crys">${gemSVG("var(--accent)")}</div><b>No pilots on the table yet</b><p>Add Kyber names to the agent's config, or sign in and claim yours — the first official-server match lights the first crystal.</p></div></section>`;return;}
-  app.innerHTML=`<section class="standings view"><div class="sh"><h2>SQUAD STANDINGS</h2><i></i><div class="sort">Sort: <span class="selwrap"><select class="sel" id="sortsel">${Object.entries(SORTS).map(([k,[l]])=>`<option value="${k}" ${k===sortKey?"selected":""}>${l}</option>`).join("")}</select></span></div></div>
-  <div class="rows">${list.map((p,i)=>{const c=p.career||{};return `<button class="row ${i===0?'top':''}" data-id="${p.id}" style="--c:${crystalOf(p)}">
-    <span class="no">${i+1}</span><span class="av">${ini(p.name)}</span>
-    <span class="who"><b>${esc(p.name)}</b><small>LVL ${c.rank??"—"}</small></span>
-    <span class="chips">${chips(p)}</span>
-    <span class="sts"><span class="st"><small>K/D</small><b>${c.kd!=null?c.kd.toFixed(2):"—"}</b></span><span class="st"><small>KILLS / HR</small><b>${c.killsPerHour!=null?c.killsPerHour.toFixed(1):"—"}</b></span><span class="st"><small>PLAY TIME</small><b>${fmtH(c.playtimeSec)}</b></span></span></button>`;}).join("")}${unresRows()}</div></section>
-  <div class="foot"><span class="i">i</span><span>Stats accrue on OFFICIAL servers only.</span><button class="link" id="toservers">View live servers <svg viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button><span class="r">BUILT ON THE OPEN-SOURCE KYBER API · NOT AFFILIATED WITH EA OR KYBER.</span></div>`;
-  $("#sortsel").onchange=e=>{sortKey=e.target.value;renderOverview();};
-  app.querySelectorAll(".row[data-id]").forEach(r=>r.onclick=()=>{selected=r.dataset.id;blip();switchTo("player");});
-  const ts=$("#toservers");if(ts)ts.onclick=()=>switchTo("servers");
-}
-
-/* Leaderboard: full stats, career vs this week, podium, trend sparklines */
-function renderLeaderboard(){
-  const base=players.filter(p=>p.resolved);
-  if(!base.length){app.innerHTML=UI.empty("No pilots yet. Open your profile to claim your Kyber name.");return;}
-  const wk=lbMode==="week";const S=wk?WSORTS:SORTS;if(!S[sortKey])sortKey=wk?"kills":"playtime";
-  const list=[...base].sort((a,b)=>S[sortKey][1](b)-S[sortKey][1](a));
-  const fmtTop=p=>wk?`${wkKills(p)} kills`:(sortKey==="kd"?(p.career?.kd??0).toFixed(2)+" K/D":sortKey==="kph"?(p.career?.killsPerHour??0).toFixed(1)+" k/h":sortKey==="damage"?fmtN(p.career?.damage)+" dmg":sortKey==="headshots"?(p.career?.headshots??0)+" HS":sortKey==="kills"?fmtN(p.career?.kills)+" kills":sortKey==="score"?fmtN(p.career?.score)+" pts":sortKey==="rank"?"LVL "+p.career?.rank:fmtH(p.career?.playtimeSec));
-  const podium=list.slice(0,3).map((p,i)=>`<button class="pod p${i+1}" data-id="${p.id}" data-place="${i+1}">${UI.avatar(p.name)}<div style="min-width:0"><b>${p.name}</b><small>${wk?`${week(p).length} SESSIONS · ${fmtH(wkMin(p)*60)}`:`LVL ${p.career?.rank??"—"} · ${fmtH(p.career?.playtimeSec)}`}</small></div><div class="big">${fmtTop(p)}</div></button>`).join("");
-  const cols=wk?`<th class="r">KILLS</th><th class="r">DEATHS</th><th class="r">K/D</th><th class="r">TIME</th><th class="r">SESSIONS</th><th class="r hm">TREND</th>`
-             :`<th class="r">K/D</th><th class="r">KILLS</th><th class="r hm">DEATHS</th><th class="r hm">SCORE</th><th class="r">K / HR</th><th class="r hm">HS</th><th class="r" style="white-space:nowrap">PLAY TIME</th><th class="r hm">TREND</th>`;
-  const rows=list.map((p,i)=>{const c=p.career||{};const k=wkKills(p),d=wkDeaths(p);const tr=`<td class="r c-trend hm"><div class="trend" style="justify-content:flex-end">${UI.spark(dailyKills(p),crystalOf(p),72,22)}</div></td>`;
-    const cells=wk?`<td class="r num c-kd">${k}</td><td class="r num c-k" data-l="DEATHS">${d}</td><td class="r num c-wr" data-l="K/D">${d?(k/d).toFixed(2):k?k.toFixed(2):"—"}</td><td class="r num c-pt" data-l="TIME">${fmtH(wkMin(p)*60)}</td><td class="r num hm">${week(p).length}</td>${tr}`
-      :`<td class="r num c-kd">${c.kd!=null?c.kd.toFixed(2):na()}</td><td class="r num c-k" data-l="KILLS">${c.kills!=null?fmtN(c.kills):na()}</td><td class="r num hm">${c.deaths!=null?fmtN(c.deaths):na()}</td><td class="r num hm">${c.score!=null?fmtN(c.score):na()}</td><td class="r num c-wr">${c.killsPerHour!=null?c.killsPerHour.toFixed(1):na()}</td><td class="r num hm">${c.headshots!=null?fmtN(c.headshots):na()}</td><td class="r num c-pt">${fmtH(c.playtimeSec)}</td>${tr}`;
-    return `<tr class="click ${i===0?'top':''}" data-id="${p.id}"><td class="c-no"><span class="no">${i+1}</span></td><td class="c-pilot"><div class="pilot">${UI.avatar(p.name)}<div style="min-width:0"><b>${p.name}</b><small>LVL ${c.rank??"—"} · ${p.side==="dark"?"DARK":"LIGHT"}</small></div></div></td>${cells}</tr>`;}).join("");
-  app.innerHTML=`<div class="view">${UI.head("Leaderboard",wk?"Last 7 days, from session deltas.":"Career totals on official Kyber servers.",UI.seg("lbmode",[["career","Career"],["week","This week"]],lbMode)+`<div class="sort">Sort by: <span class="selwrap"><select class="sel" id="sortsel">${Object.entries(S).map(([k,[l]])=>`<option value="${k}" ${k===sortKey?"selected":""}>${l}</option>`).join("")}</select></span></div>`)}
-  <div class="podium">${podium}</div>
-  <table><colgroup><col style="width:64px"><col style="width:26%">${wk?'<col><col><col><col><col><col class="hm">':'<col><col><col class="hm"><col class="hm"><col><col class="hm"><col><col class="hm">'}</colgroup><thead><tr><th>RANK</th><th>PILOT</th>${cols}</tr></thead><tbody>${rows}${unresRows()}</tbody></table>
-  <div class="note">${wk?"Weekly numbers are reconstructed from stat snapshots while the agent runs. Trend = kills per day, last 14 days.":"K/D, kills, score and level are decoded from Kyber's stat keys. Damage, headshots and weapons are decoded from Kyber's stat keys too. Match wins aren't recorded by Kyber, so there's no win rate."}</div></div>`;
-  UI.bind("lbmode",k=>{lbMode=k;sortKey=k==="week"?"kills":"playtime";renderLeaderboard();});
-  $("#sortsel").onchange=e=>{sortKey=e.target.value;renderLeaderboard();};clickRows();
-  app.querySelectorAll(".pod").forEach(b=>b.onclick=()=>{selected=b.dataset.id;switchTo("player");});
-}
-
-/* Player card */
-function renderPlayer(){
-  const p=players.find(x=>x.id===selected&&x.resolved)||sorted()[0];if(!p){renderOverview();return;}selected=p.id;const c=p.career||{};
-  const mH=Math.max(1,...p.heroes.map(h=>h.playtimeSec)),mC=Math.max(1,...p.classes.map(x=>x.playtimeSec));
-  const wk=week(p),wkK=wkKills(p),wkD=wkDeaths(p),bn=bestNight(p),col=crystalOf(p);
-  const squadK=players.filter(x=>x.resolved&&x.career).reduce((a,x)=>a+(x.career.kills||0),0);
-  const share=`${p.name} · LVL ${c.rank??"—"} · K/D ${c.kd?.toFixed(2)??"—"} · ${fmtN(c.kills)??"—"} kills · ${fmtH(c.playtimeSec)} on Kyber`;
-  const ship=FACTION==="rebel"?["ships/xwing_a.webp","ships/awing.webp","ships/ywing.webp","ships/bwing.webp"][players.indexOf(p)%4]:["ships/tie_fighter.webp","ships/tie_int.webp","ships/tie_bomber.webp"][players.indexOf(p)%3];
-  app.innerHTML=`<div class="view"><div class="pc-hero" style="--c:${col}"><img class="ship-bg" src="${ship}" alt=""><div class="pc-left"><div class="crys">${gemSVG(col)}</div><div><div class="eyebrow" style="color:${sideCol(p.side)}">${p.side==="dark"?"DARK SIDE":"LIGHT SIDE"} · LVL ${c.rank??"—"}</div><h2 class="display2">${esc(p.name)}</h2><div class="muted mono" style="font-size:11px;letter-spacing:.18em">${wk.length} SESSION${wk.length===1?"":"S"} THIS WEEK · ${fmtH(wkMin(p)*60)} · ${wkK} KILLS</div></div></div>
-    <div class="pc-actions"><button class="ghost" id="cmp">Compare</button><button class="ghost" id="share">Copy card</button></div></div>
-  ${UI.tiles([UI.tile(c.kd,"K/D",{a:1,dec:2}),UI.tile(c.kills,"KILLS"),UI.tile(c.deaths,"DEATHS"),UI.tile(c.killsPerHour,"KILLS / HOUR",{dec:1}),UI.tile(c.score,"SCORE"),UI.tile(Math.round((c.playtimeSec||0)/3600),"PLAY TIME",{sfx:"h"}),UI.tile(wkK,"KILLS THIS WEEK"),UI.tile(wkD?+(wkK/wkD).toFixed(2):(wkK||null),"K/D THIS WEEK",{dec:2})])}
-  ${UI.tiles([UI.tile(c.damage,"DAMAGE DEALT"),UI.tile(c.headshots,"HEADSHOTS"),UI.tile(c.vehiclesDestroyed,"VEHICLES DESTROYED"),UI.tile(c.scorePerMin,"SCORE / MIN")])}
-  <div class="grid2">
-    ${UI.panel("FORM · KILLS PER DAY, LAST 14 DAYS",`<div style="display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center">${UI.spark(dailyKills(p),col,300,70)}${UI.ring(squadK?(c.kills||0)/squadK:0,"OF SQUAD KILLS",squadK?Math.round((c.kills||0)/squadK*100)+"%":"—",col)}</div>`)}
-    ${UI.panel("BEST NIGHT",bn&&bn.career?`<div class="records" style="grid-template-columns:1fr 1fr"><div class="rec"><small>MOST KILLS</small><b>${bn.career.kills}</b><span>${new Date(bn.start).toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"})} · ${bn.durationMin}m · K/D ${bn.career.kd}</span></div><div class="rec"><small>LONGEST SESSION</small><b>${Math.max(0,...(p.sessions||[]).map(s=>s.durationMin))}m</b><span>${(p.sessions||[]).length} sessions recorded</span></div></div>`:'<div class="muted">No sessions recorded yet.</div>')}
-    ${UI.panel("CLASS SPLIT",p.classes.length?p.classes.map(x=>UI.bar(x.name,Math.round(x.playtimeSec/mC*100),`${fmtH(x.playtimeSec)} · ${x.kills} kills · R${x.rank}`)).join(""):'<div class="muted">No class time recorded yet.</div>')}
-    ${UI.panel("WEAPONS",(p.weapons&&p.weapons.length)?p.weapons.map((w,i,arr)=>UI.bar(w.name,Math.round(w.kills/Math.max(1,arr[0].kills)*100),`${w.kills} elims`)).join(""):'<div class="muted">Weapon eliminations appear after the next agent cycle.</div>')}
-    ${UI.panel("HERO MASTERY",p.heroes.length?p.heroes.slice(0,6).map(h=>UI.bar(h.name,Math.round(h.playtimeSec/mH*100),`${fmtH(h.playtimeSec)} · ${h.kills} kills · R${h.rank}`,sideCol(h.side))).join(""):'<div class="muted">No hero time on official servers yet — pick a hero in Galactic Assault or Supremacy to start the mastery track.</div>')}
-  </div>
-  ${UI.panel("RECENT SESSIONS",wk.length?`<div class="tl">${sessionRows(wk.map(s=>({p,s})))}</div>`:'<div class="muted">No sessions this week.</div>')}</div>`;
-  UI.animate();
-  $("#cmp").onclick=()=>{rivA=p.id;switchTo("rivalry");};
-  $("#share").onclick=e=>{navigator.clipboard&&navigator.clipboard.writeText(share).then(()=>{e.target.textContent="Copied ✓";});};
-}
-function sessionRows(evs){
-  const best=Math.max(...evs.map(e=>(e.s.career&&e.s.career.kills)||0));
-  return evs.sort((a,b)=>new Date(b.s.start)-new Date(a.s.start)).map(({p,s})=>{const d=new Date(s.start),c=s.career;const hl=[...(s.heroes||[]).map(h=>`<span style="color:${sideCol(h.side)}">${h.name} ${fmtH(h.playtimeSec)}</span>`),...(s.classes||[]).map(x=>`${x.name} ${fmtH(x.playtimeSec)}`)].join(" · ");
-    return `<div class="ev"><div class="when">${d.toLocaleDateString([], {weekday:"short",month:"short",day:"numeric"})} · ${d.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})} · ${s.durationMin}m</div><div class="body"><b>${p.name}</b>${c&&c.kills===best&&best>0?'<span class="badge">TOP NIGHT</span>':""}</div>
-    <div class="stat">${c?`<b>+${c.kills}</b> kills · <b>${c.deaths}</b> deaths · K/D <b>${c.kd}</b>`:"stats pending"}${hl?" · "+hl:""}</div></div>`;}).join("");
-}
-
-/* Sessions: records, heatmap, feed */
-function renderSessions(){
-  const base=players.filter(p=>p.resolved);
-  const all=base.flatMap(p=>(p.sessions||[]).map(s=>({p,s})));
-  const evs=sessFilter==="all"?all:all.filter(e=>e.p.id===sessFilter);
-  const grid=Array.from({length:7},()=>new Array(24).fill(0));
-  all.forEach(({s})=>{const d=new Date(s.start);grid[(d.getDay()+6)%7][d.getHours()]++;});
-  const byK=[...all].sort((a,b)=>(b.s.career?.kills||0)-(a.s.career?.kills||0))[0];
-  const byL=[...all].sort((a,b)=>b.s.durationMin-a.s.durationMin)[0];
-  const byKD=[...all].filter(e=>(e.s.career?.deaths||0)>=5).sort((a,b)=>(b.s.career.kd)-(a.s.career.kd))[0];
-  const nights={};all.forEach(({s})=>{const k=new Date(s.start).toDateString();nights[k]=(nights[k]||0)+1;});const bigNight=Object.entries(nights).sort((a,b)=>b[1]-a[1])[0];
-  const rec=(l,v,sub)=>`<div class="rec"><small>${l}</small><b>${v}</b><span>${sub}</span></div>`;
-  app.innerHTML=`<div class="view"><div class="srv-hero sess-hero"><div><div class="eyebrow">${FACTION==="rebel"?"ALLIANCE":"IMPERIAL"} FLIGHT LOG</div><h2 class="display2">SESSIONS</h2><p class="muted">${all.length} recorded across the squad · reconstructed from stat snapshots.</p></div><div class="srv-tiles">${[[all.length,"SESSIONS"],[base.reduce((a,p)=>a+week(p).length,0),"THIS WEEK"],[Math.round(all.reduce((a,e)=>a+(e.s.durationMin||0),0)/60),"HOURS LOGGED"],[all.reduce((a,e)=>a+(e.s.career?.kills||0),0),"KILLS LOGGED"]].map(([v,l])=>`<div><b data-n="${v}">0</b><small>${l}</small></div>`).join("")}</div></div>
-  <div class="srv-bar">${UI.filters("sfilt",[["all","EVERYONE"],...base.map(p=>[p.id,p.name.toUpperCase()])],sessFilter)}</div>
-  ${UI.panel("SQUAD RECORDS",all.length?`<div class="records">${byK?rec("MOST KILLS IN A NIGHT",byK.s.career.kills,`${byK.p.name} · ${new Date(byK.s.start).toLocaleDateString([],{month:"short",day:"numeric"})}`):""}${byL?rec("LONGEST SESSION",byL.s.durationMin+"m",byL.p.name):""}${byKD?rec("SHARPEST NIGHT",byKD.s.career.kd+" K/D",`${byKD.p.name} · ${byKD.s.career.kills}/${byKD.s.career.deaths}`):""}${bigNight?rec("BIGGEST SQUAD NIGHT",bigNight[1]+" sessions",new Date(bigNight[0]).toLocaleDateString([],{weekday:"long",month:"short",day:"numeric"})):""}</div>`:'<div class="muted">Records appear once sessions are recorded.</div>')}
-  ${UI.panel("WHEN THE SQUAD PLAYS",all.length?UI.heat(grid):'<div class="muted">The heatmap fills in as the agent records sessions.</div>')}
-  ${UI.panel("FEED",evs.length?`<div class="tl">${sessionRows(evs.slice(0,30))}</div>`:'<div class="muted">No sessions detected yet. A session appears when someone’s stats change on an official server while the agent is running — including nights you’re not on.</div>')}
-  <div class="note">Sessions are reconstructed from stat snapshots (a burst of changes = one session). Kills/deaths per session come straight from the deltas.</div></div>`;
-  UI.bind("sfilt",k=>{sessFilter=k;renderSessions();});UI.animate();
-}
-
-/* Rivalry */
-function renderRivalry(){
-  const list=sorted();if(list.length<2){app.innerHTML=UI.empty("Need at least two resolved pilots for a rivalry.");return;}
-  rivA=list.find(p=>p.id===rivA)?rivA:list[0].id;rivB=list.find(p=>p.id===rivB&&p.id!==rivA)?rivB:list.find(p=>p.id!==rivA).id;
-  const A=list.find(p=>p.id===rivA),B=list.find(p=>p.id===rivB),ca=A.career||{},cb=B.career||{};
-  const cA=crystalOf(A),cB=crystalOf(B);
-  const top=p=>p.heroes[0]?.playtimeSec||p.classes[0]?.playtimeSec||0;
-  const M=[["K/D",ca.kd,cb.kd,v=>v.toFixed(2)],["Kills",ca.kills,cb.kills,fmtN],["Deaths",ca.deaths,cb.deaths,fmtN,true],["Score",ca.score,cb.score,fmtN],["Level",ca.rank,cb.rank,String],["Play time",ca.playtimeSec,cb.playtimeSec,fmtH],["Main playtime",top(A),top(B),fmtH],["Kills this week",wkKills(A),wkKills(B),String],["Minutes this week",wkMin(A),wkMin(B),v=>v+"m"]];
-  M.splice(1,0,["Kills / hour",ca.killsPerHour,cb.killsPerHour,v=>v.toFixed(1)],["Damage",ca.damage,cb.damage,fmtN],["Headshots",ca.headshots,cb.headshots,String],["Vehicles destroyed",ca.vehiclesDestroyed,cb.vehiclesDestroyed,String]);
-  let wa=0,wb=0;
-  const rows=M.map(([l,a,b,f,low])=>{const ok=a!=null&&b!=null;let aw=false,bw=false;if(ok&&a!==b){aw=low?a<b:a>b;bw=!aw;}if(aw)wa++;if(bw)wb++;
-    // tug-of-war: share of the bar each side owns (for "lower wins" invert)
-    let sa=50;if(ok){const x=low?(b||0):(a||0),y=low?(a||0):(b||0);sa=(x+y)>0?Math.round(x/(x+y)*100):50;}
-    return `<div class="duel-row ${aw?"a":bw?"b":""}"><div class="dv l ${aw?"win":""}">${aw?"▲ ":""}${ok?f(a):na()}</div><div class="tugwrap"><span class="dl">${l}${low?"<em>· fewer wins</em>":""}</span><div class="tug"><i class="ta" style="--w:${sa}%;background:${cA}"></i><i class="tb" style="--w:${100-sa}%;background:${cB}"></i><span class="seam" style="left:${sa}%"></span></div></div><div class="dv r ${bw?"win":""}">${ok?f(b):na()}${bw?" ▲":""}</div></div>`;}).join("");
-  const opts=id=>list.map(p=>`<option value="${p.id}" ${p.id===id?"selected":""}>${p.name}</option>`).join("");
-  const lead=wa===wb?null:(wa>wb?A:B);const verdict=lead?`${lead.name} leads ${Math.max(wa,wb)}–${Math.min(wa,wb)}`:"Dead heat";
-  const shipA=FACTION==="rebel"?"ships/xwing_b.webp":"ships/tie_fighter.webp",shipB=FACTION==="rebel"?"ships/awing.webp":"ships/tie_int.webp";
-  const side=(p,c,cls,ship)=>`<div class="duelist ${cls}" style="--c:${c}"><img class="ship-bg" src="${ship}" alt=""><div class="crys">${gemSVG(c)}</div><div class="nm"><small>${p.side==="dark"?"DARK SIDE":"LIGHT SIDE"} · LVL ${p.career?.rank??"—"}</small><b>${esc(p.name)}</b><span class="sc">${cls==="a"?wa:wb}</span></div>${UI.spark(dailyKills(p),c,300,44)}<small class="cap">KILLS · LAST 14 DAYS</small></div>`;
-  app.innerHTML=`<div class="view duel"><div class="duel-top"><div class="pick"><select id="selA">${opts(rivA)}</select></div><div class="vsmark"><span>VS</span></div><div class="pick"><select id="selB">${opts(rivB)}</select></div></div>
-  <div class="arena" style="--ca:${cA};--cb:${cB}">${side(A,cA,"a",shipA)}
-    <div class="verdict-big"><small>VERDICT</small><div class="score"><b style="color:${cA}">${wa}</b><i>–</i><b style="color:${cB}">${wb}</b></div><div class="who">${lead?`<b style="color:${crystalOf(lead)}">${esc(lead.name)}</b> LEADS`:"DEAD HEAT"}</div><button class="ghost" id="settle">Copy verdict</button></div>
-    ${side(B,cB,"b",shipB)}</div>
-  <div class="card duel-card"><div class="duel-head"><span style="color:${cA}">${esc(A.name)}</span><span class="mid">HEAD TO HEAD · ${M.length} STATS</span><span style="color:${cB}">${esc(B.name)}</span></div>${rows}<div class="note">Each bar is one stat; the longer side wins the row.</div></div></div>`;
-  $("#selA").onchange=e=>{rivA=e.target.value;if(rivA===rivB)rivB=list.find(p=>p.id!==rivA).id;renderRivalry();};
-  $("#selB").onchange=e=>{rivB=e.target.value;if(rivB===rivA)rivA=list.find(p=>p.id!==rivB).id;renderRivalry();};
-  $("#settle").onclick=e=>{navigator.clipboard&&navigator.clipboard.writeText(`${A.name} vs ${B.name} — ${verdict} (Kyber Squad Stats)`).then(()=>{e.target.textContent="Copied ✓";});};
-  requestAnimationFrame(()=>app.querySelectorAll(".tug i").forEach(i=>i.style.width="var(--w)"));
-}
-
-/* Live servers */
-function renderServers(){
-  if(!Array.isArray(servers)||!servers.length){app.innerHTML=UI.empty("Server list unavailable right now.");return;}
-  const s=[...servers].sort((a,b)=>(b.official-a.official)||((b.players||0)-(a.players||0)));
-  const pop=s.reduce((a,x)=>a+(x.players||0),0),offPop=s.filter(x=>x.official).reduce((a,x)=>a+(x.players||0),0);
-  const shown=s.filter(x=>srvFilter==="all"?(x.players||0)>0||x.official:srvFilter==="official"?x.official:srvFilter==="hvv"?/HeroesVersus/.test(x.mode):(x.players||0)>0&&!x.official);
-  const squadOn=new Set();  // reserved: who's-online when the payload carries names
-  const row=(x,i)=>{const p=x.players||0,m=x.maxPlayers||1,pc=Math.round(p/m*100);const full=p>=m,hot=pc>=75;
-    const join=x.id?`<a class="join" href="kl://join_server?server_id=${encodeURIComponent(x.id)}" data-name="${esc(x.name)}" title="Open in Kyber launcher">JOIN <svg viewBox="0 0 16 16"><path d="M3 8h9M8 4l4 4-4 4"/></svg></a>`:`<button class="join copy" data-name="${esc(x.name)}" title="Copy server name">COPY NAME</button>`;
-    return `<div class="srv2 ${x.official?"isoff":""} ${full?"full":hot?"hot":""}" style="animation-delay:${i*40}ms"><div class="planet"><b>${esc(mapName(x.map)||"—")}</b><small>${modeName(x.mode)||"MODE"}</small></div>
-      <div class="m"><b>${esc(x.name)}${x.requiresPassword?' <span class="lock" title="Password">🔒</span>':""}</b><small>${x.mods&&x.mods.length?x.mods.slice(0,2).join(", ")+(x.mods.length>2?" +"+(x.mods.length-2):""):"Vanilla"}</small>
-        <div class="popbar"><i data-w="${pc}"></i>${[25,50,75].map(t=>`<em style="left:${t}%"></em>`).join("")}</div></div>
-      <div class="tags">${x.official?'<span class="stag off">STATS COUNT</span>':""}${full?'<span class="stag full">FULL</span>':hot?'<span class="stag hot">FILLING</span>':""}</div>
-      <div class="pop"><b>${p}</b><i>/ ${m}</i><small>PILOTS</small></div>${join}</div>`;};
-  app.innerHTML=`<div class="view srvview"><div class="srv-hero"><div><div class="eyebrow">${FACTION==="rebel"?"ALLIANCE":"IMPERIAL"} FLEET COMMS</div><h2 class="display2">LIVE SERVERS</h2><p class="muted">${s.length} online · ${pop} players right now${LIVE?" · refreshes every 90s":""}.</p></div>
-    <div class="srv-tiles">${[[pop,"PILOTS ONLINE"],[offPop,"ON OFFICIAL"],[s.filter(x=>x.official).length,"OFFICIAL SERVERS"],[s.filter(x=>(x.players||0)>=(x.maxPlayers||1)*.9).length,"NEARLY FULL"]].map(([v,l])=>`<div><b data-n="${v}">0</b><small>${l}</small></div>`).join("")}</div></div>
-  <div class="srv-bar">${UI.filters("srvf",[["all","POPULATED"],["official","OFFICIAL"],["hvv","HvV"],["community","COMMUNITY"]],srvFilter)}<span class="muted mono">JOIN opens the server in the Kyber launcher</span></div>
-  ${shown.length?shown.map(row).join(""):'<div class="card muted">Nothing matches that filter right now.</div>'}
-  <div class="note">Only OFFICIAL servers write to Kyber's stat system; community servers are great nights that don't show up here.</div></div>`;
-  UI.bind("srvf",k=>{srvFilter=k;renderServers();});UI.animate();
-  app.querySelectorAll(".join").forEach(j=>j.addEventListener("click",e=>{blip();const name=j.dataset.name;
-    if(j.classList.contains("copy")){e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText(name).then(()=>{j.textContent="COPIED ✓";setTimeout(()=>j.textContent="COPY NAME",1500);});return;}
-    // if the launcher isn't installed nothing happens; after a moment offer the name instead
-    const t=setTimeout(()=>{navigator.clipboard&&navigator.clipboard.writeText(name);j.innerHTML="NAME COPIED";setTimeout(()=>renderServers(),1800);},1500);
-    addEventListener("blur",()=>clearTimeout(t),{once:true});}));
-}
-function renderYou(){
-  if(!LIVE){app.innerHTML=`<div class="view">${UI.head("Your settings")}<div class="card"><p class="muted" style="margin:0">In the live app you sign in with Google, add your Kyber gamertag to sync your stats, and pick your kyber crystal colour.</p></div></div>`;return;}
-  const claimed=ME&&ME.name;const col=(ME&&ME.color)||"#3ad7ff";
-  app.innerHTML=`<div class="view"><div class="srv-hero" style="--c:${col}"><div><div class="eyebrow">PILOT SETTINGS</div><h2 class="display2">${esc(claimed||"YOUR PROFILE")}</h2><p class="muted">Signed in as <b style="color:var(--ink)">${esc(ME&&ME.email||"(unknown — is Access on?)")}</b> · <a class="link" href="/cdn-cgi/access/logout" style="font-size:13px">Sign out</a></p></div><div class="you-crys" id="youCrys">${gemSVG(col)}</div></div>
-  <div class="grid2">
-    <div class="card"><h3>GAMERTAG</h3>${claimed?`<p style="margin:0 0 12px">Syncing stats for <b>${esc(claimed)}</b>. Wrong profile? Remove it and add the right name.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" id="unclaim">Remove ${esc(claimed)}</button></div>`:`<p class="muted" style="margin:0 0 12px">Enter the exact name you use in Battlefront on Kyber. The agent finds you and starts syncing within a few minutes.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><input class="txt" id="kyberName" placeholder="your exact Kyber gamertag" style="flex:1;min-width:220px"/><button class="btn" id="claim">Add gamertag</button></div>`}<div class="note" id="claimMsg">Stats only accrue on servers marked OFFICIAL.</div></div>
-    <div class="card"><h3>KYBER CRYSTAL</h3><p class="muted" style="margin:0 0 12px">Your colour on the holotable, standings and rivalry board.</p><div class="swatches">${KYBER.map(([n,c])=>`<button class="sw ${c===col?"on":""}" data-c="${c}" title="${n}" style="--c:${c}"><i></i>${n}</button>`).join("")}</div><div class="note" id="colMsg">${claimed?"":"Add your gamertag first — the colour is saved with it."}</div></div>
-  </div></div>`;
-  const save=async(name,color)=>{const r=await fetch("/api/claim",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name,color})});if(!r.ok){const t=await r.text();throw new Error(t||r.status);}return r.json();};
-  const cl=$("#claim");if(cl)cl.onclick=async()=>{const n=$("#kyberName").value.trim();if(!n)return;try{await save(n,col);ME={...ME,name:n,color:col};blip();renderYou();}catch(e){$("#claimMsg").innerHTML=`<span style="color:var(--accent)">Couldn't save: ${esc(e.message)}</span>`;}};
-  const un=$("#unclaim");if(un)un.onclick=async()=>{if(!confirm(`Stop syncing ${claimed}?`))return;await fetch("/api/claim",{method:"DELETE"});ME={...ME,name:null};blip();renderYou();};
-  app.querySelectorAll(".sw").forEach(b=>b.onclick=async()=>{const c=b.dataset.c;app.querySelectorAll(".sw").forEach(x=>x.classList.toggle("on",x===b));$("#youCrys").innerHTML=gemSVG(c);$("#youCrys").closest(".srv-hero").style.setProperty("--c",c);
-    if(!claimed){ME={...ME,color:c};return;}try{await save(claimed,c);ME={...ME,color:c};$("#colMsg").textContent="Saved. Your crystal updates on the next refresh.";blip();}catch(e){$("#colMsg").innerHTML=`<span style="color:var(--accent)">Couldn't save colour.</span>`;}});
-}
-
-/* ================= admin: invites ================= */
-async function renderAdmin(){
-  if(!(ME&&ME.admin)){app.innerHTML=UI.empty("Admins only.");return;}
-  app.innerHTML=`<div class="view"><div class="srv-hero"><div><div class="eyebrow">${FACTION==="rebel"?"ALLIANCE":"IMPERIAL"} COMMAND</div><h2 class="display2">ADMIN</h2><p class="muted">Invite squad members by Gmail address. Anyone invited signs in at the site link with Google.</p></div></div>
-    <div class="card"><h3>INVITE A PILOT</h3><div class="inv-form"><input class="txt" id="invEmail" type="email" placeholder="friend@gmail.com" autocomplete="off"/><button class="btn" id="invAdd">Invite</button><button class="ghost" id="invLink">Copy invite link</button></div><div class="note" id="invMsg">The invite link is the site itself: <b class="mono" style="color:var(--ink)">${location.origin}</b>. Send it with whatever you like — the Google login does the rest.</div></div>
-    <div class="card"><h3>SQUAD LIST</h3><div id="invList" class="muted">Loading…</div></div></div>`;
-  const load=async()=>{let d;try{d=await(await fetch("/api/invites",{cache:"no-store"})).json();}catch{$("#invList").textContent="Couldn't load the list.";return;}
-    const rows=[...d.admins.map(e=>({email:e,admin:true})),...d.invites];
-    $("#invList").innerHTML=rows.length?`<div class="inv-rows">${rows.map(r=>`<div class="inv-row"><span class="av">${ini(r.email)}</span><span class="who"><b>${esc(r.email)}</b><small>${r.admin?"ADMIN":r.claimedName?"PLAYING AS "+esc(r.claimedName).toUpperCase():"INVITED · NOT CLAIMED YET"}${r.addedAt?" · "+new Date(r.addedAt).toLocaleDateString([],{month:"short",day:"numeric"}):""}</small></span>${r.admin?"":`<button class="ghost sm" data-rm="${esc(r.email)}">Remove</button>`}</div>`).join("")}</div>`:'<div class="muted">No invites yet.</div>';
-    app.querySelectorAll("[data-rm]").forEach(b=>b.onclick=async()=>{if(!confirm(`Remove ${b.dataset.rm} from the squad?`))return;await fetch("/api/invites",{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({email:b.dataset.rm})});blip();load();});};
-  $("#invAdd").onclick=async()=>{const e=$("#invEmail").value.trim();if(!e)return;const r=await fetch("/api/invites",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({email:e})});const j=await r.json().catch(()=>({}));if(!r.ok){$("#invMsg").innerHTML=`<span style="color:var(--accent)">${esc(j.error||"Couldn't add that address.")}</span>`;return;}$("#invEmail").value="";$("#invMsg").innerHTML=`<b style="color:var(--ink)">${esc(e)}</b> can now sign in. Send them the link.`;blip();load();};
-  $("#invEmail").onkeydown=e=>{if(e.key==="Enter")$("#invAdd").click();};
-  $("#invLink").onclick=e=>{navigator.clipboard&&navigator.clipboard.writeText(location.origin).then(()=>{e.target.textContent="Copied ✓";setTimeout(()=>e.target.textContent="Copy invite link",1500);});};
-  load();
-}
-$("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>switchTo(b.dataset.v));
-$("#youBtn").onclick=()=>switchTo("you");$("#meBtn").onclick=()=>switchTo("you");
-addEventListener("hashchange",()=>routeFromHash(false));
-function routeFromHash(init){const h=location.hash.replace("#","");if(h==="rebel"||h==="empire")return;const [v,id]=h.split("/");if(id)selected=id;if(v&&VIEWS.includes(v)&&(init||v!==current))switchTo(v,false);}
-
-/* ================= strip spotlight ================= */
-(function(){
-  $("#strip").addEventListener("pointermove",e=>{const d=e.target.closest(".strip>div");if(!d)return;const r=d.getBoundingClientRect();d.style.setProperty("--mx",(e.clientX-r.left)+"px");d.style.setProperty("--my",(e.clientY-r.top)+"px");});
-  addEventListener("resize",moveInd);
-})();
-
-/* ================= weekly wrapped ================= */
-function buildWrapped(){
-  const list=players.filter(p=>p.resolved);
-  const wk=list.map(p=>({p,min:wkMin(p),n:week(p).length,k:wkKills(p),d:wkDeaths(p),latest:Math.max(0,...week(p).map(s=>new Date(s.start).getHours()))}));
-  const total=wk.reduce((a,x)=>a+x.min,0),totalK=wk.reduce((a,x)=>a+x.k,0),active=wk.filter(x=>x.n>0);
-  const by=k=>[...wk].sort((a,b)=>b[k]-a[k])[0];
-  const mvp=by("k"),grinder=by("n"),owl=by("latest"),ghost=wk.find(x=>x.n===0);
-  const sharp=[...wk].filter(x=>x.k>=10&&x.d>0).sort((a,b)=>(b.k/b.d)-(a.k/a.d))[0];
-  const feeder=[...wk].filter(x=>x.d>=10).sort((a,b)=>(a.k/Math.max(1,a.d))-(b.k/Math.max(1,b.d)))[0];
-  const hc={};list.forEach(p=>week(p).forEach(s=>(s.heroes||[]).forEach(h=>{hc[h.name]=hc[h.name]||{side:h.side,sec:0};hc[h.name].sec+=h.playtimeSec;})));
-  const hero=Object.entries(hc).sort((a,b)=>b[1].sec-a[1].sec)[0];
-  return[
-    {eyebrow:"SQUAD WRAPPED",title:"Your week in<br>the galaxy",sub:`${active.length} of ${list.length} pilots flew this week.`},
-    {eyebrow:"SQUAD ELIMINATIONS",big:String(totalK),sub:`${totalK.toLocaleString()} kills across ${fmtH(total*60)} of official play.`},
-    mvp&&mvp.k>0?{award:"MVP OF THE WEEK",title:mvp.p.name,sub:`${mvp.k} kills this week — the most of anyone.`}:null,
-    sharp?{award:"SHARPSHOOTER",title:sharp.p.name,sub:`Best K/D of the week: ${(sharp.k/sharp.d).toFixed(2)}.`}:null,
-    grinder&&grinder.n>1?{award:"THE GRINDER",title:grinder.p.name,sub:`${grinder.n} separate sessions. Relentless.`}:null,
-    hero?{award:"HERO OF THE WEEK",title:hero[0],sub:`${fmtH(hero[1].sec)} of squad time.`,side:hero[1].side}:null,
-    owl&&owl.latest>=22?{award:"NIGHT OWL",title:owl.p.name,sub:`Dropped in after ${owl.latest}:00. Sleep is for the Empire.`}:null,
-    feeder&&feeder!==sharp?{award:"BIGGEST FEEDER",title:feeder.p.name,sub:`${(feeder.k/Math.max(1,feeder.d)).toFixed(2)} K/D this week. We still love you.`}:null,
-    ghost?{award:"MISSING IN ACTION",title:ghost.p.name,sub:"Zero sessions this week. The squad noticed."}:null,
-    {eyebrow:"SHARE CARD",card:[["Squad kills",totalK.toLocaleString()],["Squad time",fmtH(total*60)],["MVP",mvp&&mvp.k>0?mvp.p.name:"—"],["Hero of the week",hero?hero[0]:"—"],["Pilots active",`${active.length}/${list.length}`]]}
-  ].filter(Boolean);
-}
-let W={slides:[],i:0,timer:null};
-function openWrapped(){W.slides=buildWrapped();W.i=0;$("#wrapped").classList.add("open");blip();showSlide();}
-function closeWrapped(){$("#wrapped").classList.remove("open");clearTimeout(W.timer);}
-function showSlide(){
-  const s=W.slides[W.i];if(!s){closeWrapped();return;}
-  $("#wbars").innerHTML=W.slides.map((_,k)=>`<i class="${k<W.i?'done':k===W.i?'run':''}"></i>`).join("");
-  let html="";
-  if(s.card)html=`<div class="w-eyebrow">${s.eyebrow}</div><div class="w-card">${s.card.map(([k,v])=>`<div class="rw"><span>${k}</span><b>${v}</b></div>`).join("")}</div><button class="w-share" id="wshare">COPY RECAP</button>`;
-  else if(s.big)html=`<div class="w-eyebrow">${s.eyebrow}</div><div class="w-big" id="wbig">0</div><div class="w-sub">${s.sub}</div>`;
-  else if(s.award)html=`<div class="w-award">✦ ${s.award}</div><h2 class="w-title" ${s.side?`style="color:${sideCol(s.side)}"`:""}>${s.title}</h2><div class="w-sub">${s.sub}</div>`;
-  else html=`<div class="w-eyebrow">${s.eyebrow}</div><h2 class="w-title">${s.title}</h2><div class="w-sub">${s.sub}</div>`;
-  $("#wslide").innerHTML=`<div class="w-slide">${html}</div>`;
-  if(s.big)countUp($("#wbig"),+s.big);
-  const sh=$("#wshare");if(sh)sh.onclick=()=>{const txt="Kyber Squad Wrapped — "+s.card.map(([k,v])=>`${k}: ${v}`).join(" · ");navigator.clipboard&&navigator.clipboard.writeText(txt).then(()=>{sh.textContent="COPIED ✓";},()=>{sh.textContent=txt;});};
-  clearTimeout(W.timer);if(!s.card)W.timer=setTimeout(()=>{W.i++;showSlide();},5000);
-}
-$("#openwrap").onclick=openWrapped;$("#wclose").onclick=closeWrapped;
-$("#wnext").onclick=()=>{W.i++;showSlide();};$("#wprev").onclick=()=>{W.i=Math.max(0,W.i-1);showSlide();};
-addEventListener("keydown",e=>{if(!$("#wrapped").classList.contains("open"))return;if(e.key==="Escape")closeWrapped();if(e.key==="ArrowRight")$("#wnext").click();if(e.key==="ArrowLeft")$("#wprev").click();});
-
-/* ================= faction ================= */
 function faction(f){FACTION=f;document.documentElement.setAttribute("data-faction",f);
-  $("#crest").style.setProperty("--m","url(plates/"+f+"-mask.png)");$("#fav").href="plates/"+f+"-crest.webp";$("#bootcrest").innerHTML=CREST[f];
+  $("#crest").style.setProperty("--m","url(plates/"+f+"-mask.png)");$("#fav").href="plates/"+f+"-crest.webp";
   $("#toggle").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.f===f));
-  $("#crumb").textContent=f==="rebel"?"ALLIANCE COMMAND":"IMPERIAL COMMAND";
   $("#eyebrow").textContent=f==="rebel"?"ALLIANCE INTELLIGENCE":"IMPERIAL INTELLIGENCE";
-  const n=players.filter(p=>p.resolved).length;
-  $("#tag").textContent=(n?["Zero","One","Two","Three","Four","Five","Six"][Math.min(n,6)]+" pilot"+(n===1?"":"s")+". ":"")+(f==="rebel"?"One galaxy.":"One fleet.");
   try{localStorage.setItem("kss-faction",f);}catch{}
-  hum(f);renderScene();}
+  renderScene();$("#hero").classList.remove("enter");void $("#hero").offsetWidth;$("#hero").classList.add("enter");}
 $("#toggle").addEventListener("click",e=>{const b=e.target.closest("button");if(b)faction(b.dataset.f);});
-
-/* replay count-ups and bar fills when the pointer enters a tile/card (throttled) */
-app.addEventListener("pointerenter",e=>{const t=e.target.closest?e.target.closest(".tile,.strip>div,.rec,.srv-tiles>div,.card,.srv2,.row,.duel-row,.pc-hero,.srv-hero"):null;if(!t||reduce)return;
-  const now=performance.now();if(t._replayAt&&now-t._replayAt<1400)return;t._replayAt=now;
-  t.querySelectorAll("[data-n]").forEach(el=>countUp(el,el.dataset.n===""?null:+el.dataset.n,+(el.dataset.dec||0),el.dataset.sfx||""));
-  t.querySelectorAll(".track>i,.vbar>i,.popbar>i").forEach(i=>{i.style.transition="none";i.style.width="0";void i.offsetWidth;i.style.transition="";requestAnimationFrame(()=>i.style.width=i.dataset.w+"%");});
-  t.querySelectorAll(".tug i").forEach(i=>{i.style.transition="none";i.style.width="0";void i.offsetWidth;i.style.transition="";requestAnimationFrame(()=>i.style.width="var(--w)");});
-  t.querySelectorAll(".gauge .fg").forEach(c=>{c.style.transition="none";c.style.strokeDashoffset=c.getAttribute("stroke-dashoffset");void c.getBoundingClientRect();c.style.transition="";requestAnimationFrame(()=>c.style.strokeDashoffset=c.dataset.off);});
-  t.querySelectorAll(".spark path").forEach(pth=>{pth.style.animation="none";void pth.offsetWidth;pth.style.animation="";});
-  t.querySelectorAll(".ico").forEach(ic=>{ic.classList.remove("draw");void ic.getBoundingClientRect();ic.classList.add("draw");});
-},true);
-/* ================= boot ================= */
-(async()=>{
-  const msgs=["KYBER API","RESOLVING PILOTS","DECODING STAT KEYS","HOLOTABLE ONLINE"];let mi=0;const mt=setInterval(()=>{mi=(mi+1)%msgs.length;$("#bootmsg").textContent=msgs[mi];},450);
-  let f="rebel";try{f=localStorage.getItem("kss-faction")||f;}catch{}
-  if(location.hash==="#rebel")f="rebel";if(location.hash==="#empire")f="empire";
-  await load();faction(f);renderScene();renderStrip();render();routeFromHash(true);moveInd();
-  clearInterval(mt);$("#bootmsg").textContent="HOLOTABLE ONLINE";setTimeout(()=>{$("#boot").classList.add("off");hum(FACTION);},reduce?0:650);
-  if(LIVE)setInterval(async()=>{await load();renderMarks();renderStrip();if(current!=="you")render();},90000);
-})();
+let f="rebel";try{f=localStorage.getItem("kss-faction")||f;}catch{}
+faction(f);
 </script>
 </body>
 </html>
