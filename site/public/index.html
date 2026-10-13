@@ -667,7 +667,7 @@
   .hero.enter .eyebrow,.hero.enter h1,.hero.enter .tag,.hero.enter .cta,.hero.enter .strip>div,.hero.enter .hint{animation:heroin .9s var(--ease) both}
   .hero.enter h1{animation-delay:.08s}.hero.enter .tag{animation-delay:.18s}.hero.enter .cta{animation-delay:.26s}
   .hero.enter .strip>div:nth-child(1){animation-delay:.3s}.hero.enter .strip>div:nth-child(2){animation-delay:.38s}.hero.enter .strip>div:nth-child(3){animation-delay:.46s}.hero.enter .strip>div:nth-child(4){animation-delay:.54s}.hero.enter .hint{animation-delay:.6s}
-  .hero.enter #marks .mark{animation:bob 3.6s ease-in-out infinite,markin .7s var(--ease) both}
+  .hero.enter #marks .mark{animation:markin .7s var(--ease) both}
   @keyframes heroin{from{opacity:0;transform:translateY(14px);filter:blur(6px)}}
   @keyframes markin{from{opacity:0}}
   .hero.enter .orbit{animation:orbitin 1.4s var(--ease) both}@keyframes orbitin{from{opacity:0;transform:scale(.92)}}
@@ -708,6 +708,13 @@
     .tl .ev{font-size:12.5px}
     .foot{padding:16px 4px 4px;gap:10px}.foot .r{font-size:9.5px}
   }
+
+  /* calm name tags: still, with a soft glow pulse instead of motion */
+  #marks .mark{animation:none!important;transition:filter .25s}
+  #marks .mark .lbl{transition:box-shadow .3s,background .3s}
+  #marks .gem{animation:gembob2 5s ease-in-out infinite}
+  @keyframes gembob2{50%{transform:translate(-50%,calc(-92% - 3px))}}
+  .hero.enter #marks .mark{animation:markin .7s var(--ease) both!important}
 </style>
 </head>
 <body>
