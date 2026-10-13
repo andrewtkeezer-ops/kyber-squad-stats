@@ -39,7 +39,7 @@ function buildMenu() {
 }
 
 async function runOnce() {
-  try { await agent.cycle(); last = `pushed ${new Date().toLocaleTimeString()}`; }
+  try { await agent.tick(); last = `ran ${new Date().toLocaleTimeString()}`; }
   catch (e) { last = `error: ${e.message}`; }
   if (tray) tray.setContextMenu(buildMenu());
 }
@@ -65,9 +65,8 @@ else {
         detail: 'Edit the config file (tray → Open config file) with your Cloudflare site URL and ingest secret, then choose "Push now". See the README.',
       });
     }
-    runOnce();
-    const pollMs = Number(cfg.pollMs || 90000);
-    setInterval(runOnce, pollMs);
+    agent.cycle(); // self-scheduling loop (hot-reloads config each pass)
+    setInterval(() => { if (tray) tray.setContextMenu(buildMenu()); }, 30000);
   });
   app.on('window-all-closed', () => {}); // tray app, stay alive
 }

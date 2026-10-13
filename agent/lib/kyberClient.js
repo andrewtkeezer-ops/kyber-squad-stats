@@ -1,15 +1,23 @@
 // kyberClient.js — native gRPC client for Kyber's public API.
 // Mirrors what the open-source Kyber launcher does (package:grpc over HTTP/2 TLS
-// to api-rpc.prod.kyber.gg), reimplemented with @grpc/grpc-js.
+// to api.prod.kyber.gg), reimplemented with @grpc/grpc-js.
 
 const path = require('path');
+const crypto = require('crypto');
 const protoLoader = require('@grpc/proto-loader');
 const grpc = require('@grpc/grpc-js');
 
 const PROTO_ROOT = path.join(__dirname, '..', 'proto');
 const API_PROTO = path.join(PROTO_ROOT, 'Proto', 'kyber_api.proto');
 
+// gRPC traffic goes to api-rpc.<env>.kyber.gg (api.<env>.kyber.gg is the HTTP/
+// websocket host and will 404 gRPC paths). Matches the official launcher.
 const HOST = process.env.KYBER_HOST || 'api-rpc.prod.kyber.gg:443';
+
+// The launcher sends these on every call. x-kv2-dsid is a fixed client constant
+// lifted from the open-source client; x-session-id is a fresh per-run UUID.
+const KV2_DSID = '53ff61a4-b751-40f6-a0c8-31d362f29936';
+const SESSION_ID = crypto.randomUUID();
 
 // StatsSource enum (from kyber_api.proto)
 const StatsSource = { EA_PC: 0, EA_XBOX: 1, EA_PS4: 2, KYBER: 3, PERSONAL: 4 };
@@ -38,7 +46,9 @@ class KyberClient {
 
   _meta() {
     const m = new grpc.Metadata();
-    if (this.token) m.set('authorization', this.token);
+    m.set('x-session-id', SESSION_ID);
+    m.set('x-kv2-dsid', KV2_DSID);
+    m.set('authorization', this.token || '');
     return m;
   }
 
@@ -76,4 +86,3 @@ class KyberClient {
 }
 
 module.exports = { KyberClient, StatsSource, HOST };
-

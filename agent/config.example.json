@@ -1,8 +1,11 @@
 {
-  "_comment": "Copy this to config.json and fill in. siteBase + ingestSecret come from your Cloudflare Pages setup (see the top-level README).",
-  "siteBase": "https://kyber-squad-stats.pages.dev",
-  "ingestSecret": "paste-a-long-random-string-here-same-as-in-cloudflare",
-  "pollMs": 90000,
+  "_comment": "Copy to config.json. siteBase + ingestSecret come from your Cloudflare Worker. Edits are picked up automatically every cycle (no restart).",
+  "siteBase": "https://kyber-squad-stats.YOUR-SUBDOMAIN.workers.dev",
+  "ingestSecret": "paste-the-shared-secret",
+  "pollMs": 180000,
+  "forcePushMin": 15,
   "sessionGapMin": 30,
-  "extraNames": ["YourKyberName"]
+  "extraNames": [
+    "YourKyberName"
+  ]
 }
