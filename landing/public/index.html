@@ -766,10 +766,17 @@
   .hero{margin-top:0;flex:1;aspect-ratio:auto;min-height:calc(100vh - var(--top-h));border-radius:0;display:block}
   .hero .copy{top:50%;transform:translateY(-55%)!important;max-width:min(48%,640px)}
   .land-cta{display:flex;align-items:center;gap:18px;margin-top:34px;flex-wrap:wrap}
-  .gbtn{display:inline-flex;align-items:center;gap:12px;padding:15px 24px;border-radius:10px;background:#fff;color:#111;font-weight:700;font-size:15px;text-decoration:none;box-shadow:0 10px 30px -10px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.15);transition:transform .25s var(--ease),box-shadow .3s}
-  .gbtn:hover{transform:translateY(-2px);box-shadow:0 14px 34px -10px rgba(0,0,0,.9),0 0 24px var(--accent-glow)}
-  .gbtn svg{width:20px;height:20px}
-  .land-note{font-family:var(--font-m);font-size:11.5px;letter-spacing:.14em;color:var(--ink-2)}
+  .gbtn{position:relative;display:inline-flex;align-items:center;gap:14px;padding:16px 26px 16px 20px;border-radius:10px;background:rgba(8,10,16,.72);color:var(--ink);font-family:var(--font-m);font-weight:600;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;border:1.5px solid var(--accent);box-shadow:0 0 0 1px rgba(0,0,0,.6),0 0 24px var(--accent-soft),inset 0 0 18px color-mix(in srgb,var(--accent) 10%,transparent);backdrop-filter:blur(8px);transition:transform .25s var(--ease),box-shadow .3s,background .3s;overflow:hidden}
+  .gbtn::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.14) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s var(--ease)}
+  .gbtn:hover{transform:translateY(-2px);background:color-mix(in srgb,var(--accent) 14%,rgba(8,10,16,.8));box-shadow:0 0 0 1px rgba(0,0,0,.6),0 0 36px var(--accent-glow),inset 0 0 24px color-mix(in srgb,var(--accent) 16%,transparent)}
+  .gbtn:hover::after{transform:translateX(120%)}
+  .gbtn .g{display:grid;place-items:center;width:30px;height:30px;border-radius:7px;background:#fff}
+  .gbtn .g svg{width:18px;height:18px}
+  .gbtn b{font-weight:600}
+  .gbtn .arr{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s var(--ease)}
+  .gbtn:hover .arr{transform:translateX(4px)}
+  .land-note{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-m);font-size:11px;letter-spacing:.24em;color:var(--ink-2)}
+  .land-note i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:corebreath 2.4s ease-in-out infinite}
   .land-note b{color:var(--ink);font-weight:500}
   .feat{position:absolute;left:2.9%;right:2.9%;bottom:5.5%;z-index:4;display:flex;gap:0;border-top:1px solid rgba(255,255,255,.18);padding-top:18px}
   .feat div{padding-right:26px;margin-right:26px;border-right:1px solid rgba(255,255,255,.14);display:flex;align-items:center;gap:14px}
@@ -801,8 +808,8 @@
       <h1 class="display">THE<br>SQUAD.</h1>
       <div class="tag" id="tag">Battlefront II · Kyber · your crew's numbers, live.</div>
       <div class="land-cta">
-        <a class="gbtn" href="https://kyber-squad-stats.andrewtkeezer.workers.dev/" id="signin"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.4 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-3.9-13.5-9.3l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Sign in with Google</a>
-        <span class="land-note">INVITE ONLY · <b>ask Andrew</b> to add your Gmail</span>
+        <a class="gbtn" href="https://kyber-squad-stats.andrewtkeezer.workers.dev/" id="signin"><span class="g"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.4 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-3.9-13.5-9.3l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg></span><b>Sign in with Google</b><svg class="arr" viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+        <span class="land-note"><i></i>INVITE ONLY</span>
       </div>
     </div>
     <div class="fleet" id="fleet"></div>
