@@ -860,7 +860,7 @@ async function load(){
     players=fromBlob(blob);servers=Array.isArray(blob.servers)?blob.servers:[];updatedAt=blob.updatedAt;LIVE=true;
     try{ME=await(await fetch("/api/me")).json();}catch{ME=null;}
     if(ME&&ME.admin){$("#navAdmin").hidden=false;}
-  }catch{players=DEMO.players;servers=DEMO.servers;updatedAt=new Date(Date.now()-40000).toISOString();LIVE=false;}
+  }catch{const local=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);if(!local){document.body.innerHTML='<div style="min-height:100vh;display:grid;place-items:center;background:#07080c;color:#f2f4f8;font:16px/1.5 system-ui,sans-serif;text-align:center"><div><div style="font-family:ui-monospace,monospace;letter-spacing:.3em;font-size:11px;color:#ff2d3f">NO SIGNAL</div><h1 style="font-size:26px;margin:12px 0">This isn\'t the squad site.</h1><p style="color:#a9b0bf">Nothing to show here. Head to the real thing and sign in.</p></div></div>';throw new Error("no api");}players=DEMO.players;servers=DEMO.servers;updatedAt=new Date(Date.now()-40000).toISOString();LIVE=false;}
   const b=$("#badge");b.classList.toggle("live",LIVE);$("#badge-txt").textContent=LIVE?("LIVE · "+ago(updatedAt).toUpperCase()):"DEMO DATA";
   const meName=(ME&&ME.name)||(!LIVE?"HeyKeezer":null);
   $("#meAv").textContent=meName?ini(meName):"··";$("#youAv").textContent=meName?ini(meName):"··";$("#youName").textContent=meName||"Sign in";
