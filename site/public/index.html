@@ -856,11 +856,13 @@ function fromBlob(blob){
   });
 }
 async function load(){
-  try{const r=await fetch("/api/data",{cache:"no-store",credentials:"include"});if(r.redirected||(r.headers.get("content-type")||"").includes("text/html")){location.reload();return;}if(!r.ok)throw 0;const blob=await r.json();if(!blob||!Array.isArray(blob.players))throw 0;
+  try{const r=await fetch("/api/data",{cache:"no-store",credentials:"include"});if(!r.ok)throw 0;const blob=await r.json();if(!blob||!Array.isArray(blob.players))throw 0;
     players=fromBlob(blob);servers=Array.isArray(blob.servers)?blob.servers:[];updatedAt=blob.updatedAt;LIVE=true;
     try{ME=await(await fetch("/api/me",{credentials:"include"})).json();}catch{ME=null;}
     if(ME&&ME.admin){$("#navAdmin").hidden=false;}
-  }catch{const local=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);if(!local){document.body.innerHTML='<div style="min-height:100vh;display:grid;place-items:center;background:#07080c;color:#f2f4f8;font:16px/1.5 system-ui,sans-serif;text-align:center"><div><div style="font-family:ui-monospace,monospace;letter-spacing:.3em;font-size:11px;color:#ff2d3f">NO SIGNAL</div><h1 style="font-size:26px;margin:12px 0">This isn\'t the squad site.</h1><p style="color:#a9b0bf">Nothing to show here. Head to the real thing and sign in.</p></div></div>';throw new Error("no api");}players=DEMO.players;servers=DEMO.servers;updatedAt=new Date(Date.now()-40000).toISOString();LIVE=false;}
+  }catch(err){const local=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);if(!local){let detail="";try{const r=await fetch("/api/data",{cache:"no-store",credentials:"include"});detail=`GET /api/data → ${r.status} ${r.statusText} · redirected: ${r.redirected} · final URL: ${r.url} · content-type: ${r.headers.get("content-type")}\n\n`+(await r.text()).slice(0,600);}catch(e2){detail="fetch failed: "+e2.message;}
+      document.body.innerHTML='<div style="min-height:100vh;display:grid;place-items:center;background:#07080c;color:#f2f4f8;font:15px/1.5 system-ui,sans-serif"><div style="max-width:760px;padding:32px"><div style="font-family:ui-monospace,monospace;letter-spacing:.3em;font-size:11px;color:#ff2d3f">NO SIGNAL</div><h1 style="font-size:24px;margin:10px 0">The data feed didn\'t answer.</h1><p style="color:#a9b0bf">Send this to Andrew:</p><pre style="white-space:pre-wrap;word-break:break-all;background:#0f1118;border:1px solid #232838;border-radius:10px;padding:16px;font:12px/1.5 ui-monospace,monospace;color:#c9ceda">'+detail.replace(/[<>&]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]))+'</pre><p style="font-size:12px;color:#6b7384"><a href="/cdn-cgi/access/logout" style="color:#a9b0bf">Sign out and try again</a></p></div></div>';return;}
+    players=DEMO.players;servers=DEMO.servers;updatedAt=new Date(Date.now()-40000).toISOString();LIVE=false;}
   const b=$("#badge");b.classList.toggle("live",LIVE);$("#badge-txt").textContent=LIVE?("LIVE · "+ago(updatedAt).toUpperCase()):"DEMO DATA";
   const meName=(ME&&ME.name)||(!LIVE?"HeyKeezer":null);
   $("#meAv").textContent=meName?ini(meName):"··";$("#youAv").textContent=meName?ini(meName):"··";$("#youName").textContent=meName||"Sign in";
