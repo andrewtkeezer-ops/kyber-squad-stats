@@ -1022,7 +1022,7 @@ function renderServers(){
   const shown=s.filter(x=>srvFilter==="all"?(x.players||0)>0||x.official:srvFilter==="official"?x.official:srvFilter==="hvv"?/HeroesVersus/.test(x.mode):(x.players||0)>0&&!x.official);
   const squadOn=new Set();  // reserved: who's-online when the payload carries names
   const row=(x,i)=>{const p=x.players||0,m=x.maxPlayers||1,pc=Math.round(p/m*100);const full=p>=m,hot=pc>=75;
-    const join=x.id?`<a class="join" href="kyber://join/${encodeURIComponent(x.id)}" data-name="${esc(x.name)}" title="Open in Kyber launcher">JOIN <svg viewBox="0 0 16 16"><path d="M3 8h9M8 4l4 4-4 4"/></svg></a>`:`<button class="join copy" data-name="${esc(x.name)}" title="Copy server name">COPY NAME</button>`;
+    const join=x.id?`<a class="join" href="kl://join_server?server_id=${encodeURIComponent(x.id)}" data-name="${esc(x.name)}" title="Open in Kyber launcher">JOIN <svg viewBox="0 0 16 16"><path d="M3 8h9M8 4l4 4-4 4"/></svg></a>`:`<button class="join copy" data-name="${esc(x.name)}" title="Copy server name">COPY NAME</button>`;
     return `<div class="srv2 ${x.official?"isoff":""} ${full?"full":hot?"hot":""}" style="animation-delay:${i*40}ms"><div class="planet"><b>${esc(mapName(x.map)||"—")}</b><small>${modeName(x.mode)||"MODE"}</small></div>
       <div class="m"><b>${esc(x.name)}${x.requiresPassword?' <span class="lock" title="Password">🔒</span>':""}</b><small>${x.mods&&x.mods.length?x.mods.slice(0,2).join(", ")+(x.mods.length>2?" +"+(x.mods.length-2):""):"Vanilla"}</small>
         <div class="popbar"><i data-w="${pc}"></i>${[25,50,75].map(t=>`<em style="left:${t}%"></em>`).join("")}</div></div>
@@ -1030,7 +1030,7 @@ function renderServers(){
       <div class="pop"><b>${p}</b><i>/ ${m}</i><small>PILOTS</small></div>${join}</div>`;};
   app.innerHTML=`<div class="view srvview"><div class="srv-hero"><div><div class="eyebrow">${FACTION==="rebel"?"ALLIANCE":"IMPERIAL"} FLEET COMMS</div><h2 class="display2">LIVE SERVERS</h2><p class="muted">${s.length} online · ${pop} players right now${LIVE?" · refreshes every 90s":""}.</p></div>
     <div class="srv-tiles">${[[pop,"PILOTS ONLINE"],[offPop,"ON OFFICIAL"],[s.filter(x=>x.official).length,"OFFICIAL SERVERS"],[s.filter(x=>(x.players||0)>=(x.maxPlayers||1)*.9).length,"NEARLY FULL"]].map(([v,l])=>`<div><b data-n="${v}">0</b><small>${l}</small></div>`).join("")}</div></div>
-  <div class="srv-bar">${UI.filters("srvf",[["all","POPULATED"],["official","OFFICIAL"],["hvv","HvV"],["community","COMMUNITY"]],srvFilter)}<span class="muted mono">JOIN opens the Kyber launcher</span></div>
+  <div class="srv-bar">${UI.filters("srvf",[["all","POPULATED"],["official","OFFICIAL"],["hvv","HvV"],["community","COMMUNITY"]],srvFilter)}<span class="muted mono">JOIN opens the server in the Kyber launcher</span></div>
   ${shown.length?shown.map(row).join(""):'<div class="card muted">Nothing matches that filter right now.</div>'}
   <div class="note">Only OFFICIAL servers write to Kyber's stat system; community servers are great nights that don't show up here.</div></div>`;
   UI.bind("srvf",k=>{srvFilter=k;renderServers();});UI.animate();
