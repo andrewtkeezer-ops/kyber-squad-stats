@@ -761,6 +761,18 @@
   .sw:hover{border-color:var(--c);color:var(--ink)}.sw.on{border-color:var(--c);color:var(--ink);box-shadow:0 0 0 1px var(--c),0 0 16px color-mix(in srgb,var(--c) 50%,transparent)}
   .standings .row .av{position:relative}
   @media (prefers-reduced-motion:reduce){.kc{animation:none}}
+
+  /* ======== compact pilot tags: name + small crystal ======== */
+  .mark.tagged{transform:translate(-50%,-50%)!important}
+  .mark.tagged .lbl{display:inline-flex;align-items:center;gap:9px;padding:.45em .7em .45em 1em}
+  .kc.mini{display:inline-block;width:11px;aspect-ratio:98/240;animation:kcglow 3.2s ease-in-out infinite}
+  .kc.mini i{display:block;width:100%;height:100%}
+  .kc.mini img{display:block;width:100%;height:100%;object-fit:contain;mix-blend-mode:screen;opacity:.9}
+  .mark.tagged .lead{display:none}
+  .glow{width:3.2%;opacity:.35}
+  .mark.tagged .pcard{bottom:calc(100% + 10px)}
+  .mark.tagged.flip{transform:translate(-50%,-50%)!important}.mark.tagged.flip .pcard{left:auto;right:0;transform:translate(0,6px)}.mark.tagged.flip:hover .pcard{transform:translate(0,0)}
+  @keyframes markin{from{opacity:0}}
 </style>
 </head>
 <body>
@@ -944,7 +956,7 @@ function renderMarks(){
     const [bx,by,bw,bh]=sc.box;
     $("#marks").innerHTML=list.map((p,i)=>{const [ri,deg]=ORBIT_SLOTS[i];const [ox,oy]=orbitPoint(ri,deg);const c=p.color||GEMCOL[i%GEMCOL.length];
       const x=bx+ox/1000*bw,y=by+oy/500*bh;   // % of the hero
-      return `<span class="gem" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--c:${c};animation-delay:${i*-.9}s">${gemSVG(c)}</span><div class="glow" style="--c:${c};left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;animation-delay:${i*-.6}s"></div><span class="beam" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--c:${c}"></span><button class="mark ${x>82?"flip":""}" data-id="${p.id}" style="--c:${c};left:${(x>82?x-2.4:x+2.4).toFixed(2)}%;top:${(y-7.5).toFixed(2)}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="pcard">${pilotCard(p)}</span><span class="lead"></span></button>`;}).join("");
+      return `<div class="glow" style="--c:${c};left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;animation-delay:${i*-.6}s"></div><button class="mark tagged ${x>82?"flip":""}" data-id="${p.id}" style="--c:${c};left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}<i class="kc mini" style="--c:${c}"><i><img src="plates/crystal.png" alt="" draggable="false"></i></i></span><span class="pcard">${pilotCard(p)}</span></button>`;}).join("");
   }
   $("#marks").querySelectorAll(".mark").forEach(m=>{m.onclick=()=>{blip();selected=m.dataset.id;switchTo("player");};
     m.onmouseenter=()=>{const r=app.querySelector(`.row[data-id="${m.dataset.id}"]`);if(r)r.classList.add("lit");};m.onmouseleave=()=>{app.querySelectorAll(".row.lit").forEach(r=>r.classList.remove("lit"));};});
