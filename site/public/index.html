@@ -715,12 +715,16 @@
   #marks .gem{animation:gembob2 5s ease-in-out infinite}
   @keyframes gembob2{50%{transform:translate(-50%,calc(-92% - 3px))}}
   .hero.enter #marks .mark{animation:markin .7s var(--ease) both!important}
+
+  .crestm{display:inline-block;width:20px;height:20px;background:currentColor;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;flex:none}
+  header.top .crest.crestm{width:40px;height:40px;color:var(--accent);filter:drop-shadow(0 0 10px var(--accent-glow))}
+  header.top .fac button .crestm{opacity:.75}header.top .fac button.on .crestm{opacity:1;filter:drop-shadow(0 0 6px var(--accent-glow))}
 </style>
 </head>
 <body>
 
 <header class="top" id="top">
-  <div class="brand"><svg class="crest" viewBox="0 0 48 48" fill="none" id="crest"></svg><b>KYBER SQUAD<span>BATTLEFRONT II</span></b></div>
+  <div class="brand"><i class="crest crestm" id="crest"></i><b>KYBER SQUAD<span>BATTLEFRONT II</span></b></div>
   <nav class="nav" id="nav"><i class="ind" id="navind"></i>
     <button class="on" data-v="overview">Overview</button>
     <button data-v="squad">Leaderboard</button>
@@ -731,8 +735,8 @@
   </nav>
   <div class="tr">
     <div class="fac" id="toggle">
-      <button data-f="empire"><svg viewBox="0 0 48 48" fill="none" id="tEmp"></svg>EMPIRE</button>
-      <button data-f="rebel"><svg viewBox="0 0 48 48" fill="none" id="tReb"></svg>REBELLION</button>
+      <button data-f="empire"><i class="crestm" style="--m:url(plates/empire-mask.png)"></i>EMPIRE</button>
+      <button data-f="rebel"><i class="crestm" style="--m:url(plates/rebel-mask.png)"></i>REBELLION</button>
     </div>
     <span class="pill" id="badge"><span class="dot"></span><span id="badge-txt">LOADING</span></span>
     <button class="ic" id="sound" title="Sound"><svg viewBox="0 0 14 14"><path d="M3 2h2v10H3zM9 2h2v10H9z"/></svg></button>
@@ -756,7 +760,7 @@
     <div class="orbit" id="orbit"></div>
     <div class="lite core"></div>
     <div id="marks"></div>
-    <div class="hint"><svg viewBox="0 0 16 22"><rect x="1" y="1" width="14" height="20" rx="7"/><path d="M8 1v7"/></svg>DRAG TO EXPLORE <em>/</em> SELECT A PILOT</div>
+    <div class="hint"><svg viewBox="0 0 16 22"><path d="M8 2v6M8 2l-2 2M8 2l2 2"/><rect x="3" y="10" width="10" height="10" rx="2"/></svg>HOVER A PILOT OR SHIP <em>/</em> CLICK A PILOT FOR THEIR CARD</div>
     <span id="crumb" hidden></span><button id="meBtn" hidden><span id="meAv"></span><span id="meTxt"></span></button>
   </section>
 
@@ -1179,7 +1183,7 @@ addEventListener("keydown",e=>{if(!$("#wrapped").classList.contains("open"))retu
 
 /* ================= faction ================= */
 function faction(f){FACTION=f;document.documentElement.setAttribute("data-faction",f);
-  $("#crest").innerHTML='<image href="plates/'+f+'-crest.webp" x="2" y="2" width="44" height="44"/>';$("#fav").href="plates/"+f+"-crest.webp";$("#bootcrest").innerHTML=CREST[f];$("#tEmp").innerHTML=CREST.empire;$("#tReb").innerHTML=CREST.rebel;
+  $("#crest").style.setProperty("--m","url(plates/"+f+"-mask.png)");$("#fav").href="plates/"+f+"-crest.webp";$("#bootcrest").innerHTML=CREST[f];
   $("#toggle").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.f===f));
   $("#crumb").textContent=f==="rebel"?"ALLIANCE COMMAND":"IMPERIAL COMMAND";
   $("#eyebrow").textContent=f==="rebel"?"ALLIANCE INTELLIGENCE":"IMPERIAL INTELLIGENCE";
