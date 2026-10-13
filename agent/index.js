@@ -75,7 +75,7 @@ async function getRoster(s) {
   }
   const byName = new Map();
   for (const n of s.extraNames) byName.set(n.toLowerCase(), { email: null, name: n });
-  for (const c of claimed) if (c.name) byName.set(c.name.toLowerCase(), { email: c.email || null, name: c.name });
+  for (const c of claimed) if (c.name) byName.set(c.name.toLowerCase(), { email: c.email || null, name: c.name, color: c.color || null });
   return [...byName.values()];
 }
 async function resolve(name) {
@@ -108,7 +108,7 @@ async function buildBlob(s) {
       const sessions = detectSessions(snaps.history(u.id), s.sessionGap).slice(0, 12);
       const stats = decodeStats(raw);
       sigParts.push(u.id + ':' + stats.career.kills + ':' + stats.career.deaths + ':' + stats.career.score + ':' + stats.career.playtimeSec + ':' + sessions.length);
-      players.push({ name: entry.name, email: entry.email, resolved: true, username: u.username, id: u.id, source, stats, sessions });
+      players.push({ name: entry.name, email: entry.email, color: entry.color || null, resolved: true, username: u.username, id: u.id, source, stats, sessions });
     } catch (e) {
       players.push({ name: entry.name, email: entry.email, resolved: false, error: e.code || e.message });
     }

@@ -745,6 +745,22 @@
   .inv-row .av{width:40px;height:40px;border-radius:8px;font-size:13px}
   .inv-row .who{flex:1;min-width:0}.inv-row .who b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.inv-row .who small{display:block;font-family:var(--font-m);font-size:10px;letter-spacing:.16em;color:var(--ink-3);margin-top:4px}
   .ghost.sm{padding:7px 12px;font-size:12px}
+
+  /* ======== kyber crystal sprite ======== */
+  .kc{display:block;width:100%;aspect-ratio:98/240;filter:drop-shadow(0 0 6px var(--c)) drop-shadow(0 0 18px color-mix(in srgb,var(--c) 70%,transparent)) drop-shadow(0 0 40px color-mix(in srgb,var(--c) 35%,transparent));animation:kcglow 3.2s ease-in-out infinite}
+  .kc i{display:block;width:100%;height:100%;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 85%,#fff) 0%,var(--c) 45%,color-mix(in srgb,var(--c) 60%,#000) 100%);-webkit-mask:url(plates/crystal.png) center/contain no-repeat;mask:url(plates/crystal.png) center/contain no-repeat}
+  .kc img{display:block;width:100%;height:100%;object-fit:contain;mix-blend-mode:screen;opacity:.9}
+  @keyframes kcglow{50%{filter:drop-shadow(0 0 9px var(--c)) drop-shadow(0 0 28px color-mix(in srgb,var(--c) 85%,transparent)) drop-shadow(0 0 60px color-mix(in srgb,var(--c) 45%,transparent))}}
+  .gem{width:2.9%}.gem .kc{animation-delay:inherit}
+  .duelist .crys,.pc-hero .crys,.empty-state .crys{width:34px}.duelist .crys svg,.pc-hero .crys svg{display:none}
+  .you-crys{width:64px;flex:none}
+  .srv-hero .you-crys{align-self:center}
+  .swatches{display:flex;gap:8px;flex-wrap:wrap}
+  .sw{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:999px;background:rgba(0,0,0,.3);color:var(--ink-2);font-family:var(--font-m);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px 7px 8px;cursor:pointer;transition:border-color .25s,color .25s,box-shadow .25s}
+  .sw i{width:16px;height:16px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+  .sw:hover{border-color:var(--c);color:var(--ink)}.sw.on{border-color:var(--c);color:var(--ink);box-shadow:0 0 0 1px var(--c),0 0 16px color-mix(in srgb,var(--c) 50%,transparent)}
+  .standings .row .av{position:relative}
+  @media (prefers-reduced-motion:reduce){.kc{animation:none}}
 </style>
 </head>
 <body>
@@ -836,7 +852,7 @@ function fromBlob(blob){
       career:cc?{kills:cc.kills,deaths:cc.deaths,kd:cc.kd}:null,
       classes:(d.classes||[]).filter(x=>x.playtimeSec>0).sort((a,b)=>b.playtimeSec-a.playtimeSec).slice(0,2).map(x=>({name:x.name,playtimeSec:x.playtimeSec,kills:x.kills||0})),
       heroes:(d.heroes||[]).filter(x=>x.playtimeSec>0).sort((a,b)=>b.playtimeSec-a.playtimeSec).slice(0,2).map(x=>({name:x.name,side:x.side,playtimeSec:x.playtimeSec,kills:x.kills||0}))};});
-    return{id:p.id||p.name,name:p.username||p.name,username:p.username||p.name,resolved:true,side:dp>lp?"dark":"light",career,heroes,classes,sessions,weapons:st.weapons||[]};
+    return{id:p.id||p.name,name:p.username||p.name,username:p.username||p.name,resolved:true,side:dp>lp?"dark":"light",career,heroes,classes,sessions,weapons:st.weapons||[],color:p.color||null};
   });
 }
 async function load(){
@@ -912,8 +928,10 @@ function orbitSVG(){
   return `<svg viewBox="0 0 1000 500" preserveAspectRatio="none" class="orbitsvg"><defs><radialGradient id="hub"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".35" stop-color="#9be9ff" stop-opacity=".6"/><stop offset="1" stop-color="#3ad7ff" stop-opacity="0"/></radialGradient></defs>
     ${spokes}${rings}${nodes}<ellipse cx="500" cy="250" rx="60" ry="24" transform="rotate(${TILT} 500 250)" fill="url(#hub)" class="hub"/></svg>`;
 }
-function gemSVG(c){return `<svg viewBox="0 0 30 48"><path d="M15 2 L26 18 L15 46 L4 18 Z" fill="${c}" opacity=".88"/><path d="M15 2 L26 18 L15 22 Z" fill="#fff" opacity=".38"/><path d="M4 18 L15 22 L15 46 Z" fill="#000" opacity=".28"/><path d="M15 2 L4 18 L15 22 Z" fill="#fff" opacity=".12"/></svg>`;}
+function gemSVG_old(c){return `<svg viewBox="0 0 30 48"><path d="M15 2 L26 18 L15 46 L4 18 Z" fill="${c}" opacity=".88"/><path d="M15 2 L26 18 L15 22 Z" fill="#fff" opacity=".38"/><path d="M4 18 L15 22 L15 46 Z" fill="#000" opacity=".28"/><path d="M15 2 L4 18 L15 22 Z" fill="#fff" opacity=".12"/></svg>`;}
 function pilotCard(p){const c=p.career||{};const top=p.heroes[0]||p.classes[0];return `<i class="k"><b>${c.kd!=null?c.kd.toFixed(2):"—"}</b><small>K/D</small></i><i><b>${c.kills!=null?fmtN(c.kills):"—"}</b><small>KILLS</small></i><i><b>${c.rank??"—"}</b><small>LEVEL</small></i><i><b>${fmtH(c.playtimeSec)}</b><small>TIME</small></i>${top?`<em>${esc(top.name)} · ${fmtH(top.playtimeSec)}</em>`:""}`;}
+const KYBER=[["blue","#3ad7ff"],["green","#2ef2d0"],["red","#ff2d4d"],["purple","#b48cff"],["yellow","#ffc53d"],["orange","#ff8a3d"],["white","#dfe9ff"],["magenta","#ff5fd0"]];
+function gemSVG(c){return `<span class="kc" style="--c:${c}"><i><img src="plates/crystal.png" alt="" draggable="false"></i></span>`;}
 function renderMarks(){
   const sc=SCENE[FACTION]||SCENE.empire;const list=players.filter(p=>p.resolved).slice(0,6);
   if(sc.mode==="painted"){
@@ -922,7 +940,7 @@ function renderMarks(){
       return `${gem}<div class="glow" style="--c:${c};left:${s[2]}%;top:${s[3]}%;animation-delay:${i*-.6}s"></div><button class="mark" data-id="${p.id}" style="--c:${c};left:${s[0]}%;top:${s[1]}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="pcard">${pilotCard(p)}</span><span class="lead"></span></button>`;}).join("");
   }else{
     const [bx,by,bw,bh]=sc.box;
-    $("#marks").innerHTML=list.map((p,i)=>{const [ri,deg]=ORBIT_SLOTS[i];const [ox,oy]=orbitPoint(ri,deg);const c=GEMCOL[i%GEMCOL.length];
+    $("#marks").innerHTML=list.map((p,i)=>{const [ri,deg]=ORBIT_SLOTS[i];const [ox,oy]=orbitPoint(ri,deg);const c=p.color||GEMCOL[i%GEMCOL.length];
       const x=bx+ox/1000*bw,y=by+oy/500*bh;   // % of the hero
       return `<span class="gem" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--c:${c};animation-delay:${i*-.9}s">${gemSVG(c)}</span><div class="glow" style="--c:${c};left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;animation-delay:${i*-.6}s"></div><span class="beam" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--c:${c}"></span><button class="mark ${x>82?"flip":""}" data-id="${p.id}" style="--c:${c};left:${(x>82?x-2.4:x+2.4).toFixed(2)}%;top:${(y-7.5).toFixed(2)}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="pcard">${pilotCard(p)}</span><span class="lead"></span></button>`;}).join("");
   }
@@ -993,7 +1011,7 @@ const UI={
 };
 const dailyKills=(p,days=14)=>{const out=new Array(days).fill(0);(p.sessions||[]).forEach(s=>{const d=Math.floor((Date.now()-new Date(s.start))/86400e3);if(d>=0&&d<days)out[days-1-d]+=(s.career&&s.career.kills)||0;});return out;};
 const bestNight=p=>(p.sessions||[]).reduce((b,s)=>(!b||((s.career?.kills||0)>(b.career?.kills||0)))?s:b,null);
-const crystalOf=p=>{const i=players.filter(x=>x.resolved).indexOf(p);if(i<0)return CRYSTAL[0];return (SCENE[FACTION]||SCENE.empire).mode==="painted"?(PAINTED[i]?PAINTED[i][4]:GEMCOL[i%GEMCOL.length]):GEMCOL[i%GEMCOL.length];};
+const crystalOf=p=>{if(p&&p.color)return p.color;const i=players.filter(x=>x.resolved).indexOf(p);if(i<0)return CRYSTAL[0];return (SCENE[FACTION]||SCENE.empire).mode==="painted"?(PAINTED[i]?PAINTED[i][4]:GEMCOL[i%GEMCOL.length]):GEMCOL[i%GEMCOL.length];};
 
 /* ================= views ================= */
 let current="overview",selected=null,rivA=null,rivB=null,sortKey="playtime",lbMode="career",srvFilter="all",sessFilter="all";const app=$("#app");
@@ -1160,12 +1178,18 @@ function renderServers(){
     addEventListener("blur",()=>clearTimeout(t),{once:true});}));
 }
 function renderYou(){
-  if(!LIVE){app.innerHTML=`<div class="view">${UI.head("Your profile")}<div class="card"><p class="muted" style="margin:0">In the live app you sign in with your Google account and claim your exact Kyber name here. The agent then tracks you automatically — including the nights you play without the squad.</p></div></div>`;return;}
-  const claimed=ME&&ME.name;
-  app.innerHTML=`<div class="view">${UI.head("Your profile")}<div class="card"><p class="muted" style="margin:0 0 12px">Signed in as <b style="color:var(--ink)">${ME&&ME.email||"(unknown — is Access on?)"}</b></p>
-  <div style="display:flex;gap:10px;flex-wrap:wrap"><input class="txt" id="kyberName" placeholder="your exact Kyber / in-game name" value="${claimed||""}" style="flex:1;min-width:220px"/><button class="btn" id="claim">${claimed?"Update my name":"Claim my name"}</button></div>
-  <div class="note">${claimed?`You're tracked as <b style="color:var(--ink)">${claimed}</b>. The agent picks changes up within a few minutes.`:"Enter the exact name you use in Battlefront on Kyber. Stats only accrue on OFFICIAL servers."}</div></div></div>`;
-  $("#claim").onclick=async()=>{const n=$("#kyberName").value.trim();if(!n)return;try{const r=await fetch("/api/claim",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:n})});if(!r.ok)throw new Error(await r.text());await load();renderYou();}catch(e){$("#kyberName").style.borderColor="var(--dark)";}};
+  if(!LIVE){app.innerHTML=`<div class="view">${UI.head("Your settings")}<div class="card"><p class="muted" style="margin:0">In the live app you sign in with Google, add your Kyber gamertag to sync your stats, and pick your kyber crystal colour.</p></div></div>`;return;}
+  const claimed=ME&&ME.name;const col=(ME&&ME.color)||"#3ad7ff";
+  app.innerHTML=`<div class="view"><div class="srv-hero" style="--c:${col}"><div><div class="eyebrow">PILOT SETTINGS</div><h2 class="display2">${esc(claimed||"YOUR PROFILE")}</h2><p class="muted">Signed in as <b style="color:var(--ink)">${esc(ME&&ME.email||"(unknown — is Access on?)")}</b> · <a class="link" href="/cdn-cgi/access/logout" style="font-size:13px">Sign out</a></p></div><div class="you-crys" id="youCrys">${gemSVG(col)}</div></div>
+  <div class="grid2">
+    <div class="card"><h3>GAMERTAG</h3>${claimed?`<p style="margin:0 0 12px">Syncing stats for <b>${esc(claimed)}</b>. Wrong profile? Remove it and add the right name.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" id="unclaim">Remove ${esc(claimed)}</button></div>`:`<p class="muted" style="margin:0 0 12px">Enter the exact name you use in Battlefront on Kyber. The agent finds you and starts syncing within a few minutes.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><input class="txt" id="kyberName" placeholder="your exact Kyber gamertag" style="flex:1;min-width:220px"/><button class="btn" id="claim">Add gamertag</button></div>`}<div class="note" id="claimMsg">Stats only accrue on servers marked OFFICIAL.</div></div>
+    <div class="card"><h3>KYBER CRYSTAL</h3><p class="muted" style="margin:0 0 12px">Your colour on the holotable, standings and rivalry board.</p><div class="swatches">${KYBER.map(([n,c])=>`<button class="sw ${c===col?"on":""}" data-c="${c}" title="${n}" style="--c:${c}"><i></i>${n}</button>`).join("")}</div><div class="note" id="colMsg">${claimed?"":"Add your gamertag first — the colour is saved with it."}</div></div>
+  </div></div>`;
+  const save=async(name,color)=>{const r=await fetch("/api/claim",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name,color})});if(!r.ok){const t=await r.text();throw new Error(t||r.status);}return r.json();};
+  const cl=$("#claim");if(cl)cl.onclick=async()=>{const n=$("#kyberName").value.trim();if(!n)return;try{await save(n,col);ME={...ME,name:n,color:col};blip();renderYou();}catch(e){$("#claimMsg").innerHTML=`<span style="color:var(--accent)">Couldn't save: ${esc(e.message)}</span>`;}};
+  const un=$("#unclaim");if(un)un.onclick=async()=>{if(!confirm(`Stop syncing ${claimed}?`))return;await fetch("/api/claim",{method:"DELETE"});ME={...ME,name:null};blip();renderYou();};
+  app.querySelectorAll(".sw").forEach(b=>b.onclick=async()=>{const c=b.dataset.c;app.querySelectorAll(".sw").forEach(x=>x.classList.toggle("on",x===b));$("#youCrys").innerHTML=gemSVG(c);$("#youCrys").closest(".srv-hero").style.setProperty("--c",c);
+    if(!claimed){ME={...ME,color:c};return;}try{await save(claimed,c);ME={...ME,color:c};$("#colMsg").textContent="Saved. Your crystal updates on the next refresh.";blip();}catch(e){$("#colMsg").innerHTML=`<span style="color:var(--accent)">Couldn't save colour.</span>`;}});
 }
 
 /* ================= admin: invites ================= */
