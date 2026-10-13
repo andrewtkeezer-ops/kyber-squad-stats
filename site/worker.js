@@ -20,14 +20,8 @@ const notInvited = (email) => new Response(`<!doctype html><meta charset="utf-8"
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    // The landing page lives at / (public); the app lives at /app (behind Access).
-    if (url.pathname === '/app' || url.pathname === '/app/') {
-      const r = await env.ASSETS.fetch(new Request(new URL('/app.html', url).toString(), request));
-      return new Response(r.body, r);
-    }
     const mod = routes[url.pathname];
-    const PUBLIC = url.pathname === '/' || url.pathname === '/index.html' || url.pathname.startsWith('/plates/') || url.pathname.startsWith('/ships/');
-    if (!AGENT_PATHS.has(url.pathname) && !PUBLIC) {
+    if (!AGENT_PATHS.has(url.pathname)) {
       // Everyone else must be a signed-in, invited human. With Access on, the header is always present;
       // if Access is off (local/dev) there's no header and we don't gate.
       const email = request.headers.get('cf-access-authenticated-user-email');
