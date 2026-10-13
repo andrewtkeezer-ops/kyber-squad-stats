@@ -601,6 +601,36 @@
   @media (max-width:1100px){.srv2{grid-template-columns:120px 1fr 110px 100px}.srv2 .tags{display:none}}
   @media (max-width:860px){.srv-hero{grid-template-columns:1fr;padding:22px 18px}.srv-tiles{flex-wrap:wrap}.srv-tiles div{flex:1 1 40%}.srv2{grid-template-columns:1fr auto;grid-template-areas:"planet pop" "m m" "join join";padding:12px}.srv2 .planet{grid-area:planet;border:0;padding:0;background:none}.srv2 .m{grid-area:m}.srv2 .pop{grid-area:pop}.join{grid-area:join;width:100%}.srv2 .tags{display:none}}
 
+
+  /* ======== glass system for inner views ======== */
+  .view .card{background:linear-gradient(180deg,rgba(16,18,26,.82),rgba(12,14,20,.9));border:1px solid var(--line-2);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 20px 40px -30px rgba(0,0,0,.8);backdrop-filter:blur(10px);border-radius:14px;padding:20px 22px}
+  .view .card h3{font-family:var(--font-m);font-weight:500;font-size:11px;letter-spacing:.28em;color:var(--ink-2);margin:0 0 14px}
+  .tiles{gap:12px}
+  .tile{position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(18,20,30,.9),rgba(12,14,20,.95));border:1px solid var(--line-2);border-radius:12px;padding:18px 18px 16px;transition:transform .25s var(--ease),border-color .25s,box-shadow .3s}
+  .tile::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .3s}
+  .tile:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 14px 34px -22px var(--accent-glow)}.tile:hover::after{opacity:1}
+  .tile b{font-family:var(--font-m);font-size:30px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;display:block;line-height:1}
+  .tile b.a{color:var(--accent);text-shadow:0 0 18px var(--accent-soft)}
+  .tile small{display:block;font-family:var(--font-m);font-size:9.5px;letter-spacing:.22em;color:var(--ink-3);margin-top:9px}
+  .rec{background:linear-gradient(180deg,rgba(18,20,30,.9),rgba(12,14,20,.95));border:1px solid var(--line-2);border-radius:12px;padding:16px 18px;transition:transform .25s var(--ease),border-color .25s}
+  .rec:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .rec small{font-family:var(--font-m);font-size:9.5px;letter-spacing:.22em;color:var(--ink-3)}
+  .rec b{display:block;font-family:var(--font-m);font-size:30px;font-weight:600;margin:8px 0 6px;line-height:1;color:var(--accent)}
+  .rec span{font-size:12.5px;color:var(--ink-2)}
+  .barrow{margin:11px 0}.barrow .n{font-size:13.5px}.barrow .v{font-family:var(--font-m);font-size:11px;color:var(--ink-2);letter-spacing:.04em}
+  .track{height:8px;border-radius:4px;background:rgba(255,255,255,.06)}.track>i{box-shadow:0 0 10px var(--accent-soft)}
+  /* player card hero */
+  .pc-hero{position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:34px 32px 26px;margin-bottom:16px;border:1px solid var(--line-2);border-radius:18px;overflow:hidden;background:var(--plate) center 30%/cover;isolation:isolate}
+  .pc-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(6,7,10,.92) 0%,rgba(6,7,10,.75) 40%,color-mix(in srgb,var(--c) 18%,rgba(6,7,10,.6)) 100%)}
+  .pc-hero .ship-bg{position:absolute;right:-4%;top:-12%;width:38%;opacity:.35;pointer-events:none;filter:drop-shadow(0 0 30px var(--c));transition:opacity .4s}
+  .pc-hero:hover .ship-bg{opacity:.55}
+  .pc-left{display:flex;align-items:center;gap:22px}
+  .pc-hero .crys{width:34px;filter:drop-shadow(0 0 10px var(--c)) drop-shadow(0 0 24px color-mix(in srgb,var(--c) 60%,transparent));animation:gembob 3.6s ease-in-out infinite}.pc-hero .crys svg{display:block;width:100%}
+  .pc-hero .display2{margin:8px 0 8px}
+  .pc-actions{display:flex;gap:8px;position:relative}
+  .sess-hero{margin-bottom:12px}
+  .heat .h{border-radius:2px}
+  @media (max-width:860px){.pc-hero{flex-direction:column;align-items:flex-start;padding:22px 18px}.pc-hero .ship-bg{width:70%;right:-20%;top:auto;bottom:-10%}.tile b{font-size:24px}.rec b{font-size:24px}}
 </style>
 </head>
 <body>
@@ -901,8 +931,9 @@ function renderPlayer(){
   const wk=week(p),wkK=wkKills(p),wkD=wkDeaths(p),bn=bestNight(p),col=crystalOf(p);
   const squadK=players.filter(x=>x.resolved&&x.career).reduce((a,x)=>a+(x.career.kills||0),0);
   const share=`${p.name} · LVL ${c.rank??"—"} · K/D ${c.kd?.toFixed(2)??"—"} · ${fmtN(c.kills)??"—"} kills · ${fmtH(c.playtimeSec)} on Kyber`;
-  app.innerHTML=`<div class="view"><div class="ph">${UI.avatar(p.name)}<div><div class="side" style="color:${sideCol(p.side)}">${p.side==="dark"?"DARK SIDE":"LIGHT SIDE"} · LVL ${c.rank??"—"}</div><h2>${p.name}</h2><div class="muted mono" style="font-size:11px;letter-spacing:.1em;margin-top:4px">${wk.length} SESSION${wk.length===1?"":"S"} THIS WEEK · ${fmtH(wkMin(p)*60)} · ${wkK} KILLS</div></div>
-    <div class="actions"><button class="ghost" id="cmp">Compare</button><button class="ghost" id="share">Copy card</button></div></div>
+  const ship=FACTION==="rebel"?["ships/xwing_a.webp","ships/awing.webp","ships/ywing.webp","ships/bwing.webp"][players.indexOf(p)%4]:["ships/tie_fighter.webp","ships/tie_int.webp","ships/tie_bomber.webp"][players.indexOf(p)%3];
+  app.innerHTML=`<div class="view"><div class="pc-hero" style="--c:${col}"><img class="ship-bg" src="${ship}" alt=""><div class="pc-left"><div class="crys">${gemSVG(col)}</div><div><div class="eyebrow" style="color:${sideCol(p.side)}">${p.side==="dark"?"DARK SIDE":"LIGHT SIDE"} · LVL ${c.rank??"—"}</div><h2 class="display2">${esc(p.name)}</h2><div class="muted mono" style="font-size:11px;letter-spacing:.18em">${wk.length} SESSION${wk.length===1?"":"S"} THIS WEEK · ${fmtH(wkMin(p)*60)} · ${wkK} KILLS</div></div></div>
+    <div class="pc-actions"><button class="ghost" id="cmp">Compare</button><button class="ghost" id="share">Copy card</button></div></div>
   ${UI.tiles([UI.tile(c.kd,"K/D",{a:1,dec:2}),UI.tile(c.kills,"KILLS"),UI.tile(c.deaths,"DEATHS"),UI.tile(c.winRate!=null?c.winRate*100:null,"WIN RATE",{sfx:"%"}),UI.tile(c.score,"SCORE"),UI.tile(Math.round((c.playtimeSec||0)/3600),"PLAY TIME",{sfx:"h"}),UI.tile(wkK,"KILLS THIS WEEK"),UI.tile(wkD?+(wkK/wkD).toFixed(2):(wkK||null),"K/D THIS WEEK",{dec:2})])}
   <div class="grid2">
     ${UI.panel("FORM · KILLS PER DAY, LAST 14 DAYS",`<div style="display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center">${UI.spark(dailyKills(p),col,300,70)}${UI.ring(squadK?(c.kills||0)/squadK:0,"OF SQUAD KILLS",squadK?Math.round((c.kills||0)/squadK*100)+"%":"—",col)}</div>`)}
@@ -934,12 +965,13 @@ function renderSessions(){
   const byKD=[...all].filter(e=>(e.s.career?.deaths||0)>=5).sort((a,b)=>(b.s.career.kd)-(a.s.career.kd))[0];
   const nights={};all.forEach(({s})=>{const k=new Date(s.start).toDateString();nights[k]=(nights[k]||0)+1;});const bigNight=Object.entries(nights).sort((a,b)=>b[1]-a[1])[0];
   const rec=(l,v,sub)=>`<div class="rec"><small>${l}</small><b>${v}</b><span>${sub}</span></div>`;
-  app.innerHTML=`<div class="view">${UI.head("Sessions",`${all.length} recorded across the squad.`,UI.filters("sfilt",[["all","EVERYONE"],...base.map(p=>[p.id,p.name.toUpperCase()])],sessFilter))}
+  app.innerHTML=`<div class="view"><div class="srv-hero sess-hero"><div><div class="eyebrow">${FACTION==="rebel"?"ALLIANCE":"IMPERIAL"} FLIGHT LOG</div><h2 class="display2">SESSIONS</h2><p class="muted">${all.length} recorded across the squad · reconstructed from stat snapshots.</p></div><div class="srv-tiles">${[[all.length,"SESSIONS"],[base.reduce((a,p)=>a+week(p).length,0),"THIS WEEK"],[Math.round(all.reduce((a,e)=>a+(e.s.durationMin||0),0)/60),"HOURS LOGGED"],[all.reduce((a,e)=>a+(e.s.career?.kills||0),0),"KILLS LOGGED"]].map(([v,l])=>`<div><b data-n="${v}">0</b><small>${l}</small></div>`).join("")}</div></div>
+  <div class="srv-bar">${UI.filters("sfilt",[["all","EVERYONE"],...base.map(p=>[p.id,p.name.toUpperCase()])],sessFilter)}</div>
   ${UI.panel("SQUAD RECORDS",all.length?`<div class="records">${byK?rec("MOST KILLS IN A NIGHT",byK.s.career.kills,`${byK.p.name} · ${new Date(byK.s.start).toLocaleDateString([],{month:"short",day:"numeric"})}`):""}${byL?rec("LONGEST SESSION",byL.s.durationMin+"m",byL.p.name):""}${byKD?rec("SHARPEST NIGHT",byKD.s.career.kd+" K/D",`${byKD.p.name} · ${byKD.s.career.kills}/${byKD.s.career.deaths}`):""}${bigNight?rec("BIGGEST SQUAD NIGHT",bigNight[1]+" sessions",new Date(bigNight[0]).toLocaleDateString([],{weekday:"long",month:"short",day:"numeric"})):""}</div>`:'<div class="muted">Records appear once sessions are recorded.</div>')}
   ${UI.panel("WHEN THE SQUAD PLAYS",all.length?UI.heat(grid):'<div class="muted">The heatmap fills in as the agent records sessions.</div>')}
   ${UI.panel("FEED",evs.length?`<div class="tl">${sessionRows(evs.slice(0,30))}</div>`:'<div class="muted">No sessions detected yet. A session appears when someone’s stats change on an official server while the agent is running — including nights you’re not on.</div>')}
   <div class="note">Sessions are reconstructed from stat snapshots (a burst of changes = one session). Kills/deaths per session come straight from the deltas.</div></div>`;
-  UI.bind("sfilt",k=>{sessFilter=k;renderSessions();});
+  UI.bind("sfilt",k=>{sessFilter=k;renderSessions();});UI.animate();
 }
 
 /* Rivalry */
@@ -1072,6 +1104,15 @@ function faction(f){FACTION=f;document.documentElement.setAttribute("data-factio
   hum(f);renderScene();}
 $("#toggle").addEventListener("click",e=>{const b=e.target.closest("button");if(b)faction(b.dataset.f);});
 
+/* replay count-ups and bar fills when the pointer enters a tile/card (throttled) */
+app.addEventListener("pointerenter",e=>{const t=e.target.closest?e.target.closest(".tile,.strip>div,.rec,.srv-tiles>div,.card,.srv2,.row,.duel-row,.pc-hero,.srv-hero"):null;if(!t||reduce)return;
+  const now=performance.now();if(t._replayAt&&now-t._replayAt<1400)return;t._replayAt=now;
+  t.querySelectorAll("[data-n]").forEach(el=>countUp(el,el.dataset.n===""?null:+el.dataset.n,+(el.dataset.dec||0),el.dataset.sfx||""));
+  t.querySelectorAll(".track>i,.vbar>i,.popbar>i").forEach(i=>{i.style.transition="none";i.style.width="0";void i.offsetWidth;i.style.transition="";requestAnimationFrame(()=>i.style.width=i.dataset.w+"%");});
+  t.querySelectorAll(".tug i").forEach(i=>{i.style.transition="none";i.style.width="0";void i.offsetWidth;i.style.transition="";requestAnimationFrame(()=>i.style.width="var(--w)");});
+  t.querySelectorAll(".gauge .fg").forEach(c=>{c.style.transition="none";c.style.strokeDashoffset=c.getAttribute("stroke-dashoffset");void c.getBoundingClientRect();c.style.transition="";requestAnimationFrame(()=>c.style.strokeDashoffset=c.dataset.off);});
+  t.querySelectorAll(".spark path").forEach(pth=>{pth.style.animation="none";void pth.offsetWidth;pth.style.animation="";});
+},true);
 /* ================= boot ================= */
 (async()=>{
   const msgs=["KYBER API","RESOLVING PILOTS","DECODING STAT KEYS","HOLOTABLE ONLINE"];let mi=0;const mt=setInterval(()=>{mi=(mi+1)%msgs.length;$("#bootmsg").textContent=msgs[mi];},450);
