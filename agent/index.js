@@ -113,7 +113,7 @@ async function buildBlob(s) {
   try {
     const r = await client.getServers({ page: 0 });
     servers = (r.servers || []).map((x) => ({
-      name: x.name, official: !!x.official, players: x.playerCount, maxPlayers: x.maxPlayerCount,
+      id: x.id || x.serverId || null, name: x.name, official: !!x.official, players: x.playerCount, maxPlayers: x.maxPlayerCount,
       requiresPassword: !!x.requiresPassword,
       map: x.levelSetup?.mapName || x.levelSetup?.map || '', mode: x.levelSetup?.modeName || x.levelSetup?.mode || '',
       mods: (x.mods || []).map((m) => m.name),
