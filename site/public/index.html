@@ -482,6 +482,42 @@
     .row .st small{font-size:9.5px;letter-spacing:.14em;margin-bottom:4px}.row .st b{font-size:18px}
     .foot{flex-wrap:wrap}.foot .r{margin-left:0;width:100%}
   }
+
+  /* ======== v11: drawn orbit, crystals, fleet ======== */
+  :root[data-faction="rebel"]{--plate:url("plates/rebel.jpg");--holo:#ffb866;--holo-2:#ffe2b8}
+  :root[data-faction="empire"]{--holo:#9fd6ff;--holo-2:#e3f3ff}
+  .lite.core{display:none}
+  :root[data-faction="rebel"] .hero::before{background:linear-gradient(90deg,rgba(6,5,3,.6) 0%,rgba(6,5,3,.3) 30%,rgba(6,5,3,0) 52%),linear-gradient(180deg,rgba(6,5,3,.6) 0%,rgba(6,5,3,0) 20%,rgba(6,5,3,0) 78%,rgba(6,5,3,.92) 100%)}
+  :root[data-faction="rebel"] .lite.core{display:none}
+  .fleet{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;container-type:size}
+  .ship{position:absolute;left:0;top:0;width:var(--w);pointer-events:none;animation:fly var(--dur) linear var(--delay) infinite;will-change:transform}
+  @keyframes fly{from{transform:translate(var(--x0),var(--y0))}to{transform:translate(var(--x1),var(--y1))}}
+  .ship .bob{position:relative;animation:shipbob 6s ease-in-out infinite;pointer-events:auto;cursor:pointer}
+  @keyframes shipbob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-9px) rotate(1.5deg)}}
+  .ship img{display:block;width:100%;height:auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.55));transition:filter .35s var(--ease),scale .35s var(--ease);scale:1}
+  .ship:hover{animation-play-state:paused!important;z-index:9!important}
+  .ship:hover .bob{animation-play-state:paused}
+  .ship:hover img{scale:1.12;filter:drop-shadow(0 10px 18px rgba(0,0,0,.6)) drop-shadow(0 0 18px var(--accent-glow)) brightness(1.12)}
+  .ship .tipbox{position:absolute;left:50%;top:-14px;transform:translate(-50%,-100%) translateY(6px);opacity:0;pointer-events:none;white-space:nowrap;background:rgba(8,8,10,.9);border:1px solid var(--accent);border-radius:7px;padding:7px 11px;box-shadow:0 0 18px var(--accent-soft);transition:opacity .25s,transform .35s var(--ease)}
+  .ship .tipbox b{display:block;font-size:13px;font-weight:600;color:var(--ink)}.ship .tipbox small{display:block;font-family:var(--font-m);font-size:9.5px;letter-spacing:.2em;color:var(--accent);margin-top:3px}
+  .ship:hover .tipbox{opacity:1;transform:translate(-50%,-100%)}
+  .orbit{position:absolute;z-index:2;pointer-events:none}
+  .orbitsvg{width:100%;height:100%;overflow:visible}
+  .orbitsvg .ring{fill:none;stroke:var(--holo-2);stroke-opacity:.55;stroke-width:1.2;stroke-dasharray:3 9;animation:ringspin linear infinite;transform-box:fill-box;transform-origin:center;filter:drop-shadow(0 0 3px var(--holo))}
+  .orbitsvg .ring.r0{stroke-dasharray:1 14;stroke-opacity:.35}.orbitsvg .ring.r1{stroke-dasharray:80 18;stroke-width:1.6}.orbitsvg .ring.r3{stroke-dasharray:2 6}.orbitsvg .ring.r4{stroke-dasharray:none;stroke-opacity:.8}
+  @keyframes ringspin{to{stroke-dashoffset:-1000}}
+  .orbitsvg .node{fill:#fff;fill-opacity:.9;filter:drop-shadow(0 0 4px #fff)}
+  .orbitsvg .spoke{stroke:var(--holo-2);stroke-opacity:.14;stroke-width:1}
+  .orbitsvg .hub{animation:corebreath 3.2s ease-in-out infinite}
+  .gem{position:absolute;z-index:4;width:2.2%;transform:translate(-50%,-92%);pointer-events:none;filter:drop-shadow(0 0 8px var(--c)) drop-shadow(0 0 22px color-mix(in srgb,var(--c) 60%,transparent));animation:gembob 3.6s ease-in-out infinite}
+  .gem svg{display:block;width:100%;height:auto}
+  .beam{position:absolute;z-index:3;width:2px;height:7%;transform:translate(-50%,0);background:linear-gradient(180deg,var(--c),transparent);opacity:.7;pointer-events:none;filter:blur(.5px)}
+  #marks .gem{animation:gembob2 3.6s ease-in-out infinite}@keyframes gembob2{50%{transform:translate(-50%,calc(-92% - 6px))}}
+  .mark.flip{transform:translate(-82%,-100%)}.mark.flip .lead{margin-left:60%}
+  .row.lit{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 12px 30px -18px var(--c)}
+  .row.lit::before{opacity:1}
+  @media (max-width:860px){.fleet,.orbit{display:none}}
+  @media (prefers-reduced-motion:reduce){.ship,.ship .bob,.gem,.orbitsvg .ring,.orbitsvg .hub{animation:none!important}}
 </style>
 </head>
 <body>
@@ -519,6 +555,8 @@
       </div>
     </div>
     <div class="strip" id="strip"></div>
+    <div class="fleet" id="fleet"></div>
+    <div class="orbit" id="orbit"></div>
     <div class="lite core"></div>
     <div id="marks"></div>
     <div class="hint"><svg viewBox="0 0 16 22"><rect x="1" y="1" width="14" height="20" rx="7"/><path d="M8 1v7"/></svg>DRAG TO EXPLORE <em>/</em> SELECT A PILOT</div>
@@ -610,14 +648,62 @@ $("#sound").onclick=()=>{soundOn=!soundOn;$("#sound").classList.toggle("on",soun
 
 /* ================= hero markers + strip ================= */
 // Slots = the five crystals painted into the plate. [label x, label y, crystal x, crystal y] in % of the plate, plus the crystal's own colour.
-// Slots on the plate: [label x, label y, crystal x, crystal y, colour, painted?]. The first three crystals are painted into the scene.
-const SLOTS=[[69.5,42.5,67,49.8,"#2ef2d0",1],[54.4,60.5,51.7,68.6,"#4aa8ff",1],[85.8,60.2,83,67.8,"#ff2d4d",1],[62,70,59.5,76.8,"#b48cff",0],[78.5,40.5,76,47.4,"#ffc53d",0],[86.5,76,89.5,80,"#2ef2d0",0]];
+
+/* ================= scene: orbit + crystals + fleet =================
+   empire: crystals sit on the three painted into the plate (until Empire assets arrive)
+   rebel : clean plate; orbit rings, crystals and ships are drawn/animated here      */
+const SCENE={
+  empire:{mode:"drawn",box:[45,30,52,60],side:"GALACTIC EMPIRE",ships:[
+    {src:"ships/tie_fighter.webp",name:"TIE/ln starfighter",w:6.5,from:[-12,30],to:[112,58],dur:40,delay:-8,z:3,flip:0},
+    {src:"ships/tie_fighter.webp",name:"TIE/ln starfighter",w:5,from:[-14,38],to:[110,66],dur:44,delay:-14,z:2,flip:0},
+    {src:"ships/tie_int.webp",name:"TIE/in interceptor",w:7,from:[110,12],to:[-12,52],dur:30,delay:-22,z:4,flip:0},
+    {src:"ships/tie_bomber.webp",name:"TIE/sa bomber",w:7.5,from:[-12,74],to:[112,28],dur:70,delay:-35,z:2,flip:0},
+    {src:"ships/isd.webp",name:"Imperial-class Star Destroyer",w:22,from:[115,6],to:[-30,48],dur:170,delay:-90,z:1,flip:1}]},
+  rebel:{mode:"drawn",box:[45,30,52,60],side:"REBEL ALLIANCE",ships:[
+    {src:"ships/xwing_a.webp",name:"T-65 starfighter",w:9.5,from:[-14,62],to:[112,18],dur:58,delay:-12,z:3,flip:1},
+    {src:"ships/awing.webp",name:"RZ-1 interceptor",w:6,from:[108,30],to:[-10,70],dur:34,delay:-20,z:3,flip:0},
+    {src:"ships/ywing.webp",name:"BTL bomber",w:8,from:[-12,24],to:[110,46],dur:76,delay:-40,z:2,flip:1},
+    {src:"ships/bwing.webp",name:"A/SF-01 heavy fighter",w:7,from:[105,8],to:[-10,40],dur:66,delay:-5,z:2,flip:0},
+    {src:"ships/falcon.webp",name:"YT-1300 freighter",w:11,from:[-16,84],to:[112,52],dur:92,delay:-61,z:4,flip:1},
+    {src:"ships/corvette.webp",name:"CR90 corvette",w:14,from:[112,88],to:[-18,6],dur:140,delay:-70,z:1,flip:0},
+    {src:"ships/xwing_b.webp",name:"T-65 starfighter",w:8,from:[100,-6],to:[-12,38],dur:48,delay:-30,z:4,flip:0}]}};
+const PAINTED=[[69.5,42.5,67,49.8,"#2ef2d0",1],[54.4,60.5,51.7,68.6,"#4aa8ff",1],[85.8,60.2,83,67.8,"#ff2d4d",1],[62,70,59.5,76.8,"#b48cff",0],[78.5,40.5,76,47.4,"#ffc53d",0],[86.5,76,89.5,80,"#2ef2d0",0]];
+const GEMCOL=["#2ef2d0","#4aa8ff","#ff2d4d","#b48cff","#ffc53d","#ff8a3d"];
+// crystal positions on the drawn orbit: [ring index, angle°] — spread so labels never collide
+const ORBIT_SLOTS=[[1,-125],[2,-30],[1,35],[2,-170],[1,150],[2,80]];
+const RINGS=[[480,200],[400,166],[300,124],[190,78],[90,36]];   // rx, ry in a 1000×500 box, tilted
+const TILT=-9;
+function orbitPoint(ri,deg){const [rx,ry]=RINGS[ri];const a=deg*Math.PI/180,t=TILT*Math.PI/180;const x=rx*Math.cos(a),y=ry*Math.sin(a);
+  return [500+x*Math.cos(t)-y*Math.sin(t),250+x*Math.sin(t)+y*Math.cos(t)];}
+function orbitSVG(){
+  const rings=RINGS.map(([rx,ry],i)=>`<ellipse cx="500" cy="250" rx="${rx}" ry="${ry}" transform="rotate(${TILT} 500 250)" class="ring r${i}" style="animation-duration:${90+i*40}s;animation-direction:${i%2?"reverse":"normal"}"/>`).join("");
+  const nodes=[[0,-70],[0,40],[0,150],[1,-140],[1,10],[1,110],[2,-100],[2,45],[3,-60],[3,130],[4,20]].map(([r,d])=>{const [x,y]=orbitPoint(r,d);return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r<2?4.5:3}" class="node"/>`;}).join("");
+  const spokes=[-70,-20,30,80,130,180,230].map(d=>{const [x1,y1]=orbitPoint(4,d),[x2,y2]=orbitPoint(0,d);return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" class="spoke"/>`;}).join("");
+  return `<svg viewBox="0 0 1000 500" preserveAspectRatio="none" class="orbitsvg"><defs><radialGradient id="hub"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".35" stop-color="#9be9ff" stop-opacity=".6"/><stop offset="1" stop-color="#3ad7ff" stop-opacity="0"/></radialGradient></defs>
+    ${spokes}${rings}${nodes}<ellipse cx="500" cy="250" rx="60" ry="24" transform="rotate(${TILT} 500 250)" fill="url(#hub)" class="hub"/></svg>`;
+}
+function gemSVG(c){return `<svg viewBox="0 0 30 48"><path d="M15 2 L26 18 L15 46 L4 18 Z" fill="${c}" opacity=".88"/><path d="M15 2 L26 18 L15 22 Z" fill="#fff" opacity=".38"/><path d="M4 18 L15 22 L15 46 Z" fill="#000" opacity=".28"/><path d="M15 2 L4 18 L15 22 Z" fill="#fff" opacity=".12"/></svg>`;}
 function renderMarks(){
-  const list=players.filter(p=>p.resolved).slice(0,SLOTS.length);
-  $("#marks").innerHTML=SLOTS.map((s,i)=>{const p=list[i];if(!p)return"";const c=s[4];
-    const gem=s[5]?"":`<svg class="gem" viewBox="0 0 30 48" style="left:${s[2]}%;top:${s[3]}%;--c:${c}"><path d="M15 2 L26 18 L15 46 L4 18 Z" fill="${c}" opacity=".85"/><path d="M15 2 L26 18 L15 22 Z" fill="#fff" opacity=".35"/><path d="M4 18 L15 22 L15 46 Z" fill="#000" opacity=".25"/></svg>`;
-    return `${gem}<div class="glow" style="--c:${c};left:${s[2]}%;top:${s[3]}%;animation-delay:${i*-.6}s"></div><button class="mark" data-id="${p.id}" style="--c:${c};left:${s[0]}%;top:${s[1]}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="lead"></span></button>`;}).join("");
-  $("#marks").querySelectorAll(".mark").forEach(m=>m.onclick=()=>{blip();selected=m.dataset.id;switchTo("player");});
+  const sc=SCENE[FACTION]||SCENE.empire;const list=players.filter(p=>p.resolved).slice(0,6);
+  if(sc.mode==="painted"){
+    $("#marks").innerHTML=PAINTED.map((s,i)=>{const p=list[i];if(!p)return"";const c=s[4];
+      const gem=s[5]?"":`<span class="gem" style="left:${s[2]}%;top:${s[3]}%;--c:${c}">${gemSVG(c)}</span>`;
+      return `${gem}<div class="glow" style="--c:${c};left:${s[2]}%;top:${s[3]}%;animation-delay:${i*-.6}s"></div><button class="mark" data-id="${p.id}" style="--c:${c};left:${s[0]}%;top:${s[1]}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="lead"></span></button>`;}).join("");
+  }else{
+    const [bx,by,bw,bh]=sc.box;
+    $("#marks").innerHTML=list.map((p,i)=>{const [ri,deg]=ORBIT_SLOTS[i];const [ox,oy]=orbitPoint(ri,deg);const c=GEMCOL[i%GEMCOL.length];
+      const x=bx+ox/1000*bw,y=by+oy/500*bh;   // % of the hero
+      return `<span class="gem" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--c:${c};animation-delay:${i*-.9}s">${gemSVG(c)}</span><div class="glow" style="--c:${c};left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;animation-delay:${i*-.6}s"></div><span class="beam" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--c:${c}"></span><button class="mark ${x>82?"flip":""}" data-id="${p.id}" style="--c:${c};left:${(x>82?x-2.4:x+2.4).toFixed(2)}%;top:${(y-7.5).toFixed(2)}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="lead"></span></button>`;}).join("");
+  }
+  $("#marks").querySelectorAll(".mark").forEach(m=>{m.onclick=()=>{blip();selected=m.dataset.id;switchTo("player");};
+    m.onmouseenter=()=>{const r=app.querySelector(`.row[data-id="${m.dataset.id}"]`);if(r)r.classList.add("lit");};m.onmouseleave=()=>{app.querySelectorAll(".row.lit").forEach(r=>r.classList.remove("lit"));};});
+}
+function renderScene(){
+  const sc=SCENE[FACTION]||SCENE.empire;
+  $("#orbit").innerHTML=sc.mode==="drawn"?orbitSVG():"";
+  const [bx,by,bw,bh]=sc.box||[0,0,0,0];$("#orbit").style.cssText=sc.mode==="drawn"?`left:${bx}%;top:${by}%;width:${bw}%;height:${bh}%`:"";
+  $("#fleet").innerHTML=(sc.ships||[]).map((s,i)=>`<div class="ship" style="--x0:${s.from[0]}cqw;--y0:${s.from[1]}cqh;--x1:${s.to[0]}cqw;--y1:${s.to[1]}cqh;--dur:${s.dur}s;--delay:${s.delay}s;--w:${s.w}%;z-index:${s.z};animation-play-state:${reduce?"paused":"running"}"><div class="bob" style="animation-delay:${i*-1.3}s"><img src="${s.src}" alt="" draggable="false" style="transform:scaleX(${s.flip?-1:1})"><span class="tipbox"><b>${s.name}</b><small>${sc.side}</small></span></div></div>`).join("");
+  renderMarks();
 }
 const ICONS={
   elim:`<svg viewBox="0 0 34 34"><circle cx="17" cy="17" r="11"/><circle cx="17" cy="17" r="3"/><path d="M17 2v6M17 26v6M2 17h6M26 17h6"/></svg>`,
@@ -654,7 +740,7 @@ const UI={
 };
 const dailyKills=(p,days=14)=>{const out=new Array(days).fill(0);(p.sessions||[]).forEach(s=>{const d=Math.floor((Date.now()-new Date(s.start))/86400e3);if(d>=0&&d<days)out[days-1-d]+=(s.career&&s.career.kills)||0;});return out;};
 const bestNight=p=>(p.sessions||[]).reduce((b,s)=>(!b||((s.career?.kills||0)>(b.career?.kills||0)))?s:b,null);
-const crystalOf=p=>{const i=players.filter(x=>x.resolved).indexOf(p);return i>=0&&i<SLOTS.length?SLOTS[i][4]:CRYSTAL[Math.max(0,i)%CRYSTAL.length];};
+const crystalOf=p=>{const i=players.filter(x=>x.resolved).indexOf(p);if(i<0)return CRYSTAL[0];return (SCENE[FACTION]||SCENE.empire).mode==="painted"?(PAINTED[i]?PAINTED[i][4]:GEMCOL[i%GEMCOL.length]):GEMCOL[i%GEMCOL.length];};
 
 /* ================= views ================= */
 let current="overview",selected=null,rivA=null,rivB=null,sortKey="playtime",lbMode="career",srvFilter="all",sessFilter="all";const app=$("#app");
@@ -863,14 +949,14 @@ addEventListener("keydown",e=>{if(!$("#wrapped").classList.contains("open"))retu
 
 /* ================= faction ================= */
 function faction(f){FACTION=f;document.documentElement.setAttribute("data-faction",f);
-  $("#crest").innerHTML=CREST[f];$("#bootcrest").innerHTML=CREST[f];$("#tEmp").innerHTML=CREST.empire;$("#tReb").innerHTML=CREST.rebel;
+  $("#crest").innerHTML='<image href="plates/'+f+'-crest.webp" x="2" y="2" width="44" height="44"/>';$("#bootcrest").innerHTML=CREST[f];$("#tEmp").innerHTML=CREST.empire;$("#tReb").innerHTML=CREST.rebel;
   $("#toggle").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.f===f));
   $("#crumb").textContent=f==="rebel"?"ALLIANCE COMMAND":"IMPERIAL COMMAND";
   $("#eyebrow").textContent=f==="rebel"?"ALLIANCE INTELLIGENCE":"IMPERIAL INTELLIGENCE";
   const n=players.filter(p=>p.resolved).length;
   $("#tag").textContent=(n?["Zero","One","Two","Three","Four","Five","Six"][Math.min(n,6)]+" pilot"+(n===1?"":"s")+". ":"")+(f==="rebel"?"One galaxy.":"One fleet.");
   try{localStorage.setItem("kss-faction",f);}catch{}
-  hum(f);}
+  hum(f);renderScene();}
 $("#toggle").addEventListener("click",e=>{const b=e.target.closest("button");if(b)faction(b.dataset.f);});
 
 /* ================= boot ================= */
@@ -878,9 +964,9 @@ $("#toggle").addEventListener("click",e=>{const b=e.target.closest("button");if(
   const msgs=["KYBER API","RESOLVING PILOTS","DECODING STAT KEYS","HOLOTABLE ONLINE"];let mi=0;const mt=setInterval(()=>{mi=(mi+1)%msgs.length;$("#bootmsg").textContent=msgs[mi];},450);
   let f="rebel";try{f=localStorage.getItem("kss-faction")||f;}catch{}
   if(location.hash==="#rebel")f="rebel";if(location.hash==="#empire")f="empire";
-  await load();faction(f);renderMarks();renderStrip();render();routeFromHash(true);moveInd();
+  await load();faction(f);renderScene();renderStrip();render();routeFromHash(true);moveInd();
   clearInterval(mt);$("#bootmsg").textContent="HOLOTABLE ONLINE";setTimeout(()=>{$("#boot").classList.add("off");hum(FACTION);},reduce?0:650);
-  if(LIVE)setInterval(async()=>{await load();renderMarks();renderStrip();if(current!=="you")render();},90000);
+  if(LIVE)setInterval(async()=>{await load();renderScene();renderStrip();if(current!=="you")render();},90000);
 })();
 </script>
 </body>
