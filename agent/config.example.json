@@ -1,7 +1,9 @@
 {
-  "_comment": "Copy to config.json. siteBase + ingestSecret come from your Cloudflare Worker. Edits are picked up automatically every cycle (no restart).",
-  "siteBase": "https://kyber-squad-stats.YOUR-SUBDOMAIN.workers.dev",
+  "_comment": "Copy to config.json (or import it from the tray app). siteBase + ingestSecret come from your Cloudflare Worker; accessClientId/Secret from a Cloudflare Access service token. Edits are picked up every cycle.",
+  "siteBase": "https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev",
   "ingestSecret": "paste-the-shared-secret",
+  "accessClientId": "paste-the-access-service-token-client-id.access",
+  "accessClientSecret": "paste-the-access-service-token-secret",
   "pollMs": 180000,
   "forcePushMin": 15,
   "sessionGapMin": 30,
