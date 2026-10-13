@@ -119,7 +119,7 @@ async function buildBlob(s) {
       mods: (x.mods || []).map((m) => m.name),
     })).sort((a, b) => b.players - a.players);
   } catch (e) { servers = { error: e.code || e.message }; }
-  return { blob: { updatedAt: new Date().toISOString(), players, servers }, sig: sigParts.join('|') };
+  return { blob: { agentVersion: 3, updatedAt: new Date().toISOString(), players, servers }, sig: sigParts.join('|') };
 }
 
 async function tick() {
