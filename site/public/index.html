@@ -378,25 +378,25 @@
   :root{--top-h:76px;--panel-img:var(--plate);--font-d:"Archivo Black","Manrope",sans-serif;--plate:url("plates/empire.jpg")}
   :root[data-faction="rebel"]{--plate:url("plates/rebel.jpg")}
   .rail,.topbar,.table,.sep{display:none}
-  .top{position:sticky;top:0;z-index:30;height:var(--top-h);display:flex;align-items:center;gap:28px;padding:0 28px;background:linear-gradient(180deg,rgba(5,6,9,.92),rgba(5,6,9,.72));backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-  .top .brand{display:flex;flex-direction:row;align-items:center;gap:14px;padding:0;margin:0}
-  .top .crest{width:44px;height:44px}
-  .top .brand b{display:block;font-family:var(--font-m);font-weight:700;font-size:15px;letter-spacing:.24em;line-height:1}
-  .top .brand b span{display:block;font-weight:400;font-size:9.5px;letter-spacing:.3em;color:var(--ink-3);margin-top:5px}
-  .top .nav{flex-direction:row;gap:4px;position:relative;margin-left:16px}
-  .top .nav button{padding:12px 14px!important;border:0;font-size:14px;color:var(--ink-2);background:none}
-  .top .nav button:hover{color:var(--ink);padding-left:14px!important}
-  .top .nav button.on{color:var(--accent);background:none}
-  .top .nav .ind{top:auto;bottom:-16px;height:2px;width:0;left:0;transition:left .45s var(--ease),width .45s var(--ease)}
-  .top .tr{margin-left:auto;display:flex;align-items:center;gap:14px}
-  .top .fac{flex-direction:row;gap:0;padding:0;border:1px solid var(--line-2);border-radius:10px;overflow:hidden;background:rgba(0,0,0,.35)}
-  .top .fac button{border:0;border-radius:0;padding:9px 14px;font-size:10.5px;letter-spacing:.16em;gap:8px}
-  .top .fac button svg{width:20px;height:20px}
-  .top .fac button.on{background:var(--accent-soft);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);font-weight:600}
-  .top .pill{border:0;background:none;padding:8px 6px}
-  .top .you{margin:0;padding:6px 10px 6px 6px;gap:9px;border:1px solid var(--line-2);border-radius:999px}
-  .top .you .av{width:28px;height:28px;font-size:10px}
-  .top .you b{font-size:12.5px;font-weight:600}.top .you small{display:none}
+  header.top{position:sticky;top:0;z-index:30;height:var(--top-h);display:flex;align-items:center;gap:28px;padding:0 28px;background:linear-gradient(180deg,rgba(5,6,9,.92),rgba(5,6,9,.72));backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  header.top .brand{display:flex;flex-direction:row;align-items:center;gap:14px;padding:0;margin:0}
+  header.top .crest{width:44px;height:44px}
+  header.top .brand b{display:block;font-family:var(--font-m);font-weight:700;font-size:15px;letter-spacing:.24em;line-height:1}
+  header.top .brand b span{display:block;font-weight:400;font-size:9.5px;letter-spacing:.3em;color:var(--ink-3);margin-top:5px}
+  header.top .nav{flex-direction:row;gap:4px;position:relative;margin-left:16px}
+  header.top .nav button{padding:12px 14px!important;border:0;font-size:14px;color:var(--ink-2);background:none}
+  header.top .nav button:hover{color:var(--ink);padding-left:14px!important}
+  header.top .nav button.on{color:var(--accent);background:none}
+  header.top .nav .ind{top:auto;bottom:-16px;height:2px;width:0;left:0;transition:left .45s var(--ease),width .45s var(--ease)}
+  header.top .tr{margin-left:auto;display:flex;align-items:center;gap:14px}
+  header.top .fac{flex-direction:row;gap:0;padding:0;border:1px solid var(--line-2);border-radius:10px;overflow:hidden;background:rgba(0,0,0,.35)}
+  header.top .fac button{border:0;border-radius:0;padding:9px 14px;font-size:10.5px;letter-spacing:.16em;gap:8px}
+  header.top .fac button svg{width:20px;height:20px}
+  header.top .fac button.on{background:var(--accent-soft);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);font-weight:600}
+  header.top .pill{border:0;background:none;padding:8px 6px}
+  header.top .you{margin:0;padding:6px 10px 6px 6px;gap:9px;border:1px solid var(--line-2);border-radius:999px}
+  header.top .you .av{width:28px;height:28px;font-size:10px}
+  header.top .you b{font-size:12.5px;font-weight:600}header.top .you small{display:none}
   .main{margin:0;padding:0;max-width:none}
   .hero{margin-top:calc(var(--top-h) * -1);aspect-ratio:1513/612;border:0;border-radius:0;background:var(--plate) center/cover no-repeat;overflow:hidden}
   .hero::before{background:linear-gradient(90deg,rgba(5,6,9,.55) 0%,rgba(5,6,9,.25) 32%,rgba(5,6,9,0) 55%),linear-gradient(180deg,rgba(5,6,9,.6) 0%,rgba(5,6,9,0) 22%,rgba(5,6,9,0) 80%,rgba(5,6,9,.9) 100%)}
@@ -467,8 +467,8 @@
   .view .head{padding-top:0}
   @media (max-width:1180px){.row{grid-template-columns:56px 60px 1fr 1fr 100px 100px 110px}.row .chips{gap:12px}.row .chip{font-size:12px}}
   @media (max-width:860px){
-    .top{height:auto;flex-wrap:wrap;gap:8px 14px;padding:10px 14px}.top .nav{order:3;width:100%;margin:0;overflow-x:auto;scrollbar-width:none}.top .nav button{padding:10px 10px!important;font-size:13px}.top .nav .ind{bottom:0}
-    .top .brand b{font-size:12px}.top .brand b span{display:none}.top .tr{gap:8px}.top .pill{display:none}.top .you b{display:none}.top .you{padding:4px}
+    header.top{height:auto;flex-wrap:wrap;gap:8px 14px;padding:10px 14px}header.top .nav{order:3;width:100%;margin:0;overflow-x:auto;scrollbar-width:none}header.top .nav button{padding:10px 10px!important;font-size:13px}header.top .nav .ind{bottom:0}
+    header.top .brand b{font-size:12px}header.top .brand b span{display:none}header.top .tr{gap:8px}header.top .pill{display:none}header.top .you b{display:none}header.top .you{padding:4px}
     .hero{margin-top:0;aspect-ratio:auto;height:560px;background-position:58% 100%;background-size:auto 118%}
     .hero::before{background:linear-gradient(180deg,rgba(5,6,9,.35) 0%,rgba(5,6,9,0) 20%,rgba(5,6,9,.1) 45%,rgba(5,6,9,.92) 72%,rgba(5,6,9,.98) 100%)}
     .copy{left:16px;top:7%;max-width:92%}h1.display{font-size:58px;margin:10px 0 12px}.tag{font-size:12px;letter-spacing:.16em}.cta{margin-top:16px;gap:14px}.cta .wrapbtn{padding:10px 12px;font-size:10.5px;white-space:nowrap}.link{white-space:nowrap;font-size:13px}
@@ -494,10 +494,12 @@
   @keyframes fly{from{transform:translate(var(--x0),var(--y0))}to{transform:translate(var(--x1),var(--y1))}}
   .ship .bob{position:relative;animation:shipbob 6s ease-in-out infinite;pointer-events:auto;cursor:pointer}
   @keyframes shipbob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-9px) rotate(1.5deg)}}
-  .ship img{display:block;width:100%;height:auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.55));transition:filter .35s var(--ease),scale .35s var(--ease);scale:1}
+  .ship img{display:block;width:100%;height:auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.55));transition:filter .35s var(--ease)}
+  .ship .bob{transition:scale .35s var(--ease);scale:1}
   .ship:hover{animation-play-state:paused!important;z-index:9!important}
   .ship:hover .bob{animation-play-state:paused}
-  .ship:hover img{scale:1.12;filter:drop-shadow(0 10px 18px rgba(0,0,0,.6)) drop-shadow(0 0 18px var(--accent-glow)) brightness(1.12)}
+  .ship:hover .bob{scale:1.12}
+  .ship:hover img{filter:drop-shadow(0 10px 18px rgba(0,0,0,.6)) drop-shadow(0 0 18px var(--accent-glow)) brightness(1.12)}
   .ship .tipbox{position:absolute;left:50%;top:-14px;transform:translate(-50%,-100%) translateY(6px);opacity:0;pointer-events:none;white-space:nowrap;background:rgba(8,8,10,.9);border:1px solid var(--accent);border-radius:7px;padding:7px 11px;box-shadow:0 0 18px var(--accent-soft);transition:opacity .25s,transform .35s var(--ease)}
   .ship .tipbox b{display:block;font-size:13px;font-weight:600;color:var(--ink)}.ship .tipbox small{display:block;font-family:var(--font-m);font-size:9.5px;letter-spacing:.2em;color:var(--accent);margin-top:3px}
   .ship:hover .tipbox{opacity:1;transform:translate(-50%,-100%)}
@@ -654,19 +656,19 @@ $("#sound").onclick=()=>{soundOn=!soundOn;$("#sound").classList.toggle("on",soun
    rebel : clean plate; orbit rings, crystals and ships are drawn/animated here      */
 const SCENE={
   empire:{mode:"drawn",box:[45,30,52,60],side:"GALACTIC EMPIRE",ships:[
-    {src:"ships/tie_fighter.webp",name:"TIE/ln starfighter",w:6.5,from:[-12,30],to:[112,58],dur:40,delay:-8,z:3,flip:0},
-    {src:"ships/tie_fighter.webp",name:"TIE/ln starfighter",w:5,from:[-14,38],to:[110,66],dur:44,delay:-14,z:2,flip:0},
-    {src:"ships/tie_int.webp",name:"TIE/in interceptor",w:7,from:[110,12],to:[-12,52],dur:30,delay:-22,z:4,flip:0},
-    {src:"ships/tie_bomber.webp",name:"TIE/sa bomber",w:7.5,from:[-12,74],to:[112,28],dur:70,delay:-35,z:2,flip:0},
-    {src:"ships/isd.webp",name:"Imperial-class Star Destroyer",w:22,from:[115,6],to:[-30,48],dur:170,delay:-90,z:1,flip:1}]},
+    {src:"ships/tie_fighter.webp",name:"TIE/ln starfighter",h:null,w:6.5,from:[-12,30],to:[112,58],dur:40,delay:-8,z:3,flip:0},
+    {src:"ships/tie_fighter.webp",name:"TIE/ln starfighter",h:null,w:5,from:[-14,38],to:[110,66],dur:44,delay:-14,z:2,flip:0},
+    {src:"ships/tie_int.webp",name:"TIE/in interceptor",h:15,w:7,from:[110,12],to:[-12,52],dur:30,delay:-22,z:4,flip:0},
+    {src:"ships/tie_bomber.webp",name:"TIE/sa bomber",h:20,w:7.5,from:[-12,74],to:[112,28],dur:70,delay:-35,z:2,flip:0},
+    {src:"ships/isd.webp",name:"Imperial-class Star Destroyer",h:12,w:22,from:[115,6],to:[-30,48],dur:170,delay:-90,z:1,flip:1}]},
   rebel:{mode:"drawn",box:[45,30,52,60],side:"REBEL ALLIANCE",ships:[
-    {src:"ships/xwing_a.webp",name:"T-65 starfighter",w:9.5,from:[-14,62],to:[112,18],dur:58,delay:-12,z:3,flip:1},
-    {src:"ships/awing.webp",name:"RZ-1 interceptor",w:6,from:[108,30],to:[-10,70],dur:34,delay:-20,z:3,flip:0},
-    {src:"ships/ywing.webp",name:"BTL bomber",w:8,from:[-12,24],to:[110,46],dur:76,delay:-40,z:2,flip:1},
-    {src:"ships/bwing.webp",name:"A/SF-01 heavy fighter",w:7,from:[105,8],to:[-10,40],dur:66,delay:-5,z:2,flip:0},
-    {src:"ships/falcon.webp",name:"YT-1300 freighter",w:11,from:[-16,84],to:[112,52],dur:92,delay:-61,z:4,flip:1},
-    {src:"ships/corvette.webp",name:"CR90 corvette",w:14,from:[112,88],to:[-18,6],dur:140,delay:-70,z:1,flip:0},
-    {src:"ships/xwing_b.webp",name:"T-65 starfighter",w:8,from:[100,-6],to:[-12,38],dur:48,delay:-30,z:4,flip:0}]}};
+    {src:"ships/xwing_a.webp",name:"T-65 starfighter",h:22,w:9.5,from:[-14,62],to:[112,18],dur:58,delay:-12,z:3,flip:1},
+    {src:"ships/awing.webp",name:"RZ-1 interceptor",h:32,w:6,from:[108,30],to:[-10,70],dur:34,delay:-20,z:3,flip:0},
+    {src:"ships/ywing.webp",name:"BTL bomber",h:25,w:8,from:[-12,24],to:[110,46],dur:76,delay:-40,z:2,flip:1},
+    {src:"ships/bwing.webp",name:"A/SF-01 heavy fighter",h:-145,w:7,from:[105,8],to:[-10,40],dur:66,delay:-5,z:2,flip:0},
+    {src:"ships/falcon.webp",name:"YT-1300 freighter",h:5,w:11,from:[-16,84],to:[112,52],dur:92,delay:-61,z:4,flip:1},
+    {src:"ships/corvette.webp",name:"CR90 corvette",h:28,w:14,from:[112,88],to:[-18,6],dur:140,delay:-70,z:1,flip:0},
+    {src:"ships/xwing_b.webp",name:"T-65 starfighter",h:8,w:8,from:[100,-6],to:[-12,38],dur:48,delay:-30,z:4,flip:0}]}};
 const PAINTED=[[69.5,42.5,67,49.8,"#2ef2d0",1],[54.4,60.5,51.7,68.6,"#4aa8ff",1],[85.8,60.2,83,67.8,"#ff2d4d",1],[62,70,59.5,76.8,"#b48cff",0],[78.5,40.5,76,47.4,"#ffc53d",0],[86.5,76,89.5,80,"#2ef2d0",0]];
 const GEMCOL=["#2ef2d0","#4aa8ff","#ff2d4d","#b48cff","#ffc53d","#ff8a3d"];
 // crystal positions on the drawn orbit: [ring index, angle°] — spread so labels never collide
@@ -702,9 +704,18 @@ function renderScene(){
   const sc=SCENE[FACTION]||SCENE.empire;
   $("#orbit").innerHTML=sc.mode==="drawn"?orbitSVG():"";
   const [bx,by,bw,bh]=sc.box||[0,0,0,0];$("#orbit").style.cssText=sc.mode==="drawn"?`left:${bx}%;top:${by}%;width:${bw}%;height:${bh}%`:"";
-  $("#fleet").innerHTML=(sc.ships||[]).map((s,i)=>`<div class="ship" style="--x0:${s.from[0]}cqw;--y0:${s.from[1]}cqh;--x1:${s.to[0]}cqw;--y1:${s.to[1]}cqh;--dur:${s.dur}s;--delay:${s.delay}s;--w:${s.w}%;z-index:${s.z};animation-play-state:${reduce?"paused":"running"}"><div class="bob" style="animation-delay:${i*-1.3}s"><img src="${s.src}" alt="" draggable="false" style="transform:scaleX(${s.flip?-1:1})"><span class="tipbox"><b>${s.name}</b><small>${sc.side}</small></span></div></div>`).join("");
-  renderMarks();
+  $("#fleet").innerHTML=(sc.ships||[]).map((s,i)=>`<div class="ship" data-x0="${s.from[0]}" data-y0="${s.from[1]}" data-x1="${s.to[0]}" data-y1="${s.to[1]}" data-h="${s.h==null?"":s.h}" style="--x0:${s.from[0]}cqw;--y0:${s.from[1]}cqh;--x1:${s.to[0]}cqw;--y1:${s.to[1]}cqh;--dur:${s.dur}s;--delay:${s.delay}s;--w:${s.w}%;z-index:${s.z};animation-play-state:${reduce?"paused":"running"}"><div class="bob" style="animation-delay:${i*-1.3}s"><img src="${s.src}" alt="" draggable="false"><span class="tipbox"><b>${s.name}</b><small>${sc.side}</small></span></div></div>`).join("");
+  renderMarks();layoutFleet();
 }
+// Point every sprite along its flight path: rotate it from its known heading, mirroring when the turn would exceed 90°.
+const normDeg=a=>((a+180)%360+360)%360-180;
+function layoutFleet(){const el=$("#fleet");const W=el.clientWidth,H=el.clientHeight;if(!W||!H)return;
+  el.querySelectorAll(".ship").forEach(sh=>{const d=sh.dataset;const img=sh.querySelector("img");if(d.h==="")return;
+    const dx=(+d.x1-+d.x0)/100*W,dy=(+d.y1-+d.y0)/100*H;const t=Math.atan2(dy,dx)*180/Math.PI;const h=+d.h;
+    let delta=normDeg(t-h);
+    if(Math.abs(delta)>90){const r=normDeg(180-h-t);img.style.transform=`scaleX(-1) rotate(${r.toFixed(1)}deg)`;}
+    else img.style.transform=`rotate(${delta.toFixed(1)}deg)`;});}
+addEventListener("resize",layoutFleet);
 const ICONS={
   elim:`<svg viewBox="0 0 34 34"><circle cx="17" cy="17" r="11"/><circle cx="17" cy="17" r="3"/><path d="M17 2v6M17 26v6M2 17h6M26 17h6"/></svg>`,
   kd:`<svg viewBox="0 0 34 34"><path d="M7 28V18M14 28V10M21 28V14M28 28V6"/></svg>`,
