@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kyber Squad Stats</title>
+<style>
+  :root{--bg:#0b0f1a;--panel:#131a2b;--panel2:#0f1524;--line:#223049;--text:#e8eefc;--dim:#8aa0c8;--accent:#ffe81f;--accent2:#4ea1ff;--light:#4ea1ff;--dark:#ff5d5d;--good:#49d17a}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif}
+  header{display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#121a2e,#0b0f1a)}
+  header h1{font-size:18px;margin:0;letter-spacing:.14em;text-transform:uppercase}
+  header h1 b{color:var(--accent)}
+  .status{margin-left:auto;font-size:12px;color:var(--dim);text-align:right}
+  .status .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);margin-right:5px;vertical-align:middle}
+  .status .dot.ok{background:var(--good)}.status .dot.stale{background:var(--accent)}.status .dot.err{background:var(--dark)}
+  nav{display:flex;gap:4px;padding:10px 22px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  nav button{background:none;border:none;color:var(--dim);padding:9px 16px;font-size:14px;cursor:pointer;border-bottom:2px solid transparent}
+  nav button.active{color:var(--text);border-bottom-color:var(--accent)}
+  main{padding:22px;max-width:1100px;margin:0 auto}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+  .muted{color:var(--dim)}.right{text-align:right}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left}
+  th{color:var(--dim);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+  tr:hover td{background:var(--panel2)}
+  .pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;background:#1c2740;color:var(--accent2)}
+  .pill.official{background:#2a2410;color:var(--accent)}
+  .bar{height:6px;background:#1c2740;border-radius:4px;overflow:hidden}.bar>i{display:block;height:100%;background:var(--accent2)}
+  input{background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:8px 10px;border-radius:7px}
+  button.btn{background:var(--accent);color:#111;border:none;padding:8px 14px;border-radius:7px;cursor:pointer;font-weight:600;font:inherit}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .tile{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px}
+  .tile .big{font-size:20px;font-weight:700}.tile .lbl{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+  .side-light{color:var(--light)}.side-dark{color:var(--dark)}
+  .empty{color:var(--dim);text-align:center;padding:30px}
+  h2{font-size:15px;margin:0 0 12px;letter-spacing:.05em}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<header>
+  <h1>KYBER <b>SQUAD</b> STATS</h1>
+  <div class="status" id="status"><span class="dot"></span> loading…</div>
+</header>
+<nav id="nav">
+  <button data-tab="leaderboard" class="active">Leaderboard</button>
+  <button data-tab="sessions">Sessions</button>
+  <button data-tab="servers">Servers</button>
+  <button data-tab="you">You</button>
+</nav>
+<main id="main"></main>
+<script>
+const $=(s,el=document)=>el.querySelector(s);
+const fmtTime=s=>{s=Math.round(s||0);const h=Math.floor(s/3600),m=Math.floor(s%3600/60);return h>0?`${h}h ${m}m`:`${m}m`};
+const ago=ts=>{if(!ts)return'never';const d=(Date.now()-new Date(ts))/1000;if(d<90)return'just now';if(d<3600)return Math.round(d/60)+'m ago';if(d<86400)return Math.round(d/3600)+'h ago';return Math.round(d/86400)+'d ago'};
+async function api(p,o){const r=await fetch(p,o);if(!r.ok)throw new Error((await r.json().catch(()=>({}))).error||r.status);return r.json();}
+
+let TAB='leaderboard', DATA={players:[],servers:[],updatedAt:null}, ME={email:null,name:null};
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{TAB=b.dataset.tab;document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('active',x===b));render();});
+
+function topHeroes(stats,n=3){if(!stats)return[];return[...stats.heroes].filter(h=>h.playtimeSec>0).sort((a,b)=>b.playtimeSec-a.playtimeSec).slice(0,n);}
+
+async function load(){
+  try{
+    DATA=await api('/api/data');
+    try{ME=await api('/api/me');}catch{ME={email:null,name:null};}
+    const u=DATA.updatedAt;const d=u?(Date.now()-new Date(u))/1000:Infinity;
+    const cls=!u?'err':(d>1800?'stale':'ok');
+    $('#status').innerHTML=`<span class="dot ${cls}"></span>`+(u?`updated ${ago(u)}`:'no data yet')+(ME.email?` · ${ME.email}`:'');
+  }catch(e){$('#status').innerHTML=`<span class="dot err"></span> ${e.message}`;}
+  render();
+}
+
+function render(){
+  const m=$('#main');
+  if(TAB==='leaderboard')return renderLeaderboard(m);
+  if(TAB==='sessions')return renderSessions(m);
+  if(TAB==='servers')return renderServers(m);
+  if(TAB==='you')return renderYou(m);
+}
+
+function renderLeaderboard(m){
+  const players=(DATA.players||[]);
+  if(!players.length){m.innerHTML=tip('No one in the squad yet. Open the <b>You</b> tab to add your Kyber name.');return;}
+  const rows=players.map(f=>{
+    if(!f.resolved)return `<tr><td>${f.name}</td><td colspan="4" class="muted">not found on Kyber yet…</td></tr>`;
+    const t=f.stats?.totals||{};
+    const heroes=topHeroes(f.stats).map(h=>`<span class="side-${h.side}">${h.name}</span>`).join(', ')||'—';
+    return `<tr><td><b>${f.username||f.name}</b><div class="muted" style="font-size:12px">${f.source||''}</div></td>
+      <td>${fmtTime(t.heroPlaytimeSec)}</td><td>${fmtTime(t.classPlaytimeSec)}</td><td>${heroes}</td><td class="right">${t.rawKeyCount||0}</td></tr>`;
+  }).join('');
+  m.innerHTML=`<div class="card"><h2>Squad Leaderboard</h2>
+    <table><thead><tr><th>Player</th><th>Hero time</th><th>Class time</th><th>Top heroes</th><th class="right">stat keys</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="muted" style="margin:12px 0 0;font-size:12px">Decoded suffixes are limited to what the open-source launcher publishes; "stat keys" is the full raw payload available to mine further.</p></div>`;
+}
+
+function renderSessions(m){
+  const players=(DATA.players||[]).filter(f=>f.resolved);
+  if(!players.length){m.innerHTML=tip('Sessions appear once the agent has recorded stat changes for someone.');return;}
+  m.innerHTML=`<div class="card" style="background:none;border:none;padding:0"><p class="muted">Sessions are detected from gaps in the stat timeline — a burst of changes is one session. Friends’ solo nights are recorded too, as long as the agent was running while they played.</p></div>`+
+  players.map(f=>{
+    const ss=(f.sessions||[]);
+    if(!ss.length)return `<div class="card"><h2>${f.username||f.name}</h2><div class="muted">No sessions detected yet.</div></div>`;
+    const rows=ss.slice(0,8).map(s=>{
+      const movers=topHeroes(s.decoded,3).map(h=>`<span class="side-${h.side}">${h.name} +${fmtTime(h.playtimeSec)}</span>`).join(' · ')||`${s.changedKeyCount} stats moved`;
+      const d=new Date(s.start);
+      return `<tr><td>${d.toLocaleDateString([], {month:'short',day:'numeric'})} ${d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}</td><td>${s.durationMin}m</td><td>${movers}</td></tr>`;
+    }).join('');
+    return `<div class="card"><h2>${f.username||f.name} <span class="muted" style="font-weight:400;font-size:12px">${ss.length} session(s)</span></h2>
+      <table><thead><tr><th>Started</th><th>Length</th><th>Highlights</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  }).join('');
+}
+
+function renderServers(m){
+  const s=DATA.servers;
+  if(!Array.isArray(s)){m.innerHTML=`<div class="card"><div class="empty">Server list unavailable${s&&s.error?': <span class="muted">'+s.error+'</span>':''}</div></div>`;return;}
+  const rows=s.map(x=>`<tr><td><b>${x.name}</b> ${x.official?'<span class="pill official">OFFICIAL</span>':''} ${x.requiresPassword?'🔒':''}
+      <div class="muted" style="font-size:12px">${x.mods&&x.mods.length?('mods: '+x.mods.slice(0,3).join(', ')+(x.mods.length>3?'…':'')):'vanilla'}</div></td>
+      <td>${x.map}<div class="muted" style="font-size:12px">${x.mode}</div></td>
+      <td style="min-width:120px">${x.players}/${x.maxPlayers}<div class="bar"><i style="width:${Math.min(100,100*x.players/(x.maxPlayers||1))}%"></i></div></td></tr>`).join('');
+  m.innerHTML=`<div class="card"><h2>Live Servers <span class="muted" style="font-weight:400;font-size:12px">${s.length} shown</span></h2>
+    ${s.length?`<table><thead><tr><th>Server</th><th>Map / Mode</th><th>Players</th></tr></thead><tbody>${rows}</tbody></table>`:'<div class="empty">No servers online right now.</div>'}</div>`;
+}
+
+function renderYou(m){
+  const claimed=ME.name;
+  m.innerHTML=`<div class="card"><h2>Your account</h2>
+    <p class="muted">Signed in as <b>${ME.email||'(unknown — is Access on?)'}</b></p>
+    <div class="row" style="margin:10px 0">
+      <input id="kyberName" placeholder="your exact Kyber / in-game name" value="${claimed||''}" style="flex:1;min-width:220px"/>
+      <button class="btn" onclick="claim()">${claimed?'Update my name':'Claim my name'}</button>
+    </div>
+    ${claimed?`<p class="muted">You're tracked as <b>${claimed}</b>. The agent picks this up on its next cycle (usually within a couple of minutes).</p>`
+             :`<p class="muted">Enter the exact name you use in Battlefront on Kyber. Once saved, your stats start showing up on the Leaderboard.</p>`}
+  </div>`;
+  $('#kyberName').addEventListener('keydown',e=>{if(e.key==='Enter')claim();});
+}
+
+function tip(h){return `<div class="card"><div class="empty">${h}</div></div>`;}
+async function claim(){const n=$('#kyberName').value.trim();if(!n)return;
+  try{await api('/api/claim',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name:n})});await load();TAB='you';render();}
+  catch(e){alert('Could not save: '+e.message);}}
+window.claim=claim;
+
+load();
+setInterval(load,60000);
+</script>
+</body>
+</html>

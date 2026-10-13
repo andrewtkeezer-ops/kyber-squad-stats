@@ -1,0 +1,32 @@
+{
+  "name": "kyber-squad-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PC agent that polls Kyber and pushes squad stats to the Cloudflare site",
+  "author": "Andrew",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "node index.js",
+    "selftest": "node selftest.js",
+    "app": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "1.12.5",
+    "@grpc/proto-loader": "0.7.13"
+  },
+  "devDependencies": {
+    "electron": "33.2.1",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "gg.kyber.squadagent",
+    "productName": "Kyber Squad Agent",
+    "files": ["electron/**", "lib/**", "proto/**", "index.js", "selftest.js", "package.json"],
+    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }], "icon": "electron/icon.png" },
+    "nsis": {
+      "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true, "shortcutName": "Kyber Squad Agent"
+    }
+  }
+}

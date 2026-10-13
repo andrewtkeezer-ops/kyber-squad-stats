@@ -1,0 +1,8 @@
+{
+  "_comment": "Copy this to config.json and fill in. siteBase + ingestSecret come from your Cloudflare Pages setup (see the top-level README).",
+  "siteBase": "https://kyber-squad-stats.pages.dev",
+  "ingestSecret": "paste-a-long-random-string-here-same-as-in-cloudflare",
+  "pollMs": 90000,
+  "sessionGapMin": 30,
+  "extraNames": ["YourKyberName"]
+}
