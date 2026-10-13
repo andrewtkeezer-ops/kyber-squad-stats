@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Kyber Squad Stats</title>
+<link rel="icon" href="plates/rebel-crest.webp" id="fav" /><meta property="og:title" content="Kyber Squad Stats" /><meta property="og:description" content="Squad intelligence for Battlefront II on Kyber." /><meta property="og:image" content="plates/rebel.jpg" /><meta name="theme-color" content="#07080c" />
 <meta name="description" content="Kyber Squad Stats — squad intelligence for Battlefront II on Kyber." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -451,6 +452,7 @@
   .row .chip{border:0;background:none;padding:0;font-family:var(--font-b);font-size:13.5px;color:var(--ink-2);gap:10px}
   .row .chip svg{width:22px;height:22px;stroke:var(--ink-2);fill:none;stroke-width:1.4;stroke-linejoin:round}
   .row .chip.ic-assault svg{stroke:var(--accent);fill:var(--accent-soft)}
+  .row .sts{display:contents}
   .row .st{text-align:center;border-left:1px solid var(--line)}
   .row .st small{display:block;font-family:var(--font-m);font-size:10.5px;letter-spacing:.2em;color:var(--ink-3);margin-bottom:6px}
   .row .st b{font-family:var(--font-m);font-size:22px;font-weight:600}
@@ -644,6 +646,68 @@
   .mark:hover .pcard{opacity:1;transform:translate(-50%,0)}
   .mark.flip .pcard{left:auto;right:0;transform:translate(0,6px)}.mark.flip:hover .pcard{transform:translate(0,0)}
   .mark:hover{animation-play-state:paused;z-index:9}
+
+  /* ======== blaster bolts ======== */
+  .ship .bolts{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--dir,0deg));pointer-events:none;z-index:-1}
+  .ship .bolts i{position:absolute;left:0;top:-1.5px;height:3px;width:26px;border-radius:2px;background:var(--bolt);box-shadow:0 0 6px var(--bolt),0 0 14px var(--bolt);opacity:0;animation:bolt var(--bd) linear var(--bdl) infinite;animation-play-state:running!important}
+  .ship .bolts i:nth-child(2){top:4px;animation-delay:calc(var(--bdl) - .12s)}
+  @keyframes bolt{0%{opacity:0;transform:translateX(10px) scaleX(.4)}4%{opacity:1;transform:translateX(20px) scaleX(1)}26%{opacity:1;transform:translateX(420px) scaleX(1.4)}30%,100%{opacity:0;transform:translateX(460px) scaleX(.6)}}
+  :root[data-faction="rebel"] .ship{--bolt:#ff3b3b}
+  :root[data-faction="empire"] .ship{--bolt:#4dff5a}
+  @media (prefers-reduced-motion:reduce){.ship .bolts{display:none}}
+
+  /* ======== polish pass ======== */
+  html{scrollbar-color:#2a2f3d var(--bg)}
+  ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#242938;border-radius:6px;border:2px solid var(--bg)}::-webkit-scrollbar-thumb:hover{background:#343b4d}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+  button,select,a{-webkit-tap-highlight-color:transparent}
+  .view{animation:viewin .55s var(--ease) both}
+  @keyframes viewin{from{opacity:0;transform:translateY(10px)}}
+  .view>*:nth-child(2){animation:viewin .55s var(--ease) .06s both}.view>*:nth-child(3){animation:viewin .55s var(--ease) .12s both}.view>*:nth-child(4){animation:viewin .55s var(--ease) .18s both}
+  .hero.enter .eyebrow,.hero.enter h1,.hero.enter .tag,.hero.enter .cta,.hero.enter .strip>div,.hero.enter .hint{animation:heroin .9s var(--ease) both}
+  .hero.enter h1{animation-delay:.08s}.hero.enter .tag{animation-delay:.18s}.hero.enter .cta{animation-delay:.26s}
+  .hero.enter .strip>div:nth-child(1){animation-delay:.3s}.hero.enter .strip>div:nth-child(2){animation-delay:.38s}.hero.enter .strip>div:nth-child(3){animation-delay:.46s}.hero.enter .strip>div:nth-child(4){animation-delay:.54s}.hero.enter .hint{animation-delay:.6s}
+  .hero.enter #marks .mark{animation:bob 3.6s ease-in-out infinite,markin .7s var(--ease) both}
+  @keyframes heroin{from{opacity:0;transform:translateY(14px);filter:blur(6px)}}
+  @keyframes markin{from{opacity:0}}
+  .hero.enter .orbit{animation:orbitin 1.4s var(--ease) both}@keyframes orbitin{from{opacity:0;transform:scale(.92)}}
+  select.sel{background:rgba(0,0,0,.4);border-radius:8px;font-weight:600;transition:border-color .25s,box-shadow .25s}select.sel:hover{border-color:var(--accent)}select.sel:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);outline:none}
+  .ghost{border-radius:8px;transition:border-color .25s,background .25s,transform .2s var(--ease)}.ghost:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .filters button{transition:border-color .25s,color .25s,background .25s,transform .2s var(--ease)}.filters button:hover{border-color:var(--accent);color:var(--ink)}
+  .note{font-size:11px;letter-spacing:.03em;color:var(--ink-3);opacity:.9}
+  .empty-state{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 20px 48px;text-align:center}
+  .empty-state .crys{width:34px;filter:drop-shadow(0 0 12px var(--accent));animation:gembob 3.6s ease-in-out infinite}.empty-state .crys svg{display:block;width:100%}
+  .empty-state b{font-size:18px}.empty-state p{max-width:46ch;color:var(--ink-2);font-size:14px;line-height:1.5;margin:0}
+  .foot{border-top:1px solid var(--line);margin-top:10px}
+  @media (prefers-reduced-motion:reduce){.view,.view>*,.hero.enter *{animation:none!important}}
+
+  /* ======== mobile usability pass ======== */
+  @media (max-width:860px){
+    header.top{position:sticky;gap:6px 10px;padding:10px 12px 0}header.top .nav{gap:0;margin:4px -12px 0;padding:0 12px;border-top:1px solid var(--line)}header.top .nav button{padding:12px 10px!important;font-size:13.5px}header.top .nav .ind{bottom:0}
+    header.top .brand b{font-size:11.5px;letter-spacing:.2em}header.top .crest{width:34px;height:34px}header.top .tr{gap:6px}header.top .fac button{padding:9px 10px;font-size:9.5px;gap:5px}header.top .fac button svg{width:16px;height:16px}
+    .ic{width:36px;height:36px}header.top .you .av{width:30px;height:30px}
+    .row{grid-template-columns:28px 42px 1fr;grid-template-areas:"no av who" "no av chips" "st st st";gap:8px 10px;padding:12px 12px 10px}
+    .row .st{display:block}
+    .row .st:nth-of-type(1),.row .st:nth-of-type(2),.row .st:nth-of-type(3){grid-area:auto}
+    .row .sts{display:grid;grid-area:st;grid-template-columns:repeat(3,1fr);margin-top:8px;padding-top:10px;border-top:1px solid var(--line)}
+    .row .sts .st{border:0;margin:0;padding:0;text-align:left}
+    .duel-head{grid-template-columns:1fr 1fr;row-gap:4px}.duel-head .mid{grid-column:1/-1;order:-1;text-align:left;font-size:10px;margin-bottom:4px}.duel-head span:last-child{text-align:right}
+    .duel-card{padding:14px 14px 10px}.duel-row{grid-template-columns:72px 1fr 72px;gap:8px}.duel-row .dv{font-size:13.5px}.tugwrap .dl{font-size:9.5px;letter-spacing:.16em}
+    .barrow{grid-template-columns:96px 1fr;grid-template-areas:"n track" "v v";gap:4px 10px;margin:10px 0}.barrow .n{grid-area:n;min-width:0}.barrow .n span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}.barrow .track{grid-area:track}.barrow .v{grid-area:v;text-align:left;font-size:10.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+    .view .card{padding:16px 14px}.tiles{gap:8px}.tile{padding:14px 12px 12px}.tile b{font-size:22px}
+    .pc-hero{padding:20px 16px 18px;gap:14px}.pc-left{gap:14px;align-items:flex-start}.pc-hero .crys{width:26px;margin-top:6px}.pc-hero .display2{font-size:34px}.pc-actions{width:100%}.pc-actions .ghost{flex:1}
+    .srv-hero{padding:20px 16px 18px}.srv-tiles div{padding:12px 14px}.srv-tiles b{font-size:24px}
+    .srv-bar{flex-direction:column;align-items:flex-start;gap:8px}
+    .srv2{grid-template-columns:1fr auto;grid-template-areas:"m pop" "planet planet" "join join";gap:6px 12px;padding:12px}
+    .srv2 .planet{flex-direction:row;gap:8px;align-items:center}.srv2 .planet b::after{content:" ·";color:var(--ink-3)}.srv2 .planet small{margin:0}
+    .srv2 .join{grid-column:auto;grid-area:join;width:100%;margin-top:4px;padding:12px}
+    .srv2 .pop b{font-size:20px}
+    .grid2{gap:10px}.records{gap:8px}.rec{padding:12px 14px}.rec b{font-size:22px}
+    #app{padding:0 12px 28px}.standings{margin-top:0}.sh{flex-wrap:wrap}.sh i{display:none}.sh .sort{margin-left:auto}
+    .heat{grid-template-columns:26px repeat(24,1fr);gap:1px}.heat .d{font-size:8px}
+    .tl .ev{font-size:12.5px}
+    .foot{padding:16px 4px 4px;gap:10px}.foot .r{font-size:9.5px}
+  }
 </style>
 </head>
 <body>
@@ -670,7 +734,7 @@
 </header>
 
 <main class="main">
-  <section class="hero" id="hero">
+  <section class="hero enter" id="hero">
     <div class="copy">
       <div class="eyebrow" id="eyebrow">IMPERIAL INTELLIGENCE</div>
       <h1 class="display">THE<br>SQUAD.</h1>
@@ -889,7 +953,7 @@ const VIEWS=["overview","squad","rivalry","player","sessions","servers","you"];
 function moveInd(){const on=$("#nav button.on"),ind=$("#navind");if(!on||!ind)return;ind.style.left=on.offsetLeft+"px";ind.style.width=on.offsetWidth+"px";}
 let swTimer=null;
 function switchTo(v,push=true){if(!VIEWS.includes(v))v="overview";const changed=v!==current;current=v;$("#nav").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));moveInd();
-  const full=v==="overview";$("#hero").style.display=full?"":"none";document.body.classList.toggle("inner",!full);if(full)requestAnimationFrame(layoutFleet);
+  const full=v==="overview";$("#hero").style.display=full?"":"none";document.body.classList.toggle("inner",!full);if(full){requestAnimationFrame(layoutFleet);if(changed){$("#hero").classList.remove("enter");void $("#hero").offsetWidth;$("#hero").classList.add("enter");}}
   if(push){const h=v==="overview"?"":"#"+v+(v==="player"&&selected?"/"+selected:"");if(location.hash!==h)history.replaceState(null,"",location.pathname+h);}
   blip();if(changed&&!reduce){app.classList.add("out");clearTimeout(swTimer);swTimer=setTimeout(()=>{app.classList.remove("out");render();},200);}else render();if(!full)window.scrollTo({top:0,behavior:"smooth"});}
 function render(){({overview:renderOverview,squad:renderLeaderboard,rivalry:renderRivalry,player:renderPlayer,sessions:renderSessions,servers:renderServers,you:renderYou}[current])();}
@@ -902,15 +966,13 @@ const unresRows=()=>players.filter(p=>!p.resolved).map(p=>`<div class="row unres
 /* Overview: compact leaderboard under the holotable */
 function renderOverview(){
   const list=sorted();
-  if(!list.length&&!players.length){app.innerHTML=UI.empty("No pilots yet. Open your profile to claim your Kyber name.");return;}
+  if(!list.length&&!players.length){app.innerHTML=`<section class="standings view"><div class="sh"><h2>SQUAD STANDINGS</h2><i></i></div><div class="empty-state"><div class="crys">${gemSVG("var(--accent)")}</div><b>No pilots on the table yet</b><p>Add Kyber names to the agent's config, or sign in and claim yours — the first official-server match lights the first crystal.</p></div></section>`;return;}
   app.innerHTML=`<section class="standings view"><div class="sh"><h2>SQUAD STANDINGS</h2><i></i><div class="sort">Sort: <span class="selwrap"><select class="sel" id="sortsel">${Object.entries(SORTS).map(([k,[l]])=>`<option value="${k}" ${k===sortKey?"selected":""}>${l}</option>`).join("")}</select></span></div></div>
   <div class="rows">${list.map((p,i)=>{const c=p.career||{};return `<button class="row ${i===0?'top':''}" data-id="${p.id}" style="--c:${crystalOf(p)}">
     <span class="no">${i+1}</span><span class="av">${ini(p.name)}</span>
     <span class="who"><b>${esc(p.name)}</b><small>LVL ${c.rank??"—"}</small></span>
     <span class="chips">${chips(p)}</span>
-    <span class="st"><small>K/D</small><b>${c.kd!=null?c.kd.toFixed(2):"—"}</b></span>
-    <span class="st"><small>WIN RATE</small><b>${c.winRate!=null?pct(c.winRate):"—"}</b></span>
-    <span class="st"><small>PLAY TIME</small><b>${fmtH(c.playtimeSec)}</b></span></button>`;}).join("")}${unresRows()}</div></section>
+    <span class="sts"><span class="st"><small>K/D</small><b>${c.kd!=null?c.kd.toFixed(2):"—"}</b></span><span class="st"><small>WIN RATE</small><b>${c.winRate!=null?pct(c.winRate):"—"}</b></span><span class="st"><small>PLAY TIME</small><b>${fmtH(c.playtimeSec)}</b></span></span></button>`;}).join("")}${unresRows()}</div></section>
   <div class="foot"><span class="i">i</span><span>Stats accrue on OFFICIAL servers only.</span><button class="link" id="toservers">View live servers <svg viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button><span class="r">BUILT ON THE OPEN-SOURCE KYBER API · NOT AFFILIATED WITH EA OR KYBER.</span></div>`;
   $("#sortsel").onchange=e=>{sortKey=e.target.value;renderOverview();};
   app.querySelectorAll(".row[data-id]").forEach(r=>r.onclick=()=>{selected=r.dataset.id;blip();switchTo("player");});
@@ -1110,7 +1172,7 @@ addEventListener("keydown",e=>{if(!$("#wrapped").classList.contains("open"))retu
 
 /* ================= faction ================= */
 function faction(f){FACTION=f;document.documentElement.setAttribute("data-faction",f);
-  $("#crest").innerHTML='<image href="plates/'+f+'-crest.webp" x="2" y="2" width="44" height="44"/>';$("#bootcrest").innerHTML=CREST[f];$("#tEmp").innerHTML=CREST.empire;$("#tReb").innerHTML=CREST.rebel;
+  $("#crest").innerHTML='<image href="plates/'+f+'-crest.webp" x="2" y="2" width="44" height="44"/>';$("#fav").href="plates/"+f+"-crest.webp";$("#bootcrest").innerHTML=CREST[f];$("#tEmp").innerHTML=CREST.empire;$("#tReb").innerHTML=CREST.rebel;
   $("#toggle").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.f===f));
   $("#crumb").textContent=f==="rebel"?"ALLIANCE COMMAND":"IMPERIAL COMMAND";
   $("#eyebrow").textContent=f==="rebel"?"ALLIANCE INTELLIGENCE":"IMPERIAL INTELLIGENCE";
