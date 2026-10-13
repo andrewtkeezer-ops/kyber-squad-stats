@@ -132,9 +132,19 @@ async function tick() {
       fs.writeFileSync(path.join(snaps.DATA_DIR, 'last-blob.json'), JSON.stringify(blob, null, 2));
       console.log(`[${new Date().toLocaleTimeString()}] no siteBase configured; wrote data/last-blob.json (${blob.players.length} players)`);
     } else if (sig !== lastSig || stale) {
-      await sitePost(s.siteBase, s.secret, '/api/ingest', blob);
+      const changed = sig !== lastSig;
+      const res = await sitePost(s.siteBase, s.secret, '/api/ingest', blob);
       lastSig = sig; lastPushAt = Date.now();
-      console.log(`[${new Date().toLocaleTimeString()}] pushed: ${blob.players.length} players, ${Array.isArray(blob.servers) ? blob.servers.length : 0} servers${sig !== lastSig ? '' : ' (refresh)'}`);
+      try { fs.mkdirSync(snaps.DATA_DIR, { recursive: true }); fs.writeFileSync(path.join(snaps.DATA_DIR, 'last-blob.json'), JSON.stringify(blob, null, 2)); } catch {}
+      const names = blob.players.map((p) => `${p.name}${p.resolved ? '' : '(unresolved:' + (p.error || 'no match') + ')'}${p.stats ? ' kd=' + p.stats.career.kd : ''}`).join(', ');
+      console.log(`[${new Date().toLocaleTimeString()}] pushed ${changed ? '(changed)' : '(refresh)'}: ${blob.players.length} players [${names}], ${Array.isArray(blob.servers) ? blob.servers.length : 0} servers -> site replied ${JSON.stringify(res)}`);
+      // read back what the site now serves, so a mismatch is visible immediately
+      try {
+        const back = await (await fetch(`${s.siteBase}/api/data`, { cache: 'no-store' })).json();
+        const bn = (back.players || []).map((p) => p.name).join(', ');
+        const same = back.updatedAt === blob.updatedAt;
+        console.log(`   site /api/data now: ${(back.players || []).length} players [${bn}] updatedAt=${back.updatedAt} ${same ? 'OK (matches this push)' : '!! MISMATCH — site is serving a different blob'}`);
+      } catch (e) { console.log(`   read-back failed: ${e.message}`); }
     } else {
       console.log(`[${new Date().toLocaleTimeString()}] no change — skipped push (${blob.players.length} players)`);
     }
