@@ -7,7 +7,7 @@
 <meta name="description" content="Kyber Squad Stats — squad intelligence for Battlefront II on Kyber." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
 <style>
   /* Layout: fixed command-rail on the left (crest, nav, faction switch, you); main column with a
      cinematic plate + holotable, stat strip, leaderboard. Live data from /api/data, demo otherwise. */
@@ -58,7 +58,7 @@
   .you b{display:block;font-size:12.5px}.you small{display:block;font-family:var(--font-m);font-size:10px;color:var(--ink-3);letter-spacing:.06em;margin-top:3px}
 
   /* ---------- main ---------- */
-  .main{margin-left:var(--rail-w);padding:14px 22px 48px;max-width:none}
+  .main{margin-left:var(--rail-w);padding:14px 20px 48px;max-width:1260px}
   .topbar{position:absolute;left:0;right:0;top:0;z-index:6;display:flex;align-items:center;gap:12px;padding:18px 22px}
   .crumb{font-family:var(--font-m);font-size:12.5px;letter-spacing:.2em;color:var(--ink-2)}
   .crumb b{font-weight:500;color:var(--accent)}
@@ -373,44 +373,158 @@
     .no{font-size:18px}.pilot .av{width:38px;height:38px;font-size:12px}.pilot b{font-size:15px}
   }
   @media (prefers-reduced-motion:reduce){.mark,.table .galaxy,.w-bars i.run::after{animation:none}}
+
+  /* ======== v10: top nav, full-bleed scene, standings ======== */
+  :root{--top-h:76px;--panel-img:var(--plate);--font-d:"Archivo Black","Manrope",sans-serif;--plate:url("plates/empire.jpg")}
+  :root[data-faction="rebel"]{--plate:url("plates/rebel.jpg")}
+  .rail,.topbar,.table,.sep{display:none}
+  .top{position:sticky;top:0;z-index:30;height:var(--top-h);display:flex;align-items:center;gap:28px;padding:0 28px;background:linear-gradient(180deg,rgba(5,6,9,.92),rgba(5,6,9,.72));backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .top .brand{display:flex;flex-direction:row;align-items:center;gap:14px;padding:0;margin:0}
+  .top .crest{width:44px;height:44px}
+  .top .brand b{display:block;font-family:var(--font-m);font-weight:700;font-size:15px;letter-spacing:.24em;line-height:1}
+  .top .brand b span{display:block;font-weight:400;font-size:9.5px;letter-spacing:.3em;color:var(--ink-3);margin-top:5px}
+  .top .nav{flex-direction:row;gap:4px;position:relative;margin-left:16px}
+  .top .nav button{padding:12px 14px!important;border:0;font-size:14px;color:var(--ink-2);background:none}
+  .top .nav button:hover{color:var(--ink);padding-left:14px!important}
+  .top .nav button.on{color:var(--accent);background:none}
+  .top .nav .ind{top:auto;bottom:-16px;height:2px;width:0;left:0;transition:left .45s var(--ease),width .45s var(--ease)}
+  .top .tr{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .top .fac{flex-direction:row;gap:0;padding:0;border:1px solid var(--line-2);border-radius:10px;overflow:hidden;background:rgba(0,0,0,.35)}
+  .top .fac button{border:0;border-radius:0;padding:9px 14px;font-size:10.5px;letter-spacing:.16em;gap:8px}
+  .top .fac button svg{width:20px;height:20px}
+  .top .fac button.on{background:var(--accent-soft);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);font-weight:600}
+  .top .pill{border:0;background:none;padding:8px 6px}
+  .top .you{margin:0;padding:6px 10px 6px 6px;gap:9px;border:1px solid var(--line-2);border-radius:999px}
+  .top .you .av{width:28px;height:28px;font-size:10px}
+  .top .you b{font-size:12.5px;font-weight:600}.top .you small{display:none}
+  .main{margin:0;padding:0;max-width:none}
+  .hero{margin-top:calc(var(--top-h) * -1);aspect-ratio:1513/612;border:0;border-radius:0;background:var(--plate) center/cover no-repeat;overflow:hidden}
+  .hero::before{background:linear-gradient(90deg,rgba(5,6,9,.55) 0%,rgba(5,6,9,.25) 32%,rgba(5,6,9,0) 55%),linear-gradient(180deg,rgba(5,6,9,.6) 0%,rgba(5,6,9,0) 22%,rgba(5,6,9,0) 80%,rgba(5,6,9,.9) 100%)}
+  .copy{left:2.9%;top:19%;max-width:46%;transform:none!important}
+  .eyebrow{font-size:12px;letter-spacing:.42em}
+  h1.display{font-family:var(--font-d);font-weight:400;font-size:clamp(44px,8.6vw,132px);line-height:.86;letter-spacing:-.01em;margin:14px 0 18px;color:#e9ecf1;
+    background:linear-gradient(180deg,#fdfdfe 0%,#d9dde6 48%,#8c93a3 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 6px 18px rgba(0,0,0,.6))}
+  .tag{font-size:clamp(13px,1.45vw,22px);letter-spacing:.22em;color:#c9ceda}
+  .cta{display:flex;align-items:center;gap:26px;margin-top:30px}
+  .link{display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:var(--accent);font-family:var(--font-b);font-weight:600;font-size:15px;cursor:pointer;padding:0;transition:gap .25s var(--ease),filter .25s}
+  .link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .link:hover{gap:12px;filter:brightness(1.2)}
+  .cta .wrapbtn{position:static;border-radius:8px;color:var(--ink);border:1px solid var(--line-2);background:rgba(10,12,18,.6);padding:12px 18px;gap:12px;font-size:12px;letter-spacing:.16em;box-shadow:none}
+  .cta .wrapbtn .bars{stroke:var(--accent);stroke-width:2.2}
+  .cta .wrapbtn:hover{background:rgba(20,22,30,.9);color:var(--ink);border-color:var(--accent);box-shadow:0 0 22px var(--accent-soft)}
+  .hero .strip{position:absolute;left:2.9%;bottom:5.5%;z-index:4;display:flex;margin:0;border:0;background:none;border-radius:0;gap:0}
+  .hero .strip div{padding:0 26px 0 0;margin-right:26px;border-left:0;border-right:1px solid rgba(255,255,255,.18);display:flex;align-items:flex-end;gap:16px;overflow:visible}
+  .hero .strip div:last-child{border-right:0}
+  .hero .strip svg{width:26px;height:26px;margin-bottom:2px}
+  .hero .strip b{font-family:var(--font-m);font-weight:600;font-size:clamp(26px,3vw,46px);letter-spacing:-.02em;text-shadow:0 2px 14px rgba(0,0,0,.7)}
+  .hero .strip small{font-size:11.5px;letter-spacing:.22em;color:#d4d8e2;margin-top:10px}
+  .hero .strip em{display:block;font-style:normal;font-family:var(--font-m);font-size:11px;color:var(--ink-3);margin-top:8px;letter-spacing:.02em}
+  .hero .strip div::after{display:none}
+  .hint{left:auto;right:2.9%;bottom:6%;color:#d4d8e2;font-size:11.5px;letter-spacing:.18em;border-top:1px solid rgba(255,255,255,.2);padding-top:10px}
+  .hint em{color:var(--ink-3)}
+  .lite.core{left:67.4%;top:63%;width:9%;aspect-ratio:1.6;background:radial-gradient(ellipse,rgba(200,235,255,.55) 0%,rgba(120,190,255,.18) 40%,transparent 70%);filter:blur(10px)}
+  .glow{width:5%;aspect-ratio:.7;opacity:.5}
+  #marks .gem{position:absolute;z-index:4;width:2.1%;transform:translate(-50%,-50%);filter:drop-shadow(0 0 8px var(--c)) drop-shadow(0 0 20px color-mix(in srgb,var(--c) 60%,transparent));animation:bob 3.6s ease-in-out infinite}
+  .mark{transform:translate(-18%,-100%)}
+  .mark .lbl{font-family:var(--font-b);font-weight:600;font-size:clamp(10px,1.05vw,15px);letter-spacing:0;padding:.45em 1em;border-radius:7px;background:rgba(8,10,16,.9);border:1px solid var(--c);box-shadow:0 0 16px color-mix(in srgb,var(--c) 40%,transparent)}
+  .mark .lead{display:block;width:1px;height:1.6vw;background:linear-gradient(180deg,var(--c),transparent);margin-left:-60%}
+  .mark .tip{display:none}
+  @keyframes bob{50%{transform:translate(-18%,calc(-100% - 5px))}}
+  #marks .gem{animation:gembob 3.6s ease-in-out infinite}@keyframes gembob{50%{transform:translate(-50%,calc(-50% - 5px))}}
+  /* standings */
+  #app{padding:0 24px 40px}
+  body.inner #app{padding-top:24px}
+  .standings{position:relative;margin-top:-6px;border:1px solid var(--line-2);border-radius:18px;background:#0b0d12;overflow:hidden;isolation:isolate}
+  .standings::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--panel-img) 30% 100%/120% auto no-repeat;opacity:.26;-webkit-mask:linear-gradient(90deg,transparent 0,#000 18%,#000 55%,transparent 80%);mask:linear-gradient(90deg,transparent 0,#000 18%,#000 55%,transparent 80%)}
+  .standings::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(11,13,18,.2),rgba(11,13,18,.85))}
+  .sh{display:flex;align-items:center;gap:22px;padding:22px 28px 12px}
+  .sh h2{font-family:var(--font-m);font-weight:500;font-size:20px;letter-spacing:.34em;margin:0;white-space:nowrap}
+  .sh i{flex:1;height:1px;background:var(--line-2)}
+  .sh .sort{font-family:var(--font-m);font-size:13px;letter-spacing:.06em;color:var(--ink-2)}
+  .rows{display:flex;flex-direction:column;gap:10px;padding:8px 18px 20px}
+  .row{display:grid;grid-template-columns:70px 72px minmax(160px,1.1fr) minmax(200px,1.4fr) 120px 120px 130px;align-items:center;gap:10px;padding:14px 20px 14px 10px;border:1px solid var(--line-2);border-radius:12px;background:linear-gradient(90deg,rgba(14,16,22,.92),rgba(14,16,22,.65));color:var(--ink);text-align:left;cursor:pointer;position:relative;overflow:hidden;transition:transform .25s var(--ease),border-color .25s,box-shadow .3s}
+  .row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c);opacity:0;transition:opacity .25s}
+  .row:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--c) 60%,var(--line-2));box-shadow:0 12px 30px -18px var(--c)}
+  .row:hover::before{opacity:1}
+  .row.top{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 30px -4px var(--accent-glow),inset 0 0 40px -20px var(--accent-glow);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 16%,rgba(14,16,22,.95)),rgba(14,16,22,.7) 45%)}
+  .row.top .no,.row.top .av{color:var(--accent);border-color:var(--accent)}
+  .row.top .av{box-shadow:0 0 16px var(--accent-soft)}
+  .row .no{font-family:var(--font-m);font-size:26px;font-weight:500;text-align:center;border-right:1px solid var(--line);padding-right:10px}
+  .row .av{width:56px;height:56px;border-radius:6px;font-size:18px;font-family:var(--font-m);border:1.5px solid var(--line-2);background:rgba(0,0,0,.35)}
+  .row .who b{display:block;font-size:19px;font-weight:600}.row .who small{display:block;font-family:var(--font-m);font-size:12px;letter-spacing:.14em;color:var(--ink-2);margin-top:4px}
+  .row .chips{display:flex;gap:18px;flex-wrap:wrap}
+  .row .chip{border:0;background:none;padding:0;font-family:var(--font-b);font-size:13.5px;color:var(--ink-2);gap:10px}
+  .row .chip svg{width:22px;height:22px;stroke:var(--ink-2);fill:none;stroke-width:1.4;stroke-linejoin:round}
+  .row .chip.ic-assault svg{stroke:var(--accent);fill:var(--accent-soft)}
+  .row .st{text-align:center;border-left:1px solid var(--line)}
+  .row .st small{display:block;font-family:var(--font-m);font-size:10.5px;letter-spacing:.2em;color:var(--ink-3);margin-bottom:6px}
+  .row .st b{font-family:var(--font-m);font-size:22px;font-weight:600}
+  .row.unres{opacity:.55;cursor:default}
+  .foot{display:flex;align-items:center;gap:16px;padding:22px 10px 8px;font-size:13px;color:var(--ink-2)}
+  .foot .i{width:22px;height:22px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;font-family:var(--font-m);font-size:11px}
+  .foot .r{margin-left:auto;font-family:var(--font-m);font-size:10.5px;letter-spacing:.14em;color:var(--ink-3)}
+  .foot .link{font-size:13px}
+  .view .head{padding-top:0}
+  @media (max-width:1180px){.row{grid-template-columns:56px 60px 1fr 1fr 100px 100px 110px}.row .chips{gap:12px}.row .chip{font-size:12px}}
+  @media (max-width:860px){
+    .top{height:auto;flex-wrap:wrap;gap:8px 14px;padding:10px 14px}.top .nav{order:3;width:100%;margin:0;overflow-x:auto;scrollbar-width:none}.top .nav button{padding:10px 10px!important;font-size:13px}.top .nav .ind{bottom:0}
+    .top .brand b{font-size:12px}.top .brand b span{display:none}.top .tr{gap:8px}.top .pill{display:none}.top .you b{display:none}.top .you{padding:4px}
+    .hero{margin-top:0;aspect-ratio:auto;height:560px;background-position:58% 100%;background-size:auto 118%}
+    .hero::before{background:linear-gradient(180deg,rgba(5,6,9,.35) 0%,rgba(5,6,9,0) 20%,rgba(5,6,9,.1) 45%,rgba(5,6,9,.92) 72%,rgba(5,6,9,.98) 100%)}
+    .copy{left:16px;top:7%;max-width:92%}h1.display{font-size:58px;margin:10px 0 12px}.tag{font-size:12px;letter-spacing:.16em}.cta{margin-top:16px;gap:14px}.cta .wrapbtn{padding:10px 12px;font-size:10.5px;white-space:nowrap}.link{white-space:nowrap;font-size:13px}
+    .hero .strip{left:16px;right:16px;bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}.hero .strip div{padding:0;margin:0;border:0;gap:10px;align-items:center}.hero .strip svg{width:20px;height:20px;margin:0}.hero .strip b{font-size:24px}.hero .strip small{font-size:9.5px;letter-spacing:.14em;margin-top:5px}.hero .strip em{display:none}
+    .hint,#marks,.lite{display:none}
+    #app{padding:0 12px 32px}.standings{margin-top:-10px}.sh{padding:16px 14px 8px;gap:12px}.sh h2{font-size:14px;letter-spacing:.24em}.sh .sort{font-size:11px}
+    .row{grid-template-columns:30px 44px 1fr;grid-template-areas:"no av who" "no av chips" "k w t";gap:8px 10px;padding:12px}
+    .row .no{font-size:18px;border:0;padding:0;grid-area:no}.row .av{width:44px;height:44px;font-size:14px;grid-area:av}.row .who{grid-area:who}.row .who b{font-size:16px}
+    .row .chips{grid-area:chips;gap:10px}.row .chip{font-size:11.5px}.row .chip svg{width:16px;height:16px}
+    .row .st{border:0;text-align:left;margin-top:6px;padding-top:10px;border-top:1px solid var(--line)}.row .st:nth-last-child(3){grid-area:k}.row .st:nth-last-child(2){grid-area:w}.row .st:nth-last-child(1){grid-area:t}
+    .row .st small{font-size:9.5px;letter-spacing:.14em;margin-bottom:4px}.row .st b{font-size:18px}
+    .foot{flex-wrap:wrap}.foot .r{margin-left:0;width:100%}
+  }
 </style>
 </head>
 <body>
 
-<aside class="rail">
-  <div class="brand"><svg class="crest" viewBox="0 0 48 48" fill="none" id="crest"></svg><b>KYBER<span>SQUAD</span></b></div>
+<header class="top" id="top">
+  <div class="brand"><svg class="crest" viewBox="0 0 48 48" fill="none" id="crest"></svg><b>KYBER SQUAD<span>BATTLEFRONT II</span></b></div>
   <nav class="nav" id="nav"><i class="ind" id="navind"></i>
-    <button class="on" data-v="overview"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Overview</button>
-    <button data-v="squad"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a2 2 0 0 0 0 4h3M16 6h3a2 2 0 0 1 0 4h-3"/><path d="M12 13v4M8 21h8M9 17h6"/></svg>Leaderboard</button>
-    <button data-v="rivalry"><svg viewBox="0 0 24 24"><path d="M4 20 14 10M20 20 10 10"/><path d="M14 10l5-5h1v1l-5 5M10 10 5 5H4v1l5 5"/><path d="M3 17l4 4M21 17l-4 4"/></svg>Rivalry</button>
-    <button data-v="player"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Player Card</button>
-    <button data-v="sessions"><svg viewBox="0 0 24 24"><path d="M5 20V12M10 20V6M15 20v-9M20 20V4"/></svg>Sessions</button>
-    <button data-v="servers"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><path d="M8.5 15.5a5 5 0 0 1 0-7M15.5 8.5a5 5 0 0 1 0 7M6 18a9 9 0 0 1 0-12M18 6a9 9 0 0 1 0 12"/></svg>Live Servers</button>
+    <button class="on" data-v="overview">Overview</button>
+    <button data-v="squad">Leaderboard</button>
+    <button data-v="rivalry">Rivalry</button>
+    <button data-v="player">Player Card</button>
+    <button data-v="sessions">Sessions</button>
+    <button data-v="servers">Live Servers</button>
   </nav>
-  <div class="sep"></div>
-  <div class="fac" id="toggle">
-    <button data-f="empire"><svg viewBox="0 0 48 48" fill="none" id="tEmp"></svg>EMPIRE</button>
-    <button data-f="rebel"><svg viewBox="0 0 48 48" fill="none" id="tReb"></svg>REBELLION</button>
+  <div class="tr">
+    <div class="fac" id="toggle">
+      <button data-f="empire"><svg viewBox="0 0 48 48" fill="none" id="tEmp"></svg>EMPIRE</button>
+      <button data-f="rebel"><svg viewBox="0 0 48 48" fill="none" id="tReb"></svg>REBELLION</button>
+    </div>
+    <span class="pill" id="badge"><span class="dot"></span><span id="badge-txt">LOADING</span></span>
+    <button class="ic" id="sound" title="Sound"><svg viewBox="0 0 14 14"><path d="M3 2h2v10H3zM9 2h2v10H9z"/></svg></button>
+    <button class="you" id="youBtn"><span class="av" id="youAv">··</span><span><b id="youName">Sign in</b><small>Your profile</small></span></button>
   </div>
-  <button class="you" id="youBtn"><span class="av" id="youAv">··</span><span><b id="youName">Sign in</b><small>Your profile</small></span></button>
-</aside>
+</header>
 
 <main class="main">
   <section class="hero" id="hero">
-    <div class="topbar">
-      <div class="crumb"><span class="pre">BATTLEFRONT II &nbsp;/&nbsp; </span><b id="crumb">ALLIANCE COMMAND</b></div>
-      <div class="r"><span class="pill" id="badge"><span class="dot"></span><span id="badge-txt">LOADING</span></span>
-        <button class="ic" id="sound" title="Sound"><svg viewBox="0 0 14 14"><path d="M3 2h2v10H3zM9 2h2v10H9z"/></svg></button>
-        <button class="me" id="meBtn"><span class="av" id="meAv">··</span><span id="meTxt">▾</span></button></div>
+    <div class="copy">
+      <div class="eyebrow" id="eyebrow">IMPERIAL INTELLIGENCE</div>
+      <h1 class="display">THE<br>SQUAD.</h1>
+      <div class="tag" id="tag">Three pilots. One fleet.</div>
+      <div class="cta">
+        <button class="link" id="toboard">View leaderboard <svg viewBox="0 0 16 16"><path d="M8 2v11M3 9l5 5 5-5"/></svg></button>
+        <button class="wrapbtn" id="openwrap"><svg class="bars" viewBox="0 0 16 16"><path d="M3 13V8M7 13V3M11 13V6M15 13V9"/></svg>WEEKLY WRAPPED <svg viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
+      </div>
     </div>
-    <div class="copy"><div class="eyebrow" id="eyebrow">ALLIANCE INTELLIGENCE NETWORK</div><h1>Squad Holotable</h1><div class="tag" id="tag">Five pilots. One galaxy.</div></div>
-    <div class="dim"></div><div class="lite floor"></div><div class="lite ring"></div><div class="lite core"></div>
+    <div class="strip" id="strip"></div>
+    <div class="lite core"></div>
     <div id="marks"></div>
-    <div class="hint"><svg viewBox="0 0 16 22"><rect x="1" y="1" width="14" height="20" rx="7"/><path d="M8 1v7"/></svg>HOVER A CRYSTAL <em>·</em> SELECT TO VIEW PILOT</div>
-    <button class="wrapbtn" id="openwrap">WEEKLY WRAPPED <svg viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
+    <div class="hint"><svg viewBox="0 0 16 22"><rect x="1" y="1" width="14" height="20" rx="7"/><path d="M8 1v7"/></svg>DRAG TO EXPLORE <em>/</em> SELECT A PILOT</div>
+    <span id="crumb" hidden></span><button id="meBtn" hidden><span id="meAv"></span><span id="meTxt"></span></button>
   </section>
 
-  <div class="strip" id="strip"></div>
 
   <div id="app"></div>
   <div class="foot" id="foot"></div>
@@ -496,13 +610,14 @@ $("#sound").onclick=()=>{soundOn=!soundOn;$("#sound").classList.toggle("on",soun
 
 /* ================= hero markers + strip ================= */
 // Slots = the five crystals painted into the plate. [label x, label y, crystal x, crystal y] in % of the plate, plus the crystal's own colour.
-const SLOTS=[[49.5,44,49.5,47.5,"#3ad7ff"],[64.9,52,64.9,55.5,"#2ee6a6"],[36.2,52.3,36.2,55.5,"#ff3b5c"],[64.8,65.3,64.8,69,"#ff3b5c"],[31.8,65.1,31.8,69,"#3ad7ff"]];
+// Slots on the plate: [label x, label y, crystal x, crystal y, colour, painted?]. The first three crystals are painted into the scene.
+const SLOTS=[[69.5,42.5,67,49.8,"#2ef2d0",1],[54.4,60.5,51.7,68.6,"#4aa8ff",1],[85.8,60.2,83,67.8,"#ff2d4d",1],[62,70,59.5,76.8,"#b48cff",0],[78.5,40.5,76,47.4,"#ffc53d",0],[86.5,76,89.5,80,"#2ef2d0",0]];
 function renderMarks(){
   const list=players.filter(p=>p.resolved).slice(0,SLOTS.length);
-  $("#marks").innerHTML=SLOTS.map((s,i)=>{const p=list[i];const c=s[4];
-    return p?`<div class="glow" style="--c:${c};left:${s[2]}%;top:${s[3]}%;animation-delay:${i*-.6}s"></div><button class="mark" data-id="${p.id}" style="--c:${c};left:${s[0]}%;top:${s[1]}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="tip"></span></button>`
-            :`<div class="glow open" style="--c:${c};left:${s[2]}%;top:${s[3]}%"></div><button class="mark open" data-open="1" style="--c:${c};left:${s[0]}%;top:${s[1]}%;animation-delay:${i*-.7}s"><span class="lbl">OPEN SLOT</span><span class="tip"></span></button>`;}).join("");
-  $("#marks").querySelectorAll(".mark").forEach(m=>m.onclick=()=>{blip();if(m.dataset.open){switchTo("you");return;}selected=m.dataset.id;switchTo("player");});
+  $("#marks").innerHTML=SLOTS.map((s,i)=>{const p=list[i];if(!p)return"";const c=s[4];
+    const gem=s[5]?"":`<svg class="gem" viewBox="0 0 30 48" style="left:${s[2]}%;top:${s[3]}%;--c:${c}"><path d="M15 2 L26 18 L15 46 L4 18 Z" fill="${c}" opacity=".85"/><path d="M15 2 L26 18 L15 22 Z" fill="#fff" opacity=".35"/><path d="M4 18 L15 22 L15 46 Z" fill="#000" opacity=".25"/></svg>`;
+    return `${gem}<div class="glow" style="--c:${c};left:${s[2]}%;top:${s[3]}%;animation-delay:${i*-.6}s"></div><button class="mark" data-id="${p.id}" style="--c:${c};left:${s[0]}%;top:${s[1]}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="lead"></span></button>`;}).join("");
+  $("#marks").querySelectorAll(".mark").forEach(m=>m.onclick=()=>{blip();selected=m.dataset.id;switchTo("player");});
 }
 const ICONS={
   elim:`<svg viewBox="0 0 34 34"><circle cx="17" cy="17" r="11"/><circle cx="17" cy="17" r="3"/><path d="M17 2v6M17 26v6M2 17h6M26 17h6"/></svg>`,
@@ -515,7 +630,7 @@ function renderStrip(){
   const kds=list.map(p=>p.career.kd).filter(v=>v!=null);const avgKd=kds.length?kds.reduce((a,b)=>a+b,0)/kds.length:null;
   const wrs=list.map(p=>p.career.winRate).filter(v=>v!=null);const avgWr=wrs.length?wrs.reduce((a,b)=>a+b,0)/wrs.length*100:null;
   const sess=players.reduce((a,p)=>a+week(p).length,0);
-  $("#strip").innerHTML=`<div>${ICONS.elim}<span><b data-n="${kills}">0</b><small>ELIMINATIONS</small></span></div><div>${ICONS.kd}<span><b data-n="${avgKd??""}" data-dec="2">0</b><small>AVG K/D</small></span></div><div>${ICONS.win}<span><b data-n="${avgWr??""}" data-dec="1" data-sfx="%">0</b><small>WIN RATE</small></span></div><div>${ICONS.squad}<span><b data-n="${sess}">0</b><small>WEEKLY BATTLES</small></span></div>`;
+  $("#strip").innerHTML=`<div>${ICONS.elim}<span><b data-n="${kills}">0</b><small>ELIMINATIONS</small></span></div><div>${ICONS.kd}<span><b data-n="${avgKd??""}" data-dec="2">0</b><small>AVG K/D</small></span></div><div>${ICONS.win}<span><b data-n="${avgWr??""}" data-dec="1" data-sfx="%">0</b>${avgWr==null?'<em>Awaiting match data</em>':""}<small>WIN RATE</small></span></div><div>${ICONS.squad}<span><b data-n="${sess}">0</b><small>WEEKLY BATTLES</small></span></div>`;
   $("#strip").querySelectorAll("[data-n]").forEach(el=>countUp(el,el.dataset.n===""?null:+el.dataset.n,+(el.dataset.dec||0),el.dataset.sfx||""));
 }
 
@@ -546,31 +661,35 @@ let current="overview",selected=null,rivA=null,rivB=null,sortKey="playtime",lbMo
 const SORTS={playtime:["Play time",p=>p.career?.playtimeSec??0],kd:["K/D",p=>p.career?.kd??-1],win:["Win rate",p=>p.career?.winRate??-1],kills:["Kills",p=>p.career?.kills??-1],score:["Score",p=>p.career?.score??-1],rank:["Level",p=>p.career?.rank??-1]};
 const WSORTS={kills:["Kills this week",p=>wkKills(p)],kd:["K/D this week",p=>wkDeaths(p)?wkKills(p)/wkDeaths(p):wkKills(p)],time:["Time this week",p=>wkMin(p)],sessions:["Sessions",p=>week(p).length]};
 const VIEWS=["overview","squad","rivalry","player","sessions","servers","you"];
-function moveInd(){const on=$("#nav button.on"),ind=$("#navind");if(!on||!ind)return;const mob=matchMedia("(max-width:860px)").matches;if(mob){ind.style.height="0";return;}ind.style.top=on.offsetTop+"px";ind.style.height=on.offsetHeight+"px";}
+function moveInd(){const on=$("#nav button.on"),ind=$("#navind");if(!on||!ind)return;ind.style.left=on.offsetLeft+"px";ind.style.width=on.offsetWidth+"px";}
 let swTimer=null;
 function switchTo(v,push=true){if(!VIEWS.includes(v))v="overview";const changed=v!==current;current=v;$("#nav").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));moveInd();
-  const full=v==="overview";$("#hero").style.display=full?"":"none";$("#strip").style.display=full?"":"none";
+  const full=v==="overview";$("#hero").style.display=full?"":"none";document.body.classList.toggle("inner",!full);
   if(push){const h=v==="overview"?"":"#"+v+(v==="player"&&selected?"/"+selected:"");if(location.hash!==h)history.replaceState(null,"",location.pathname+h);}
   blip();if(changed&&!reduce){app.classList.add("out");clearTimeout(swTimer);swTimer=setTimeout(()=>{app.classList.remove("out");render();},200);}else render();if(!full)window.scrollTo({top:0,behavior:"smooth"});}
 function render(){({overview:renderOverview,squad:renderLeaderboard,rivalry:renderRivalry,player:renderPlayer,sessions:renderSessions,servers:renderServers,you:renderYou}[current])();}
 const sorted=()=>players.filter(p=>p.resolved).sort((a,b)=>SORTS[sortKey][1](b)-SORTS[sortKey][1](a));
-const chips=p=>(p.heroes.length?p.heroes.slice(0,3).map(h=>`<span class="chip"><i class="${h.side==="dark"?"d":"l"}"></i>${h.name}</span>`):p.classes.slice(0,3).map(c=>`<span class="chip"><i class="a"></i>${c.name}</span>`)).join("");
+const CICON={Assault:'<svg viewBox="0 0 16 16"><path d="M8 2l6 11H2z"/><path d="M8 7v3M8 11.5v.5"/></svg>',Specialist:'<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.5"/><circle cx="8" cy="8" r="1"/><path d="M8 1v3M8 12v3M1 8h3M12 8h3"/></svg>',Heavy:'<svg viewBox="0 0 16 16"><path d="M8 1.5l5.6 3.25v6.5L8 14.5l-5.6-3.25v-6.5z"/><rect x="5.5" y="5.5" width="5" height="5"/></svg>',Officer:'<svg viewBox="0 0 16 16"><path d="M8 2l1.8 3.7 4.2.6-3 2.9.7 4.1L8 11.4l-3.7 1.9.7-4.1-3-2.9 4.2-.6z"/></svg>',Aerial:'<svg viewBox="0 0 16 16"><path d="M8 2v12M3 8h10M5 5l6 6M11 5l-6 6"/></svg>',Enforcer:'<svg viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" rx="2"/><path d="M6 8h4"/></svg>',Infiltrator:'<svg viewBox="0 0 16 16"><path d="M2 8c2-4 10-4 12 0-2 4-10 4-12 0z"/><circle cx="8" cy="8" r="1.5"/></svg>'};
+const chips=p=>(p.heroes.length?p.heroes.slice(0,3).map(h=>`<span class="chip"><i class="${h.side==="dark"?"d":"l"}"></i>${h.name}</span>`):p.classes.slice(0,3).map(c=>`<span class="chip ic-${c.name.toLowerCase()}">${CICON[c.name]||'<i class="a"></i>'}${c.name}</span>`)).join("");
 const clickRows=()=>app.querySelectorAll("tr.click").forEach(tr=>tr.onclick=()=>{selected=tr.dataset.id;switchTo("player");});
-const unresRows=()=>players.filter(p=>!p.resolved).map(p=>`<tr style="opacity:.55"><td class="c-no"><span class="no">·</span></td><td class="c-pilot"><div class="pilot"><div class="av">?</div><div><b>${p.name}</b><small>NOT FOUND ON KYBER — CHECK THE EXACT IN-GAME NAME</small></div></div></td><td class="c-chips"></td><td></td><td></td><td></td></tr>`).join("");
+const unresRows=()=>players.filter(p=>!p.resolved).map(p=>`<div class="row unres"><span class="no">·</span><span class="av">${ini(p.name)}</span><span class="who"><b>${esc(p.name)}</b><small>NOT FOUND ON KYBER — CHECK SPELLING</small></span></div>`).join("");
 
 /* Overview: compact leaderboard under the holotable */
 function renderOverview(){
   const list=sorted();
   if(!list.length&&!players.length){app.innerHTML=UI.empty("No pilots yet. Open your profile to claim your Kyber name.");return;}
-  app.innerHTML=`<div class="view">${UI.head("Squad leaderboard","Your squad, by the numbers.",`<div class="sort">Sort by: <span class="selwrap"><select class="sel" id="sortsel">${Object.entries(SORTS).map(([k,[l]])=>`<option value="${k}" ${k===sortKey?"selected":""}>${l}</option>`).join("")}</select></span></div>`)}
-  <table><colgroup><col style="width:78px"><col style="width:25%"><col><col style="width:100px"><col style="width:120px"><col style="width:120px"></colgroup>
-  <thead><tr><th>RANK</th><th>PILOT</th><th></th><th class="r">K/D</th><th class="r">WIN RATE</th><th class="r">PLAY TIME</th></tr></thead><tbody>
-  ${list.map((p,i)=>{const c=p.career||{};return `<tr class="click ${i===0?'top':''}" data-id="${p.id}"><td class="c-no"><span class="no">${i+1}</span></td>
-    <td class="c-pilot"><div class="pilot">${UI.avatar(p.name)}<div style="min-width:0"><b>${p.name}</b><small>LVL ${c.rank??"—"}</small></div></div></td>
-    <td class="c-chips"><div class="chips">${chips(p)}</div></td>
-    <td class="r num c-kd">${c.kd!=null?c.kd.toFixed(2):na()}</td><td class="r num c-wr">${c.winRate!=null?pct(c.winRate):na()}</td><td class="r num c-pt">${fmtH(c.playtimeSec)}</td></tr>`;}).join("")}${unresRows()}
-  </tbody></table><div class="note">${LIVE?"Stats only accrue on servers marked OFFICIAL in Live Servers — community servers don't write to Kyber's stat system.":"Sample squad. In the live app these are your squad's real Kyber stats."}</div></div>`;
-  $("#sortsel").onchange=e=>{sortKey=e.target.value;renderOverview();};clickRows();
+  app.innerHTML=`<section class="standings view"><div class="sh"><h2>SQUAD STANDINGS</h2><i></i><div class="sort">Sort: <span class="selwrap"><select class="sel" id="sortsel">${Object.entries(SORTS).map(([k,[l]])=>`<option value="${k}" ${k===sortKey?"selected":""}>${l}</option>`).join("")}</select></span></div></div>
+  <div class="rows">${list.map((p,i)=>{const c=p.career||{};return `<button class="row ${i===0?'top':''}" data-id="${p.id}" style="--c:${crystalOf(p)}">
+    <span class="no">${i+1}</span><span class="av">${ini(p.name)}</span>
+    <span class="who"><b>${esc(p.name)}</b><small>LVL ${c.rank??"—"}</small></span>
+    <span class="chips">${chips(p)}</span>
+    <span class="st"><small>K/D</small><b>${c.kd!=null?c.kd.toFixed(2):"—"}</b></span>
+    <span class="st"><small>WIN RATE</small><b>${c.winRate!=null?pct(c.winRate):"—"}</b></span>
+    <span class="st"><small>PLAY TIME</small><b>${fmtH(c.playtimeSec)}</b></span></button>`;}).join("")}${unresRows()}</div></section>
+  <div class="foot"><span class="i">i</span><span>Stats accrue on OFFICIAL servers only.</span><button class="link" id="toservers">View live servers <svg viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button><span class="r">BUILT ON THE OPEN-SOURCE KYBER API · NOT AFFILIATED WITH EA OR KYBER.</span></div>`;
+  $("#sortsel").onchange=e=>{sortKey=e.target.value;renderOverview();};
+  app.querySelectorAll(".row[data-id]").forEach(r=>r.onclick=()=>{selected=r.dataset.id;blip();switchTo("player");});
+  const ts=$("#toservers");if(ts)ts.onclick=()=>switchTo("servers");
 }
 
 /* Leaderboard: full stats, career vs this week, podium, trend sparklines */
@@ -747,7 +866,7 @@ function faction(f){FACTION=f;document.documentElement.setAttribute("data-factio
   $("#crest").innerHTML=CREST[f];$("#bootcrest").innerHTML=CREST[f];$("#tEmp").innerHTML=CREST.empire;$("#tReb").innerHTML=CREST.rebel;
   $("#toggle").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.f===f));
   $("#crumb").textContent=f==="rebel"?"ALLIANCE COMMAND":"IMPERIAL COMMAND";
-  $("#eyebrow").textContent=f==="rebel"?"ALLIANCE INTELLIGENCE NETWORK":"IMPERIAL COMMAND NETWORK";
+  $("#eyebrow").textContent=f==="rebel"?"ALLIANCE INTELLIGENCE":"IMPERIAL INTELLIGENCE";
   const n=players.filter(p=>p.resolved).length;
   $("#tag").textContent=(n?["Zero","One","Two","Three","Four","Five","Six"][Math.min(n,6)]+" pilot"+(n===1?"":"s")+". ":"")+(f==="rebel"?"One galaxy.":"One fleet.");
   try{localStorage.setItem("kss-faction",f);}catch{}
