@@ -42,7 +42,7 @@ jobs:
           fi
       - name: Install
         if: steps.exists.outputs.skip == 'false'
-        run: npm ci
+        run: npm install --no-audit --no-fund
       - name: Build and publish installer
         if: steps.exists.outputs.skip == 'false'
         env:
