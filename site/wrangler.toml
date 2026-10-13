@@ -1,14 +1,11 @@
-# Cloudflare Pages project config.
-# Deploy with:  npx wrangler pages deploy public
-# (the functions/ folder next to public/ is picked up automatically.)
-
-name = "kyber-squad-stats"
+﻿name = "kyber-squad-stats"
+main = "worker.js"
 compatibility_date = "2024-11-01"
-pages_build_output_dir = "public"
 
-# KV namespace holding the stats blob + the claimed-names roster.
-# After `npx wrangler kv namespace create STATS`, paste the id below AND add the
-# same binding (name: STATS) in the Pages project → Settings → Functions → KV bindings.
+[assets]
+directory = "./public"
+binding = "ASSETS"
 
-# KSS_INGEST_SECRET is set as a secret, not here:
-#   npx wrangler pages secret put KSS_INGEST_SECRET
+[[kv_namespaces]]
+binding = "STATS"
+id = "d7d31887e49c4dc983ca494a1aa23733"
