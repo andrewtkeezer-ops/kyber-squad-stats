@@ -601,22 +601,30 @@
   @media (max-width:860px){.srv-hero{grid-template-columns:1fr;padding:22px 18px}.srv-tiles{flex-wrap:wrap}.srv-tiles div{flex:1 1 40%}.srv2{grid-template-columns:1fr auto;grid-template-areas:"planet pop" "m m" "join join";padding:12px}.srv2 .planet{grid-area:planet;border:0;padding:0;background:none}.srv2 .m{grid-area:m}.srv2 .pop{grid-area:pop}.join{grid-area:join;width:100%}.srv2 .tags{display:none}}
 
   /* ======== nav saber duel ======== */
-  .duelnav{margin-left:auto;margin-right:6px;width:180px;height:48px;flex:none;opacity:.95}
+  .duelnav{margin-left:auto;margin-right:6px;width:210px;height:58px;flex:none}
   .duelnav svg{width:100%;height:100%;overflow:visible}
-  .duelnav .body{fill:#232a3a;stroke:#6b7690;stroke-width:1}
-  .duelnav .arm{stroke:#5a6478;stroke-width:2;stroke-linecap:round}
-  .duelnav .blade{stroke:#fff;stroke-width:1.6;stroke-linecap:round}
+  .duelnav .robe{fill:#2a2f3d;stroke:#7d879c;stroke-width:.8}
+  .duelnav .cloak{fill:#1a1e29;stroke:#5c6578;stroke-width:.8}
+  .duelnav .leg{fill:#242938;stroke:#6b7690;stroke-width:.8}
+  .duelnav .hood{fill:#1f2431;stroke:#7d879c;stroke-width:.8}
+  .duelnav .face{fill:#0b0d12}
+  .duelnav .belt{stroke:#8d7a55;stroke-width:1.6;stroke-linecap:round}
+  .duelnav .arm{stroke:#2a2f3d;stroke-width:3.2;stroke-linecap:round}
+  .duelnav .hand{fill:#c9b8a0}
+  .duelnav .hilt{stroke:#b8c0cc;stroke-width:3;stroke-linecap:round}
+  .duelnav .blade{stroke:#fff;stroke-width:1.5;stroke-linecap:round}
   .duelnav .sglow{stroke-width:5;stroke-linecap:round;opacity:.75;filter:blur(1.2px)}
-  .duelnav .sab.a .sglow{stroke:#4ab8ff}.duelnav .sab.b .sglow{stroke:#ff3b4a}
-  .duelnav .fA{transform-origin:40px 44px;animation:lungeA 1.9s ease-in-out infinite}
-  .duelnav .fB{transform-origin:140px 44px;animation:lungeB 1.9s ease-in-out infinite}
-  .duelnav .sab.a{transform-origin:56px 25px;animation:swingA 1.9s ease-in-out infinite}
-  .duelnav .sab.b{transform-origin:124px 25px;animation:swingB 1.9s ease-in-out infinite}
-  .duelnav .spark{fill:#fff;stroke:#fff;stroke-width:1.2;stroke-linecap:round;transform-origin:90px 12px;animation:spark 1.9s ease-in-out infinite;filter:drop-shadow(0 0 4px #fff)}
-  @keyframes lungeA{0%,100%{transform:translateX(0) rotate(0)}30%{transform:translateX(6px) rotate(4deg)}60%{transform:translateX(-3px) rotate(-2deg)}}
-  @keyframes lungeB{0%,100%{transform:translateX(0) rotate(0)}30%{transform:translateX(-6px) rotate(-4deg)}60%{transform:translateX(3px) rotate(2deg)}}
-  @keyframes swingA{0%,100%{transform:rotate(14deg)}30%{transform:rotate(-16deg)}60%{transform:rotate(6deg)}}
-  @keyframes swingB{0%,100%{transform:rotate(-14deg)}30%{transform:rotate(16deg)}60%{transform:rotate(-6deg)}}
+  .duelnav .fA .sglow{stroke:#4ab8ff}.duelnav .fB .sglow{stroke:#ff3b4a}
+  .duelnav .fB .hood,.duelnav .fB .robe,.duelnav .fB .cloak{fill:#161218;stroke:#6a5560}
+  .duelnav .fA{transform-origin:50px 54px;animation:lungeA 1.9s ease-in-out infinite}
+  .duelnav .fB{transform-origin:150px 54px;animation:lungeB 1.9s ease-in-out infinite}
+  .duelnav .fA .sab{transform-origin:72px 26px;animation:swingA 1.9s ease-in-out infinite}
+  .duelnav .fB .sab{transform-origin:72px 26px;animation:swingA 1.9s ease-in-out infinite}
+  .duelnav .spark{fill:#fff;stroke:#fff;stroke-width:1.2;stroke-linecap:round;transform-origin:100px 9px;animation:spark 1.9s ease-in-out infinite;filter:drop-shadow(0 0 4px #fff)}
+  @keyframes lungeA{0%,100%{transform:translateX(0) rotate(0)}30%{transform:translateX(7px) rotate(3deg)}60%{transform:translateX(-4px) rotate(-2deg)}}
+  @keyframes lungeB{0%,100%{transform:translateX(0) rotate(0)}30%{transform:translateX(-7px) rotate(-3deg)}60%{transform:translateX(4px) rotate(2deg)}}
+  @keyframes swingA{0%,100%{transform:rotate(12deg)}30%{transform:rotate(-18deg)}60%{transform:rotate(5deg)}}
+  @keyframes swingB{0%,100%{transform:rotate(12deg)}30%{transform:rotate(-18deg)}60%{transform:rotate(5deg)}}
   @keyframes spark{0%,100%{opacity:0;transform:scale(.4)}28%{opacity:0;transform:scale(.4)}32%{opacity:1;transform:scale(1.3)}42%{opacity:0;transform:scale(.6)}58%{opacity:0}62%{opacity:.9;transform:scale(1)}70%{opacity:0;transform:scale(.5)}}
   header.top .tr{margin-left:0}
   @media (max-width:1180px){.duelnav{display:none}header.top .tr{margin-left:auto}}
@@ -635,10 +643,10 @@
     <button data-v="sessions">Sessions</button>
     <button data-v="servers">Live Servers</button>
   </nav>
-  <div class="duelnav" id="duelnav" title="The eternal struggle"><svg viewBox="0 0 180 48" aria-hidden="true">
-  <g class="fA"><path class="body" d="M34 46 L35 30 L40 24 L45 30 L46 46 Z"/><circle class="body" cx="40" cy="19" r="4"/><path class="arm" d="M45 30 L56 25"/><g class="sab a"><line class="sglow" x1="56" y1="25" x2="92" y2="11"/><line class="blade" x1="56" y1="25" x2="92" y2="11"/></g></g>
-  <g class="fB"><path class="body" d="M146 46 L145 30 L140 24 L135 30 L134 46 Z"/><circle class="body" cx="140" cy="19" r="4"/><path class="arm" d="M135 30 L124 25"/><g class="sab b"><line class="sglow" x1="124" y1="25" x2="88" y2="11"/><line class="blade" x1="124" y1="25" x2="88" y2="11"/></g></g>
-  <g class="spark"><circle cx="90" cy="12" r="2.5"/><path d="M90 5v3M90 16v3M83 12h3M94 12h3M85 7l2 2M93 15l2 2M95 7l-2 2M87 15l-2 2"/></g>
+  <div class="duelnav" id="duelnav" title="The eternal struggle"><svg viewBox="0 0 200 56" aria-hidden="true">
+  <g class="fA"><path class="cloak" d="M40 22 L28 54 L46 54 L44 40 Z"/><path class="robe" d="M40 19 L56 19 L60 36 L58 54 L38 54 L36 34 Z"/><path class="leg" d="M52 40 L68 46 L72 54 L60 54 L50 50 Z"/><path class="hood" d="M39 11 Q48 1 57 11 Q58 19 48 21 Q38 19 39 11 Z"/><path class="face" d="M44 12 Q48 9 52 12 Q52 17 48 18 Q44 17 44 12 Z"/><path class="belt" d="M39 28 L57 27"/><path class="arm" d="M54 25 L70 24 M53 29 L72 27"/><circle class="hand" cx="70" cy="24" r="2.2"/><circle class="hand" cx="72" cy="27" r="2.2"/><g class="sab"><path class="hilt" d="M66 26 L78 23"/><line class="sglow" x1="78" y1="23" x2="126" y2="7"/><line class="blade" x1="78" y1="23" x2="126" y2="7"/></g></g>
+  <g class="fB"><g transform="matrix(-1 0 0 1 200 0)"><path class="cloak" d="M40 22 L28 54 L46 54 L44 40 Z"/><path class="robe" d="M40 19 L56 19 L60 36 L58 54 L38 54 L36 34 Z"/><path class="leg" d="M52 40 L68 46 L72 54 L60 54 L50 50 Z"/><path class="hood" d="M39 11 Q48 1 57 11 Q58 19 48 21 Q38 19 39 11 Z"/><path class="face" d="M44 12 Q48 9 52 12 Q52 17 48 18 Q44 17 44 12 Z"/><path class="belt" d="M39 28 L57 27"/><path class="arm" d="M54 25 L70 24 M53 29 L72 27"/><circle class="hand" cx="70" cy="24" r="2.2"/><circle class="hand" cx="72" cy="27" r="2.2"/><g class="sab"><path class="hilt" d="M66 26 L78 23"/><line class="sglow" x1="78" y1="23" x2="126" y2="7"/><line class="blade" x1="78" y1="23" x2="126" y2="7"/></g></g></g>
+  <g class="spark"><circle cx="100" cy="9" r="2.5"/><path d="M100 2v3M100 13v3M93 9h3M104 9h3M95 4l2 2M103 12l2 2M105 4l-2 2M97 12l-2 2"/></g>
 </svg></div>
   <div class="tr">
     <div class="fac" id="toggle">
