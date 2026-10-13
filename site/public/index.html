@@ -719,6 +719,25 @@
   .crestm{display:inline-block;width:20px;height:20px;background:currentColor;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;flex:none}
   header.top .crest.crestm{width:40px;height:40px;color:var(--accent);filter:drop-shadow(0 0 10px var(--accent-glow))}
   header.top .fac button .crestm{opacity:.75}header.top .fac button.on .crestm{opacity:1;filter:drop-shadow(0 0 6px var(--accent-glow))}
+
+  /* ======== line icons: draw on, replay on hover ======== */
+  .ico{width:30px;height:30px;flex:none;fill:none;stroke:var(--ink-2);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+  .ico *{stroke-dasharray:120;stroke-dashoffset:0}
+  .ico .dot{fill:var(--accent);stroke:none;filter:drop-shadow(0 0 4px var(--accent))}
+  .ico.draw *{animation:draw 1.1s var(--ease) both}
+  .ico.draw *:nth-child(2){animation-delay:.08s}.ico.draw *:nth-child(3){animation-delay:.16s}.ico.draw *:nth-child(4){animation-delay:.24s}.ico.draw *:nth-child(5){animation-delay:.32s}
+  .ico.draw .dot{animation:dotin .5s var(--ease) .55s both}
+  @keyframes draw{from{stroke-dashoffset:120;opacity:.2}to{stroke-dashoffset:0;opacity:1}}
+  @keyframes dotin{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+  .ico .dot{transform-box:fill-box;transform-origin:center}
+  .view .ico,.hero .strip .ico{animation:none}
+  .view:not(.out) .ico,.hero.enter .strip .ico{} 
+  .tile.has-ico{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"ico num" "ico lbl";column-gap:14px;align-items:center}
+  .tile.has-ico .ico{grid-area:ico;width:34px;height:34px;opacity:.85;transition:stroke .3s,opacity .3s}
+  .tile.has-ico b{grid-area:num}.tile.has-ico small{grid-area:lbl;margin-top:4px}
+  .tile:hover .ico,.hero .strip div:hover .ico{stroke:var(--accent);opacity:1}
+  .hero .strip svg.ico{width:28px;height:28px;stroke:#d4d8e2;transform:none!important}
+  .hero .strip div:hover svg{transform:none}
 </style>
 </head>
 <body>
@@ -920,18 +939,29 @@ function layoutFleet(){const el=$("#fleet");const W=el.clientWidth,H=el.clientHe
 addEventListener("resize",layoutFleet);
 $("#fleet").addEventListener("pointerenter",e=>{const bob=e.target.closest&&e.target.closest(".bob");if(!bob)return;const r=bob.getBoundingClientRect(),h=$("#hero").getBoundingClientRect();bob.classList.toggle("below",r.top-h.top<190);bob.classList.toggle("edge-l",r.left-h.left<140);bob.classList.toggle("edge-r",h.right-r.right<140);},true);
 const ICONS={
-  elim:`<svg viewBox="0 0 34 34"><circle cx="17" cy="17" r="11"/><circle cx="17" cy="17" r="3"/><path d="M17 2v6M17 26v6M2 17h6M26 17h6"/></svg>`,
-  kd:`<svg viewBox="0 0 34 34"><path d="M7 28V18M14 28V10M21 28V14M28 28V6"/></svg>`,
-  win:`<svg viewBox="0 0 34 34"><path d="M17 4l3.9 8.2 9 1.2-6.5 6.3 1.6 9-8-4.3-8 4.3 1.6-9L4.1 13.4l9-1.2z"/></svg>`,
-  squad:`<svg viewBox="0 0 34 34"><circle cx="17" cy="11" r="4"/><circle cx="7" cy="14" r="3"/><circle cx="27" cy="14" r="3"/><path d="M10 28a7 7 0 0 1 14 0M2 26a5 5 0 0 1 8-4M32 26a5 5 0 0 0-8-4"/></svg>`};
+  // thin-line terminal marks, in the style of the reference sheet. Every path is stroke-only so it can draw on.
+  elim:`<svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="12"/><circle cx="17" cy="17" r="5"/><path d="M17 1v7M17 26v7M1 17h7M26 17h7"/><circle class="dot" cx="17" cy="17" r="1.5"/></svg>`,
+  kd:`<svg class="ico" viewBox="0 0 34 34"><path d="M3 29h28"/><path d="M4 24l7-7 6 4 7-11 6 3"/><circle class="dot" cx="30" cy="13" r="1.8"/><path d="M4 5v24" stroke-dasharray="2 3"/></svg>`,
+  kph:`<svg class="ico" viewBox="0 0 34 34"><path d="M5 25a12 12 0 1 1 24 0"/><path d="M17 25L24 13"/><circle class="dot" cx="17" cy="25" r="2"/><path d="M5 25h3M26 25h3M8 15l2 1M26 15l-2 1M17 9v3"/></svg>`,
+  squad:`<svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="13"/><ellipse cx="17" cy="17" rx="13" ry="5"/><ellipse cx="17" cy="17" rx="5" ry="13"/><path d="M4 17h26"/><circle class="dot" cx="26" cy="9" r="1.8"/></svg>`,
+  dmg:`<svg class="ico" viewBox="0 0 34 34"><path d="M17 3l4 9 9 1-6.5 6 2 9-8.5-4.5L8.5 28l2-9L4 13l9-1z"/><path d="M17 11v6M17 20v1" /></svg>`,
+  hs:`<svg class="ico" viewBox="0 0 34 34"><rect x="5" y="5" width="24" height="24" rx="2"/><path d="M17 5v7M17 22v7M5 17h7M22 17h7"/><circle cx="17" cy="17" r="4"/><circle class="dot" cx="17" cy="17" r="1.2"/></svg>`,
+  veh:`<svg class="ico" viewBox="0 0 34 34"><path d="M6 20h22l-3 6H9z"/><path d="M10 20v-6h8l4 6"/><circle cx="11" cy="26" r="2.5"/><circle cx="23" cy="26" r="2.5"/><path d="M22 14h6"/></svg>`,
+  spm:`<svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="17" r="12"/><path d="M17 8v9l6 3"/><path d="M17 3v2M31 17h-2M17 31v-2M3 17h2"/></svg>`,
+  time:`<svg class="ico" viewBox="0 0 34 34"><path d="M9 4h16M9 30h16M11 4c0 9 12 9 12 13s-12 4-12 13M23 4c0 9-12 9-12 13s12 4 12 13"/><circle class="dot" cx="17" cy="17" r="1.5"/></svg>`,
+  score:`<svg class="ico" viewBox="0 0 34 34"><path d="M5 28V12M12 28V6M19 28V16M26 28V9"/><path d="M3 30h28" stroke-dasharray="2 3"/></svg>`,
+  deaths:`<svg class="ico" viewBox="0 0 34 34"><circle cx="17" cy="14" r="9"/><path d="M12 23v6h10v-6"/><circle cx="13.5" cy="13" r="1.8"/><circle cx="20.5" cy="13" r="1.8"/><path d="M15 27v2M19 27v2"/></svg>`,
+  level:`<svg class="ico" viewBox="0 0 34 34"><path d="M17 4l12 7v12l-12 7-12-7V11z"/><path d="M17 11l6 3.5v7L17 25l-6-3.5v-7z"/><circle class="dot" cx="17" cy="18" r="1.5"/></svg>`,
+};
+const TILE_ICON={"K/D":"kd","KILLS":"elim","DEATHS":"deaths","KILLS / HOUR":"kph","SCORE":"score","PLAY TIME":"time","KILLS THIS WEEK":"elim","K/D THIS WEEK":"kd","DAMAGE DEALT":"dmg","HEADSHOTS":"hs","VEHICLES DESTROYED":"veh","SCORE / MIN":"spm","LEVEL":"level"};
 function renderStrip(){
   const list=players.filter(p=>p.resolved&&p.career);
   const kills=list.reduce((a,p)=>a+(p.career.kills||0),0);
   const kds=list.map(p=>p.career.kd).filter(v=>v!=null);const avgKd=kds.length?kds.reduce((a,b)=>a+b,0)/kds.length:null;
   const totSec=list.reduce((a,p)=>a+(p.career.playtimeSec||0),0);const kph=totSec>0?+(kills/(totSec/3600)).toFixed(1):null;
   const sess=players.reduce((a,p)=>a+week(p).length,0);
-  $("#strip").innerHTML=`<div>${ICONS.elim}<span><b data-n="${kills}">0</b><small>ELIMINATIONS</small></span></div><div>${ICONS.kd}<span><b data-n="${avgKd??""}" data-dec="2">0</b><small>AVG K/D</small></span></div><div>${ICONS.win}<span><b data-n="${kph??""}" data-dec="1">0</b><small>KILLS / HOUR</small></span></div><div>${ICONS.squad}<span><b data-n="${sess}">0</b><small>WEEKLY BATTLES</small></span></div>`;
-  $("#strip").querySelectorAll("[data-n]").forEach(el=>countUp(el,el.dataset.n===""?null:+el.dataset.n,+(el.dataset.dec||0),el.dataset.sfx||""));
+  $("#strip").innerHTML=`<div>${ICONS.elim}<span><b data-n="${kills}">0</b><small>ELIMINATIONS</small></span></div><div>${ICONS.kd}<span><b data-n="${avgKd??""}" data-dec="2">0</b><small>AVG K/D</small></span></div><div>${ICONS.kph}<span><b data-n="${kph??""}" data-dec="1">0</b><small>KILLS / HOUR</small></span></div><div>${ICONS.squad}<span><b data-n="${sess}">0</b><small>WEEKLY BATTLES</small></span></div>`;
+  $("#strip").querySelectorAll(".ico").forEach(ic=>ic.classList.add("draw"));$("#strip").querySelectorAll("[data-n]").forEach(el=>countUp(el,el.dataset.n===""?null:+el.dataset.n,+(el.dataset.dec||0),el.dataset.sfx||""));
 }
 
 /* ================= component kit ================= */
@@ -939,7 +969,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;","&gt;":"&gt
 const UI={
   head:(title,sub,right="")=>`<div class="head"><div><h2>${title}</h2>${sub?`<p>${sub}</p>`:""}</div>${right?`<div class="r">${right}</div>`:""}</div>`,
   panel:(title,body,extra="")=>`<div class="card ${extra}"><h3>${title}</h3>${body}</div>`,
-  tile:(v,label,o={})=>`<div class="tile"><b class="${o.a?"a":""}" data-n="${v??""}" data-dec="${o.dec||0}" data-sfx="${o.sfx||""}">0</b><small>${label}</small></div>`,
+  tile:(v,label,o={})=>`<div class="tile ${TILE_ICON[label]?"has-ico":""}">${TILE_ICON[label]?ICONS[TILE_ICON[label]]:""}<b class="${o.a?"a":""}" data-n="${v??""}" data-dec="${o.dec||0}" data-sfx="${o.sfx||""}">0</b><small>${label}</small></div>`,
   tiles:items=>`<div class="tiles" style="margin-bottom:12px">${items.join("")}</div>`,
   bar:(name,w,val,col="var(--accent)")=>`<div class="barrow"><div class="n"><i style="background:${col}"></i><span>${name}</span></div><div class="track"><i data-w="${w}" style="background:${col}"></i></div><div class="v">${val}</div></div>`,
   seg:(id,opts,cur)=>`<div class="seg" id="${id}">${opts.map(([k,l])=>`<button data-k="${k}" class="${k===cur?"on":""}">${l}</button>`).join("")}</div>`,
@@ -949,7 +979,7 @@ const UI={
   ring:(pctv,label,txt,col="var(--accent)")=>{const r=32,C=2*Math.PI*r,off=C*(1-Math.min(1,Math.max(0,pctv||0)));return`<div class="ringbox"><svg class="gauge" viewBox="0 0 76 76"><circle class="bg" cx="38" cy="38" r="${r}"/><circle class="fg" cx="38" cy="38" r="${r}" stroke="${col}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" data-off="${off.toFixed(1)}"/></svg><div><b>${txt}</b><small>${label}</small></div></div>`;},
   heat:grid=>{const mx=Math.max(1,...grid.flat());const D=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];return`<div class="heat">${grid.map((row,d)=>`<div class="d">${D[d]}</div>${row.map(v=>`<div class="h ${v?"l"+Math.max(1,Math.ceil(v/mx*4)):""}" title="${D[d]} · ${v} session${v===1?"":"s"}"></div>`).join("")}`).join("")}<div class="x"><span>12am</span><span>6am</span><span>noon</span><span>6pm</span><span>11pm</span></div></div>`;},
   empty:(txt)=>`<div class="view card" style="text-align:center;padding:40px"><div class="muted">${txt}</div></div>`,
-  animate:()=>{app.querySelectorAll("[data-n]").forEach(el=>countUp(el,el.dataset.n===""?null:+el.dataset.n,+(el.dataset.dec||0),el.dataset.sfx||""));requestAnimationFrame(()=>{app.querySelectorAll(".track>i,.vbar>i,.popbar>i").forEach(i=>i.style.width=i.dataset.w+"%");app.querySelectorAll(".gauge .fg").forEach(c=>c.style.strokeDashoffset=c.dataset.off);});},
+  animate:()=>{app.querySelectorAll(".ico").forEach(ic=>ic.classList.add("draw"));app.querySelectorAll("[data-n]").forEach(el=>countUp(el,el.dataset.n===""?null:+el.dataset.n,+(el.dataset.dec||0),el.dataset.sfx||""));requestAnimationFrame(()=>{app.querySelectorAll(".track>i,.vbar>i,.popbar>i").forEach(i=>i.style.width=i.dataset.w+"%");app.querySelectorAll(".gauge .fg").forEach(c=>c.style.strokeDashoffset=c.dataset.off);});},
   bind:(id,fn)=>{const el=$("#"+id);if(el)el.querySelectorAll("button").forEach(b=>b.onclick=()=>fn(b.dataset.k));}
 };
 const dailyKills=(p,days=14)=>{const out=new Array(days).fill(0);(p.sessions||[]).forEach(s=>{const d=Math.floor((Date.now()-new Date(s.start))/86400e3);if(d>=0&&d<days)out[days-1-d]+=(s.career&&s.career.kills)||0;});return out;};
@@ -1203,6 +1233,7 @@ app.addEventListener("pointerenter",e=>{const t=e.target.closest?e.target.closes
   t.querySelectorAll(".tug i").forEach(i=>{i.style.transition="none";i.style.width="0";void i.offsetWidth;i.style.transition="";requestAnimationFrame(()=>i.style.width="var(--w)");});
   t.querySelectorAll(".gauge .fg").forEach(c=>{c.style.transition="none";c.style.strokeDashoffset=c.getAttribute("stroke-dashoffset");void c.getBoundingClientRect();c.style.transition="";requestAnimationFrame(()=>c.style.strokeDashoffset=c.dataset.off);});
   t.querySelectorAll(".spark path").forEach(pth=>{pth.style.animation="none";void pth.offsetWidth;pth.style.animation="";});
+  t.querySelectorAll(".ico").forEach(ic=>{ic.classList.remove("draw");void ic.getBoundingClientRect();ic.classList.add("draw");});
 },true);
 /* ================= boot ================= */
 (async()=>{
