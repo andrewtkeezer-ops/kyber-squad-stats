@@ -46,19 +46,23 @@ function settings() {
     sessionGap: Number(process.env.KSS_SESSION_GAP_MIN || cfg.sessionGapMin || 30),
     extraNames: Array.isArray(cfg.extraNames) ? cfg.extraNames.filter(Boolean) : [],
     forcePushMin: Number(cfg.forcePushMin || 15),
+    accessId: process.env.KSS_ACCESS_ID || cfg.accessClientId || '',
+    accessSecret: process.env.KSS_ACCESS_SECRET || cfg.accessClientSecret || '',
   };
 }
 
 const client = new KyberClient();
 let lastSig = '', lastPushAt = 0;
 
+let ACCESS = {};
+function accessHeaders(s) { ACCESS = s.accessId ? { 'CF-Access-Client-Id': s.accessId, 'CF-Access-Client-Secret': s.accessSecret } : {}; }
 async function siteGet(base, secret, p) {
-  const r = await fetch(`${base}${p}`, { headers: { 'x-kss-secret': secret } });
+  const r = await fetch(`${base}${p}`, { headers: { 'x-kss-secret': secret, ...ACCESS } });
   if (!r.ok) throw new Error(`${p} -> ${r.status}`);
   return r.json();
 }
 async function sitePost(base, secret, p, body) {
-  const r = await fetch(`${base}${p}`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-kss-secret': secret }, body: JSON.stringify(body) });
+  const r = await fetch(`${base}${p}`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-kss-secret': secret, ...ACCESS }, body: JSON.stringify(body) });
   if (!r.ok) throw new Error(`${p} -> ${r.status} ${await r.text().catch(() => '')}`);
   return r.json().catch(() => ({}));
 }
@@ -124,6 +128,7 @@ async function buildBlob(s) {
 
 async function tick() {
   const s = settings();
+  accessHeaders(s);
   try {
     const { blob, sig } = await buildBlob(s);
     const stale = Date.now() - lastPushAt > s.forcePushMin * 60000;
@@ -140,7 +145,7 @@ async function tick() {
       console.log(`[${new Date().toLocaleTimeString()}] pushed ${changed ? '(changed)' : '(refresh)'}: ${blob.players.length} players [${names}], ${Array.isArray(blob.servers) ? blob.servers.length : 0} servers -> site replied ${JSON.stringify(res)}`);
       // read back what the site now serves, so a mismatch is visible immediately
       try {
-        const back = await (await fetch(`${s.siteBase}/api/data`, { cache: 'no-store' })).json();
+        const back = await (await fetch(`${s.siteBase}/api/data`, { cache: 'no-store', headers: ACCESS })).json();
         const bn = (back.players || []).map((p) => p.name).join(', ');
         const same = back.updatedAt === blob.updatedAt;
         console.log(`   site /api/data now: ${(back.players || []).length} players [${bn}] updatedAt=${back.updatedAt} ${same ? 'OK (matches this push)' : '!! MISMATCH — site is serving a different blob'}`);
