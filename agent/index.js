@@ -9,6 +9,8 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { EventEmitter } = require('events');
+const events = new EventEmitter();
 const { KyberClient } = require('./lib/kyberClient');
 const { decodeStats } = require('./lib/statsDictionary');
 const { detectSessions } = require('./lib/sessions');
@@ -142,6 +144,7 @@ async function tick() {
       lastSig = sig; lastPushAt = Date.now();
       try { fs.mkdirSync(snaps.DATA_DIR, { recursive: true }); fs.writeFileSync(path.join(snaps.DATA_DIR, 'last-blob.json'), JSON.stringify(blob, null, 2)); } catch {}
       const names = blob.players.map((p) => `${p.name}${p.resolved ? '' : '(unresolved:' + (p.error || 'no match') + ')'}${p.stats ? ' kd=' + p.stats.career.kd : ''}`).join(', ');
+      events.emit('push', { players: blob.players.length, changed });
       console.log(`[${new Date().toLocaleTimeString()}] pushed ${changed ? '(changed)' : '(refresh)'}: ${blob.players.length} players [${names}], ${Array.isArray(blob.servers) ? blob.servers.length : 0} servers -> site replied ${JSON.stringify(res)}`);
       // read back what the site now serves, so a mismatch is visible immediately
       try {
@@ -151,9 +154,11 @@ async function tick() {
         console.log(`   site /api/data now: ${(back.players || []).length} players [${bn}] updatedAt=${back.updatedAt} ${same ? 'OK (matches this push)' : '!! MISMATCH — site is serving a different blob'}`);
       } catch (e) { console.log(`   read-back failed: ${e.message}`); }
     } else {
+      events.emit('skip', { players: blob.players.length });
       console.log(`[${new Date().toLocaleTimeString()}] no change — skipped push (${blob.players.length} players)`);
     }
   } catch (e) {
+    events.emit('error', e.message);
     console.error(`[${new Date().toLocaleTimeString()}] cycle error:`, e.message);
   }
 }
@@ -167,4 +172,4 @@ function main() {
 }
 
 if (require.main === module) main();
-module.exports = { cycle, tick, buildBlob, settings };
+module.exports = { cycle, tick, buildBlob, settings, events };

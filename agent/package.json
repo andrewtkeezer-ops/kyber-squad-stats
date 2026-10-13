@@ -1,6 +1,6 @@
 {
   "name": "kyber-squad-agent",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "PC agent that polls Kyber and pushes squad stats to the Cloudflare site",
   "author": "Andrew",
@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "1.12.5",
-    "@grpc/proto-loader": "0.7.13"
+    "@grpc/proto-loader": "0.7.13",
+    "electron-updater": "6.3.9"
   },
   "devDependencies": {
     "electron": "33.2.1",
@@ -22,11 +23,40 @@
   "build": {
     "appId": "gg.kyber.squadagent",
     "productName": "Kyber Squad Agent",
-    "files": ["electron/**", "lib/**", "proto/**", "index.js", "selftest.js", "package.json"],
-    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }], "icon": "electron/icon.png" },
+    "files": [
+      "electron/**",
+      "lib/**",
+      "proto/**",
+      "index.js",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "electron/icon.ico",
+      "artifactName": "KyberSquadAgent-Setup-${version}.${ext}"
+    },
     "nsis": {
-      "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true, "shortcutName": "Kyber Squad Agent"
-    }
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Kyber Squad Agent",
+      "runAfterFinish": true
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "andrewtkeezer-ops",
+        "repo": "kyber-squad-stats",
+        "releaseType": "release"
+      }
+    ]
   }
 }
