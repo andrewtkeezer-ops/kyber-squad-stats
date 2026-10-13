@@ -631,6 +631,20 @@
   .sess-hero{margin-bottom:12px}
   .heat .h{border-radius:2px}
   @media (max-width:860px){.pc-hero{flex-direction:column;align-items:flex-start;padding:22px 18px}.pc-hero .ship-bg{width:70%;right:-20%;top:auto;bottom:-10%}.tile b{font-size:24px}.rec b{font-size:24px}}
+
+  /* ======== hover cards ======== */
+  .ship .tipbox{text-align:left;width:250px;white-space:normal;padding:10px 14px 12px}
+  .ship .tipbox b{font-size:14px}
+  .ship .tipbox dl{display:grid;grid-template-columns:52px 1fr;gap:4px 10px;margin:8px 0 0;padding-top:8px;border-top:1px solid var(--line);font-family:var(--font-m);font-size:11px;letter-spacing:.02em}
+  .ship .tipbox dt{color:var(--ink-3);text-transform:uppercase;letter-spacing:.14em;font-size:8.5px;align-self:center}.ship .tipbox dd{margin:0;color:var(--ink);line-height:1.35}
+  .mark{overflow:visible}
+  .mark .pcard{position:absolute;left:50%;bottom:calc(100% + 8px);transform:translate(-50%,6px);display:grid;grid-template-columns:repeat(4,auto);gap:4px 14px;padding:10px 14px;background:rgba(6,8,14,.94);border:1px solid var(--c);border-radius:9px;box-shadow:0 0 22px color-mix(in srgb,var(--c) 45%,transparent);opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .2s,transform .3s var(--ease);z-index:20}
+  .mark .pcard i{font-style:normal;text-align:center}.mark .pcard i b{display:block;font-family:var(--font-m);font-size:15px;font-weight:600;color:#fff}.mark .pcard i.k b{color:var(--c)}
+  .mark .pcard i small{display:block;font-family:var(--font-m);font-size:8.5px;letter-spacing:.18em;color:var(--ink-3);margin-top:2px}
+  .mark .pcard em{grid-column:1/-1;font-style:normal;font-family:var(--font-m);font-size:10px;color:var(--ink-2);text-align:center;margin-top:4px;padding-top:6px;border-top:1px solid var(--line)}
+  .mark:hover .pcard{opacity:1;transform:translate(-50%,0)}
+  .mark.flip .pcard{left:auto;right:0;transform:translate(0,6px)}.mark.flip:hover .pcard{transform:translate(0,0)}
+  .mark:hover{animation-play-state:paused;z-index:9}
 </style>
 </head>
 <body>
@@ -780,6 +794,7 @@ const SCENE={
     {src:"ships/falcon.webp",name:"YT-1300 freighter",h:5,w:11,from:[-16,84],to:[112,52],dur:92,delay:-61,z:4,flip:1},
     {src:"ships/corvette.webp",name:"CR90 corvette",h:28,w:14,from:[112,88],to:[-18,6],dur:140,delay:-70,z:1,flip:0},
     {src:"ships/xwing_b.webp",name:"T-65 starfighter",h:8,w:8,from:[100,-6],to:[-12,38],dur:48,delay:-30,z:4,flip:0}]}};
+const SPECS={"T-65 starfighter": ["Incom", "Starfighter", "1 + astromech", "100 MGLT", "4 laser cannons \u00b7 2 proton torpedo launchers"], "RZ-1 interceptor": ["Kuat", "Interceptor", "1", "120 MGLT", "2 laser cannons \u00b7 12 concussion missiles"], "BTL bomber": ["Koensayr", "Bomber", "1\u20132", "80 MGLT", "2 laser cannons \u00b7 ion cannon \u00b7 proton bombs"], "A/SF-01 heavy fighter": ["Slayn & Korpil", "Heavy assault", "1", "91 MGLT", "3 laser cannons \u00b7 ion cannon \u00b7 torpedoes"], "YT-1300 freighter": ["Corellian Eng.", "Light freighter", "2 + 6 passengers", "75 MGLT", "2 quad laser turrets \u00b7 concussion missiles"], "CR90 corvette": ["Corellian Eng.", "Corvette", "30\u2013165", "60 MGLT", "6 turbolaser turrets"], "TIE/ln starfighter": ["Sienar", "Starfighter", "1", "100 MGLT", "2 laser cannons \u00b7 no shields"], "TIE/in interceptor": ["Sienar", "Interceptor", "1", "111 MGLT", "4 laser cannons \u00b7 no shields"], "TIE/sa bomber": ["Sienar", "Bomber", "1", "60 MGLT", "2 laser cannons \u00b7 proton bombs \u00b7 missiles"], "Imperial-class Star Destroyer": ["Kuat Drive Yards", "Capital ship", "37,000", "60 MGLT", "60 turbolasers \u00b7 60 ion cannons \u00b7 72 TIEs"]};
 const PAINTED=[[69.5,42.5,67,49.8,"#2ef2d0",1],[54.4,60.5,51.7,68.6,"#4aa8ff",1],[85.8,60.2,83,67.8,"#ff2d4d",1],[62,70,59.5,76.8,"#b48cff",0],[78.5,40.5,76,47.4,"#ffc53d",0],[86.5,76,89.5,80,"#2ef2d0",0]];
 const GEMCOL=["#2ef2d0","#4aa8ff","#ff2d4d","#b48cff","#ffc53d","#ff8a3d"];
 // crystal positions on the drawn orbit: [ring index, angle°] — spread so labels never collide
@@ -796,17 +811,18 @@ function orbitSVG(){
     ${spokes}${rings}${nodes}<ellipse cx="500" cy="250" rx="60" ry="24" transform="rotate(${TILT} 500 250)" fill="url(#hub)" class="hub"/></svg>`;
 }
 function gemSVG(c){return `<svg viewBox="0 0 30 48"><path d="M15 2 L26 18 L15 46 L4 18 Z" fill="${c}" opacity=".88"/><path d="M15 2 L26 18 L15 22 Z" fill="#fff" opacity=".38"/><path d="M4 18 L15 22 L15 46 Z" fill="#000" opacity=".28"/><path d="M15 2 L4 18 L15 22 Z" fill="#fff" opacity=".12"/></svg>`;}
+function pilotCard(p){const c=p.career||{};const top=p.heroes[0]||p.classes[0];return `<i class="k"><b>${c.kd!=null?c.kd.toFixed(2):"—"}</b><small>K/D</small></i><i><b>${c.kills!=null?fmtN(c.kills):"—"}</b><small>KILLS</small></i><i><b>${c.rank??"—"}</b><small>LEVEL</small></i><i><b>${fmtH(c.playtimeSec)}</b><small>TIME</small></i>${top?`<em>${esc(top.name)} · ${fmtH(top.playtimeSec)}</em>`:""}`;}
 function renderMarks(){
   const sc=SCENE[FACTION]||SCENE.empire;const list=players.filter(p=>p.resolved).slice(0,6);
   if(sc.mode==="painted"){
     $("#marks").innerHTML=PAINTED.map((s,i)=>{const p=list[i];if(!p)return"";const c=s[4];
       const gem=s[5]?"":`<span class="gem" style="left:${s[2]}%;top:${s[3]}%;--c:${c}">${gemSVG(c)}</span>`;
-      return `${gem}<div class="glow" style="--c:${c};left:${s[2]}%;top:${s[3]}%;animation-delay:${i*-.6}s"></div><button class="mark" data-id="${p.id}" style="--c:${c};left:${s[0]}%;top:${s[1]}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="lead"></span></button>`;}).join("");
+      return `${gem}<div class="glow" style="--c:${c};left:${s[2]}%;top:${s[3]}%;animation-delay:${i*-.6}s"></div><button class="mark" data-id="${p.id}" style="--c:${c};left:${s[0]}%;top:${s[1]}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="pcard">${pilotCard(p)}</span><span class="lead"></span></button>`;}).join("");
   }else{
     const [bx,by,bw,bh]=sc.box;
     $("#marks").innerHTML=list.map((p,i)=>{const [ri,deg]=ORBIT_SLOTS[i];const [ox,oy]=orbitPoint(ri,deg);const c=GEMCOL[i%GEMCOL.length];
       const x=bx+ox/1000*bw,y=by+oy/500*bh;   // % of the hero
-      return `<span class="gem" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--c:${c};animation-delay:${i*-.9}s">${gemSVG(c)}</span><div class="glow" style="--c:${c};left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;animation-delay:${i*-.6}s"></div><span class="beam" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--c:${c}"></span><button class="mark ${x>82?"flip":""}" data-id="${p.id}" style="--c:${c};left:${(x>82?x-2.4:x+2.4).toFixed(2)}%;top:${(y-7.5).toFixed(2)}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="lead"></span></button>`;}).join("");
+      return `<span class="gem" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--c:${c};animation-delay:${i*-.9}s">${gemSVG(c)}</span><div class="glow" style="--c:${c};left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;animation-delay:${i*-.6}s"></div><span class="beam" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--c:${c}"></span><button class="mark ${x>82?"flip":""}" data-id="${p.id}" style="--c:${c};left:${(x>82?x-2.4:x+2.4).toFixed(2)}%;top:${(y-7.5).toFixed(2)}%;animation-delay:${i*-.7}s"><span class="lbl">${esc(p.name)}</span><span class="pcard">${pilotCard(p)}</span><span class="lead"></span></button>`;}).join("");
   }
   $("#marks").querySelectorAll(".mark").forEach(m=>{m.onclick=()=>{blip();selected=m.dataset.id;switchTo("player");};
     m.onmouseenter=()=>{const r=app.querySelector(`.row[data-id="${m.dataset.id}"]`);if(r)r.classList.add("lit");};m.onmouseleave=()=>{app.querySelectorAll(".row.lit").forEach(r=>r.classList.remove("lit"));};});
@@ -815,7 +831,7 @@ function renderScene(){
   const sc=SCENE[FACTION]||SCENE.empire;
   $("#orbit").innerHTML=sc.mode==="drawn"?orbitSVG():"";
   const [bx,by,bw,bh]=sc.box||[0,0,0,0];$("#orbit").style.cssText=sc.mode==="drawn"?`left:${bx}%;top:${by}%;width:${bw}%;height:${bh}%`:"";
-  $("#fleet").innerHTML=(sc.ships||[]).map((s,i)=>`<div class="ship" data-x0="${s.from[0]}" data-y0="${s.from[1]}" data-x1="${s.to[0]}" data-y1="${s.to[1]}" data-h="${s.h==null?"":s.h}" style="--x0:${s.from[0]}cqw;--y0:${s.from[1]}cqh;--x1:${s.to[0]}cqw;--y1:${s.to[1]}cqh;--dur:${s.dur}s;--delay:${s.delay}s;--w:${s.w}%;z-index:${s.z};animation-play-state:${reduce?"paused":"running"}"><div class="bob" style="animation-delay:${i*-1.3}s">${/corvette|isd|falcon|ywing/.test(s.src)?"":`<span class="bolts" style="--bd:${(2.6+i*.7).toFixed(1)}s;--bdl:${(i*-1.1).toFixed(1)}s"><i></i><i></i></span>`}<img src="${s.src}" alt="" draggable="false"><span class="tipbox"><b>${s.name}</b><small>${sc.side}</small></span></div></div>`).join("");
+  $("#fleet").innerHTML=(sc.ships||[]).map((s,i)=>`<div class="ship" data-x0="${s.from[0]}" data-y0="${s.from[1]}" data-x1="${s.to[0]}" data-y1="${s.to[1]}" data-h="${s.h==null?"":s.h}" style="--x0:${s.from[0]}cqw;--y0:${s.from[1]}cqh;--x1:${s.to[0]}cqw;--y1:${s.to[1]}cqh;--dur:${s.dur}s;--delay:${s.delay}s;--w:${s.w}%;z-index:${s.z};animation-play-state:${reduce?"paused":"running"}"><div class="bob" style="animation-delay:${i*-1.3}s">${/corvette|isd|falcon|ywing/.test(s.src)?"":`<span class="bolts" style="--bd:${(2.6+i*.7).toFixed(1)}s;--bdl:${(i*-1.1).toFixed(1)}s"><i></i><i></i></span>`}<img src="${s.src}" alt="" draggable="false"><span class="tipbox"><b>${s.name}</b><small>${sc.side}</small>${SPECS[s.name]?`<dl><dt>Maker</dt><dd>${SPECS[s.name][0]}</dd><dt>Role</dt><dd>${SPECS[s.name][1]}</dd><dt>Crew</dt><dd>${SPECS[s.name][2]}</dd><dt>Speed</dt><dd>${SPECS[s.name][3]}</dd><dt>Arms</dt><dd>${SPECS[s.name][4]}</dd></dl>`:""}</span></div></div>`).join("");
   renderMarks();layoutFleet();
 }
 // Point every sprite along its flight path: rotate it from its known heading, mirroring when the turn would exceed 90°.
